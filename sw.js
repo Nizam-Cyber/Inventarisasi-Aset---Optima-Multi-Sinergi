@@ -1,4 +1,4 @@
-const V = 'inv-shell-v1', TILES = 'inv-tiles', MAX_TILES = 600;
+const V = 'inv-shell-v2', TILES = 'inv-tiles', MAX_TILES = 600;
 const LIBS = [
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css',
@@ -9,7 +9,7 @@ const LIBS = [
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(V).then(async c => {
     await c.addAll(['./', './index.html']);
-    await Promise.all(LIBS.map(u => c.add(u).catch(() => {}))); // pustaka disimpan agar Excel & peta tetap jalan offline
+    await Promise.all(LIBS.map(u => c.add(u).catch(() => {})));
   }).then(() => self.skipWaiting()));
 });
 
@@ -27,7 +27,6 @@ self.addEventListener('fetch', e => {
   if (r.method !== 'GET') return;
   const u = new URL(r.url);
 
-  // Tile peta (OSM & citra satelit Esri): area yang pernah dibuka tetap tampil offline
   if (u.hostname.endsWith('tile.openstreetmap.org') || u.hostname === 'server.arcgisonline.com') {
     e.respondWith(caches.open(TILES).then(async c => {
       const hit = await c.match(r);
@@ -38,7 +37,6 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Aplikasi + pustaka: dari cache, diperbarui di belakang layar
   if (u.origin === location.origin || u.hostname === 'cdnjs.cloudflare.com') {
     e.respondWith(caches.match(r, { ignoreSearch: true }).then(hit => {
       const net = fetch(r).then(n => { if (n.ok) caches.open(V).then(c => c.put(r, n.clone())); return n; }).catch(() => hit);
