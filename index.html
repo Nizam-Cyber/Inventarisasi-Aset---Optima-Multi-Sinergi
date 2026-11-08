@@ -22,10 +22,11 @@ html,body{margin:0}
 body{font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:calc(72px + env(safe-area-inset-bottom))}
 header{position:sticky;top:0;z-index:20;background:rgba(13,148,136,.92);backdrop-filter:blur(12px);color:#fff;display:flex;gap:12px;align-items:center;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top))}
 .brand{display:flex;gap:10px;align-items:center;flex:1;min-width:0}
-.brand-logo{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,#fb923c,#f97316);display:grid;place-items:center;font-weight:900;font-size:11px;letter-spacing:.5px;color:#fff;box-shadow:0 4px 12px rgba(251,146,60,.4);flex-shrink:0}
-.brand-text{min-width:0}
+.brand-logo{width:120px;height:40px;display:flex;align-items:center;justify-content:flex-start;flex-shrink:0}
+.brand-logo svg{height:100%;width:auto;max-width:100%;}
+.brand-text{min-width:0;margin-left:6px;border-left:1px solid rgba(255,255,255,.3);padding-left:10px}
 .brand-text b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.brand-text small{opacity:.85;font-size:11.5px}
+.brand-text small{opacity:.85;font-size:11.5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .chip{border:1px solid rgba(255,255,255,.4);border-radius:99px;padding:4px 10px;font-size:12px;white-space:nowrap;background:rgba(255,255,255,.1)}
 .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#34d399;margin-right:5px}
 .chip.off .dot{background:#f87171}
@@ -102,7 +103,21 @@ footer{text-align:center;padding:16px;color:var(--mu);font-size:12px;border-top:
 
 <header>
   <div class="brand">
-    <div class="brand-logo" id="lgOpt">OPTIMA</div>
+    <!-- Logo Optima SVG default -->
+    <div class="brand-logo" id="lgOpt">
+      <svg viewBox="0 0 240 60">
+        <polygon points="30,5 55,20 55,50 30,65 5,50 5,20" fill="#3d3d3d"/>
+        <polygon points="30,5 55,20 55,30 30,15" fill="#009fe3"/>
+        <polygon points="30,5 30,15 5,30 5,20" fill="#f5c200"/>
+        <polygon points="55,20 55,50 45,50 45,20" fill="#e50054"/>
+        <polygon points="5,20 5,50 15,50 15,20" fill="#e50054"/>
+        <polygon points="30,65 55,50 45,50 30,60" fill="#5a9e30"/>
+        <polygon points="30,65 5,50 15,50 30,60" fill="#7db928"/>
+        <text x="30" y="40" font-family="Arial, sans-serif" font-size="16" fill="#fff" text-anchor="middle" font-weight="bold">OMS</text>
+        <text x="65" y="42" font-family="Arial, sans-serif" font-size="34" fill="#009fe3" font-weight="400" letter-spacing="-1">optima</text>
+        <text x="125" y="56" font-family="Arial, sans-serif" font-size="10" fill="#3d3d3d" font-weight="bold" letter-spacing="4">multi sinergi</text>
+      </svg>
+    </div>
     <div class="brand-text">
       <b id="appTitle">Inventarisasi Aset</b>
       <small id="appSub">Sistem Inventarisasi BMD</small>
@@ -226,7 +241,7 @@ const put=(s,o)=>tx(s,'readwrite',x=>x.put(o)),
       putMany=(s,a)=>tx(s,'readwrite',x=>a.forEach(o=>x.put(o))),
       kv=(k,v)=>put('kv',{k,v});
 
-/* ==== FUNGSI save & saveMany (INTI PERBAIKAN BUG 1 & 2) ==== */
+/* ==== FUNGSI save & saveMany (PERBAIKAN BUG) ==== */
 async function save(r){
   r.ts=Date.now();
   if(!D.recs.includes(r))D.recs.push(r);
@@ -277,8 +292,7 @@ function updHeader(){
   $('#appTitle').textContent=m.project?`Inventarisasi Aset - ${m.project}`:'Inventarisasi Aset';
   $('#appSub').textContent=`KKI - ${KIB_META[S.kib].n} · ${m.prov||'-'}`;
   const lg=$('#lgOpt');
-  if(m.logoOpt){lg.style.background='none';lg.style.boxShadow='none';lg.innerHTML=`<img src="${m.logoOpt}" style="max-width:100%;max-height:100%;object-fit:contain">`}
-  else{lg.innerHTML='OPTIMA'}
+  if(m.logoOpt){lg.style.width='auto';lg.innerHTML=`<img src="${m.logoOpt}" style="max-height:40px;object-fit:contain">`}
 }
 async function upQ(){const n=(await all('q')).length;const q=$('#qc');if(q)q.textContent=n?n+' belum terkirim':'Semua terkirim'}
 
@@ -450,7 +464,7 @@ const CP=r=>{const o={};['kib','nama','kode','reg','alamat','tgl','harga','kond'
 
 A.del=async t=>{if(!confirm('Hapus baris ini?'))return;const r=by(t.dataset.id);r.del=1;await save(r);A.close();lst('0'+S.st)};
 
-/* ========== TAMBAH MANUAL (BUG 2 — diberi KIB & OPD selector) ========== */
+/* ========== TAMBAH MANUAL (FIX BUG) ========== */
 A.new=t=>{
   const st=t.dataset.st;
   const kibOpts=['A','B','C','D','E','F'].map(k=>`<option value="${k}"${k===S.kib?' selected':''}>KIB ${k} - ${KIB_META[k].n}</option>`).join('');
@@ -931,4 +945,141 @@ async function dlTemplate(kib){
   });
 }
 A.imp=t=>{S.impKib=t.dataset.kib||S.kib;$('#fi').click()};
-$('#fi').onchange=e=>{const f=e.target.files[0];e.target.value='';f&&busy
+$('#fi').onchange=e=>{const f=e.target.files[0];e.target.value='';f&&busy('Membaca '+f.name+'…',()=>importX(f,S.impKib||S.kib))};
+const iso=d=>d instanceof Date?new Date(d.getTime()+432e5).toISOString().slice(0,10):String(d??'').slice(0,10);
+
+async function importX(f,kib){
+  await js(XJS);
+  const buf=await f.arrayBuffer();
+  const names=XLSX.read(buf,{bookSheets:true}).SheetNames;
+  let use=[names[0]];
+  if(names.length>1&&confirm(`File punya ${names.length} sheet.\nOK = semua sheet, Batal = sheet pertama saja.`))use=names;
+  const seen=new Set(V().filter(r=>r.kib===kib).map(r=>[r.kode,r.reg,r.nama,r.tgl,r.harga].join('|')));
+  const add=[];let dup=0;
+  for(const sn of use){
+    const wb=XLSX.read(buf,{cellDates:true,sheets:sn}),
+          a=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:true,defval:''}),
+          h=a.findIndex(r=>/^(NO)$/i.test(String(r[0]).trim()));
+    if(h<0)continue;
+    for(let i=h+1;i<a.length;i++){
+      const r=a[i];
+      if(String(r[0]).trim().toUpperCase()==='JUMLAH')break;
+      if(!String(r[1]).trim()&&!String(r[2]).trim())continue;
+      const o=parseRow(kib,r);
+      if(!o)continue;
+      const k=[o.kode,o.reg,o.nama,o.tgl,o.harga].join('|');
+      if(seen.has(k)){dup++;continue}
+      seen.add(k);add.push(o);
+    }
+  }
+  if(!add.length)return toast('Tidak ada baris baru'+(dup?` (${dup} duplikat)`:''),'w');
+  await saveMany(add);
+  const g=await grup(false);
+  toast(`Import KIB ${kib}: ${add.length} baru, ${dup} duplikat, ${g} diregroup`,'ok',9000);
+  render();
+}
+function parseRow(kib,r){
+  const base={id:uid(),kib,st:'01',opd:'',no:0};
+  if(kib==='C'){
+    const o={...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),alamat:tx_(r[4]),
+      luas:r[5],tgl:iso(r[6]),jml:r[7],harga:r[8],ada:tx_(r[9]),bert:tx_(r[10]),beton:tx_(r[11]),
+      kond:tx_(r[12]),guna:tx_(r[13]),kuasa:tx_(r[14]),jmlLap:r[15],luasUkur:r[16],
+      rehab:tx_(r[17]),kap:tx_(r[18]),indukLain:tx_(r[19]),reff:tx_(r[20]),kd:tx_(r[21]),
+      y:tx_(r[24]),ket:tx_(r[25])};
+    if(!o.nama&&!o.kode)return null;return o;
+  }
+  if(kib==='A')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),alamat:tx_(r[4]),luas:r[5],hak:tx_(r[6]),guna:tx_(r[7]),tgl:iso(r[8]),harga:r[9],ket:tx_(r[10])};
+  if(kib==='B')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),merk:tx_(r[4]),ukuran:tx_(r[5]),satuan:tx_(r[6]),jml:r[7],tgl:iso(r[8]),harga:r[9],kond:tx_(r[10]),alamat:tx_(r[11]),ket:tx_(r[12])};
+  if(kib==='D')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),konstruksi:tx_(r[4]),panjang:r[5],lebar:r[6],luas:r[7],alamat:tx_(r[8]),tgl:iso(r[9]),harga:r[10],kond:tx_(r[11]),ket:tx_(r[12])};
+  if(kib==='E')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),merk:tx_(r[4]),ukuran:tx_(r[5]),jml:r[6],alamat:tx_(r[7]),tgl:iso(r[8]),harga:r[9],kond:tx_(r[10]),ket:tx_(r[11])};
+  if(kib==='F')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),kontrak:tx_(r[4]),nilai:r[5],progress:r[6],mulai:iso(r[7]),selesai:iso(r[8]),alamat:tx_(r[9]),harga:r[10],ket:tx_(r[11])};
+  return null;
+}
+async function grup(all){
+  let ch=[];
+  const P=D.opds.map(o=>({n:o.name,k:(o.keys||[]).map(norm).filter(Boolean).map(k=>new RegExp('(?<![a-z0-9])'+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?![0-9])'))}));
+  V().forEach(r=>{
+    if(r.st!=='01'||r.lock||(r.opd&&!all))return;
+    const T=[[norm(r.nama),3],[norm(r.alamat),2],[norm(r.y),3],[norm(r.ket),1]];
+    let b='',bs=0;
+    P.forEach(p=>{let s=0;p.k.forEach(re=>T.forEach(([t,w])=>{if(re.test(t))s+=w}));if(s>bs){bs=s;b=p.n}});
+    if(b!==r.opd){r.opd=b;ch.push(r)}
+  });
+  if(ch.length)await saveMany(ch);return ch.length;
+}
+async function impCtl(f){
+  await js(XJS);
+  const wb=XLSX.read(await f.arrayBuffer(),{cellDates:true}),
+        nm=n=>wb.SheetNames.find(s=>s.trim().toLowerCase()===n),
+        pg=nm('progres'),jd=nm('jadwal mingguan');
+  if(!pg)throw new Error('Sheet "Progres" tidak ditemukan');
+  const M=ctlMap(),out=[];let nO=0;
+  const get=n=>{n=n.trim();let o=D.opds.find(x=>norm(x.name)==norm(n));if(!o){o={name:n,keys:[n]};D.opds.push(o);nO++}return o.name},
+        rec=n=>{let r=M.get(n);if(!r){r={id:'ctl:'+n,st:'ctl',opd:n};M.set(n,r)}if(!out.includes(r))out.push(r);return r},
+        sv=v=>{v=tx_(v).toUpperCase();return STS.includes(v)?v:''},
+        nz=v=>typeof v==='number'?v:'';
+  const rows=XLSX.utils.sheet_to_json(wb.Sheets[pg],{header:1,raw:true,defval:''});
+  for(let i=10;i<rows.length;i++){
+    const r=rows[i],u=tx_(r[1]);
+    if(!u||/^jumlah/i.test(u)||r[0]===''||isNaN(+r[0]))continue;
+    const c=rec(get(u));
+    Object.assign(c,{tim:tx_(r[2]),jt:sv(r[3]),pj:tx_(r[27])||c.pj||'',
+      rT:nz(r[17]),rB:nz(r[18]),rK:nz(r[19]),sT:nz(r[20]),sB:nz(r[21]),sK:nz(r[22]),final:nz(r[16])});
+    [['tl',4],['in',7],['dn',10],['ft',13]].forEach(([k,j])=>KB.forEach((b,x)=>c[k+b]=sv(r[j+x])));
+  }
+  await saveMany(out);await kv('opds',D.opds);mkAbr();
+  toast(`Controlling: ${out.length} instansi, ${nO} baru`,'ok',9000);render();
+}
+
+/* ======================= EKSPOR EXCEL KKI ======================= */
+A.xl=t=>{const kib=t.dataset.kib||S.kib;exportKib(kib)};
+async function exportKib(kib){
+  await busy('Menyusun Excel KKI…',async()=>{
+    const o=D.opds.find(x=>x.name==cur());
+    if(!o)return toast('Pilih instansi dulu','w');
+    await js(EXJS);
+    const W=new ExcelJS.Workbook(),m=D.meta,rs=V().filter(r=>r.opd===cur()&&r.kib===kib);
+    const c1=rs.filter(r=>r.st==='01').sort((a,b)=>(a.no||0)-(b.no||0)),
+          c2=rs.filter(r=>r.st==='02'),c3=rs.filter(r=>r.st==='03'),h=hasil(c1,c2);
+    const FIELDS_K=(FIELDS[kib]||FIELDS.C);
+    const H=FIELDS_K.map(f=>[String(f[1]).toUpperCase(),'',Math.max(12,Math.min(30,String(f[1]).length+2))]);
+    const put=async(name,title,code,rows)=>{
+      const ws=W.addWorksheet(name,{views:[{state:'frozen',ySplit:8,xSplit:3}]}),
+            n=H.length;
+      for(let i=1;i<=4;i++){ws.mergeCells(i,1,i,n-1);ws.getRow(i).font={bold:true,size:i===1?13:11}}
+      ws.getCell(1,1).value='Kertas Kerja Inventarisasi/Validasi (KKI)';
+      ws.getCell(2,1).value=title;ws.getCell(3,1).value=(o.name||'').toUpperCase();
+      ws.getCell(4,1).value='Pemerintah Daerah Provinsi '+(m.prov||'');
+      ws.getCell(2,n).value='FORM - KKI';ws.getCell(3,n).value=code;
+      ws.getCell(3,n).font=ws.getCell(2,n).font={bold:true};
+      H.forEach(([l,s,w],i)=>{const c=i+1;ws.getColumn(c).width=w;ws.getCell(6,c).value=l;ws.getCell(8,c).value=c});
+      rows.forEach((r,i)=>FIELDS_K.forEach((f,j)=>ws.getCell(9+i,j+1).value=r[f[0]]??''));
+      ws.getColumn(5).numFmt='#,##0';
+    };
+    await put('Form_'+kib+'_01','DAFTAR RINCIAN BARANG HASIL INVENTARISASI','FORM '+kib+'-01',c1);
+    await put('Form_'+kib+'_02','USULAN MUTASI TAMBAH','FORM '+kib+'-02',c2);
+    await put('Form_'+kib+'_03','USULAN MUTASI KURANG','FORM '+kib+'-03',c3);
+    await put('Form_'+kib+'_04','USULAN DAFTAR HASIL','FORM '+kib+'-04',h);
+    const b=await W.xlsx.writeBuffer(),a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([b],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+    a.download=`KKI_KIB_${kib}_${(o.name||'').replace(/[^\w]+/g,'_')}.xlsx`;a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('Excel selesai','ok');
+  });
+}
+
+/* ======================= INIT ======================= */
+(async()=>{
+  const [recs,k]=await Promise.all([all('recs'),all('kv')]);
+  D.recs=recs;
+  k.forEach(x=>{
+    if(x.k==='opds')D.opds=x.v;
+    else if(x.k==='abbr')D.abbr=x.v;
+    else if(x.k==='meta')Object.assign(D.meta,x.v);
+    else if(x.k==='last')S.opd=x.v;
+  });
+  mkAbr();updNet();upQ();render();sync();
+  if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+})();
+</script>
+</body>
+</html>
