@@ -20,8 +20,6 @@
 *{box-sizing:border-box}[hidden]{display:none!important}
 html,body{margin:0}
 body{font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:calc(72px + env(safe-area-inset-bottom))}
-
-/* header */
 header{position:sticky;top:0;z-index:20;background:rgba(13,148,136,.92);backdrop-filter:blur(12px);color:#fff;display:flex;gap:12px;align-items:center;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top))}
 .brand{display:flex;gap:10px;align-items:center;flex:1;min-width:0}
 .brand-logo{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,#fb923c,#f97316);display:grid;place-items:center;font-weight:900;font-size:11px;letter-spacing:.5px;color:#fff;box-shadow:0 4px 12px rgba(251,146,60,.4);flex-shrink:0}
@@ -31,8 +29,6 @@ header{position:sticky;top:0;z-index:20;background:rgba(13,148,136,.92);backdrop
 .chip{border:1px solid rgba(255,255,255,.4);border-radius:99px;padding:4px 10px;font-size:12px;white-space:nowrap;background:rgba(255,255,255,.1)}
 .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#34d399;margin-right:5px}
 .chip.off .dot{background:#f87171}
-
-/* layout */
 .layout{display:flex;min-height:calc(100vh - var(--hh))}
 aside{display:none;width:220px;flex-shrink:0;background:var(--sf);border-right:1px solid var(--ln);padding:12px 8px;position:sticky;top:var(--hh);height:calc(100vh - var(--hh));overflow-y:auto}
 aside button{display:flex;gap:10px;align-items:center;width:100%;padding:10px 14px;border:0;background:none;color:var(--ink);font:inherit;font-weight:600;text-align:left;border-radius:9px;margin-bottom:2px;cursor:pointer;transition:background .15s}
@@ -40,34 +36,21 @@ aside button:hover{background:var(--bg)}
 aside button.on{background:color-mix(in srgb,var(--pr) 15%,transparent);color:var(--pr)}
 aside button .ic{width:20px;text-align:center;font-size:15px}
 main{flex:1;min-width:0;padding:14px;max-width:1100px;margin:0 auto;width:100%}
-
-/* nav mobile */
 nav{position:fixed;bottom:0;left:0;right:0;z-index:20;display:flex;overflow-x:auto;background:var(--sf);border-top:1px solid var(--ln);padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -2px 8px rgba(0,0,0,.04)}
 nav button{flex:1;min-width:62px;padding:9px 4px 8px;border:0;background:none;color:var(--mu);font-weight:600;font-size:11px;border-top:3px solid transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
 nav button .ic{font-size:17px}
 nav button.on{color:var(--pr);border-top-color:var(--pr)}
-
-@media(min-width:900px){
-  body{padding-bottom:0}
-  aside{display:block}
-  nav{display:none}
-}
-
-/* cards */
+@media(min-width:900px){body{padding-bottom:0}aside{display:block}nav{display:none}}
 .pn,.cd{background:var(--sf);border:1px solid var(--ln);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:var(--sh)}
 .cd{cursor:pointer;transition:transform .1s,box-shadow .15s}
 .cd:hover{box-shadow:var(--shg);transform:translateY(-1px)}
 .cd small,.mu{color:var(--mu);display:block;font-size:12.5px;margin-top:2px}
 h3{margin:0 0 12px;font-size:16px}
 h4{margin:14px 0 8px;font-size:14px;color:var(--mu)}
-
-/* forms */
 label{display:flex;flex-direction:column;gap:4px;font-weight:600;font-size:13px;margin:9px 0}
 input,select,textarea{font:inherit;color:inherit;width:100%;padding:9px 11px;border:1px solid var(--ln);border-radius:9px;background:var(--bg);transition:border-color .15s,box-shadow .15s}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--pr);box-shadow:0 0 0 3px color-mix(in srgb,var(--pr) 20%,transparent)}
 textarea{resize:vertical;min-height:60px}
-
-/* buttons */
 .b{border:1px solid var(--ln);background:var(--sf);color:var(--ink);border-radius:9px;padding:9px 14px;font-weight:600;cursor:pointer;font:inherit;transition:all .15s;white-space:nowrap}
 .b:hover{background:var(--bg)}
 .b.p{background:linear-gradient(135deg,var(--pr),var(--pr2));color:var(--pi);border-color:transparent;box-shadow:0 2px 6px color-mix(in srgb,var(--pr) 40%,transparent)}
@@ -77,14 +60,10 @@ textarea{resize:vertical;min-height:60px}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
 .row>select,.row>input{flex:1;min-width:140px;width:auto}
 .bar{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;margin-bottom:12px}
-
-/* chips */
 .ch{font-style:normal;font-size:11.5px;padding:2px 9px;border-radius:99px;border:1px solid var(--ln);margin:3px 4px 0 0;display:inline-block;color:var(--mu)}
 .ch.ok{color:var(--ok);border-color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,transparent)}
 .ch.er{color:var(--er);border-color:var(--er);background:color-mix(in srgb,var(--er) 10%,transparent)}
 .ch.wa{color:var(--wa);border-color:var(--wa);background:color-mix(in srgb,var(--wa) 10%,transparent)}
-
-/* loading & toast */
 #ld{position:fixed;inset:0;z-index:100;background:rgba(15,23,42,.5);backdrop-filter:blur(4px);display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;color:#fff}
 .sp{width:44px;height:44px;border-radius:50%;border:4px solid rgba(255,255,255,.3);border-top-color:#fff;animation:s .7s linear infinite}
 @keyframes s{to{transform:rotate(360deg)}}
@@ -92,27 +71,17 @@ textarea{resize:vertical;min-height:60px}
 .t{padding:11px 15px;border-radius:10px;background:#0f172a;color:#fff;box-shadow:0 6px 20px rgba(0,0,0,.2);animation:tin .2s;font-size:14px}
 .t.ok{background:var(--ok)}.t.e{background:var(--er)}.t.w{background:#b45309}
 @keyframes tin{from{transform:translateY(-10px);opacity:0}}
-
-/* dialog */
 dialog{width:min(680px,96vw);max-height:92vh;border:0;border-radius:14px;background:var(--sf);color:var(--ink);padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
 dialog::backdrop{background:rgba(0,0,0,.5);backdrop-filter:blur(3px)}
 dialog h3{margin-bottom:12px}
-
-/* tables */
 table{border-collapse:collapse;width:100%;font-size:13px}
 td,th{border:1px solid var(--ln);padding:6px 9px;text-align:left}
 th{background:var(--bg);font-weight:600}
-
-/* thumb */
 .th{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
 .th img{width:76px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--ln)}
-
-/* map */
 #mw{position:relative}#map{height:62vh;border-radius:12px;border:1px solid var(--ln)}
 #nA{position:absolute;right:12px;top:12px;z-index:500;background:rgba(255,255,255,.92);color:#000;border-radius:50%;width:46px;height:46px;text-align:center;font-weight:800;line-height:1.05;padding-top:5px;box-shadow:var(--sh)}
 .mk b{display:block;background:#e4572e;color:#fff;border:2px solid #fff;border-radius:50%;width:28px;height:28px;text-align:center;line-height:24px;font-size:12px}
-
-/* misc */
 .pb{height:7px;border-radius:6px;background:var(--ln);overflow:hidden;margin-top:6px}
 .pb i{display:block;height:100%;background:var(--ok);border-radius:0;padding:0;border:0}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -126,7 +95,6 @@ th{background:var(--bg);font-weight:600}
 footer{text-align:center;padding:16px;color:var(--mu);font-size:12px;border-top:1px solid var(--ln);margin-top:20px}
 .empty{text-align:center;padding:32px;color:var(--mu)}
 .logo-preview{max-height:60px;max-width:140px;object-fit:contain;border:1px dashed var(--ln);border-radius:8px;padding:4px;background:var(--bg)}
-
 @media print{header,nav,aside,footer,.bar,.row,#hint,#ts{display:none!important}body{padding:0;background:#fff}#map{height:70vh}}
 </style>
 </head>
@@ -158,9 +126,9 @@ footer{text-align:center;padding:16px;color:var(--mu);font-size:12px;border-top:
 
 <input type="file" id="fi" hidden accept=".xlsx,.xlsm">
 <input type="file" id="fk" hidden accept=".xlsx,.xlsm">
+<input type="file" id="fo" hidden accept=".xlsx,.xlsm">
 <input type="file" id="fc" hidden accept="image/*" capture="environment">
 <input type="file" id="fg" hidden accept="image/*">
-<input type="file" id="fl" hidden accept="image/*">
 
 <script>
 'use strict';
@@ -190,26 +158,20 @@ const KD=[
   ['2.7','Kesalahan Pencatatan'],['3.1','Barang Belum Diketemukan']
 ];
 const KDL=Object.fromEntries(KD);
-
 const SBT=['Kapitalisasi','Kapitalisasi dari OPD Lain','Mutasi dari OPD lain','Rincian Dari Aset Glondong','Hibah'];
 const SBK=['Dikapitalisasi ke Aset Induk','Dikapitalisasi ke Aset Di OPD lain','Mutasi ke OPD Lain','Aset Glondong untuk dirincikan','Dihibahkan'];
 
-/* ======================= FIELD PER KIB ======================= */
-/* Setiap KIB punya field dasar (kode, nama, reg, alamat, tgl, harga) + field khusus */
 const COMMON=[['kode','Kode Barang','text'],['nama','Nama Barang','text'],['reg','No. Register','text'],['alamat','Alamat/Lokasi','text'],['tgl','Tgl Perolehan','date'],['harga','Harga (Rp)','number']];
 const FIELDS={
-  A:[...COMMON,
-    ['luas','Luas (m²)','number'],['hak','Hak/Sertifikat',['','SHM','HGB','HPL','HP','Girik','Lainnya']],
+  A:[...COMMON,['luas','Luas (m²)','number'],['hak','Hak/Sertifikat',['','SHM','HGB','HPL','HP','Girik','Lainnya']],
     ['guna','Penggunaan',['','Bangunan','Pertanian','Jalan','Lainnya']],
     ['ada','Keberadaan',['','ADA','TIDAK','BELUM']],
     ['kd','Kode Inventarisasi',[''].concat(KD)],['ket','Keterangan','text']],
-  B:[...COMMON,
-    ['merk','Merk/Type','text'],['ukuran','Ukuran','text'],['satuan','Satuan','text'],
+  B:[...COMMON,['merk','Merk/Type','text'],['ukuran','Ukuran','text'],['satuan','Satuan','text'],
     ['jml','Jumlah','number'],['kond','Kondisi',['','B','KB','RB']],
     ['ada','Keberadaan',['','ADA','TIDAK','BELUM']],
     ['kd','Kode Inventarisasi',[''].concat(KD)],['ket','Keterangan','text']],
-  C:[...COMMON,
-    ['luas','Luas sesuai KIB (m²)','number'],['jml','Jumlah Bangunan','number'],
+  C:[...COMMON,['luas','Luas sesuai KIB (m²)','number'],['jml','Jumlah Bangunan','number'],
     ['ada','Keberadaan',['','ADA','TIDAK','BELUM']],
     ['bert','Bertingkat',['','YA','TIDAK']],['beton','Beton',['','YA','TIDAK']],
     ['kond','Kondisi',['','B','KB','RB']],['guna','Penggunaan',['','YA','TIDAK']],
@@ -218,23 +180,19 @@ const FIELDS={
     ['rehab','Bangunan rehab',['','YA','TIDAK']],['kap','Kapitalisasi ke induk',['','YA','TIDAK']],
     ['indukLain','Aset induk di OPD lain',['','YA','TIDAK']],['reff','Reff induk','text'],
     ['kd','Kode Inventarisasi',[''].concat(KD)],['y','Aset induk / mutasi OPD lain','text'],['ket','Keterangan','text']],
-  D:[...COMMON,
-    ['konstruksi','Konstruksi',['','Beton','Aspal','Kerikil','Tanah','Lainnya']],
+  D:[...COMMON,['konstruksi','Konstruksi',['','Beton','Aspal','Kerikil','Tanah','Lainnya']],
     ['panjang','Panjang (m)','number'],['lebar','Lebar (m)','number'],['luas','Luas (m²)','number'],
     ['kond','Kondisi',['','B','KB','RB']],['ada','Keberadaan',['','ADA','TIDAK','BELUM']],
     ['kd','Kode Inventarisasi',[''].concat(KD)],['ket','Keterangan','text']],
-  E:[...COMMON,
-    ['merk','Merk/Type','text'],['ukuran','Ukuran','text'],['jml','Jumlah','number'],
+  E:[...COMMON,['merk','Merk/Type','text'],['ukuran','Ukuran','text'],['jml','Jumlah','number'],
     ['kond','Kondisi',['','B','KB','RB']],['ada','Keberadaan',['','ADA','TIDAK','BELUM']],
     ['kd','Kode Inventarisasi',[''].concat(KD)],['ket','Keterangan','text']],
-  F:[...COMMON,
-    ['kontrak','No. Kontrak','text'],['nilai','Nilai Kontrak (Rp)','number'],
+  F:[...COMMON,['kontrak','No. Kontrak','text'],['nilai','Nilai Kontrak (Rp)','number'],
     ['progress','Progress (%)','number'],['mulai','Tgl Mulai','date'],['selesai','Tgl Selesai','date'],
     ['ada','Keberadaan',['','ADA','TIDAK','BELUM']],
     ['kd','Kode Inventarisasi',[''].concat(KD)],['ket','Keterangan','text']]
 };
 
-/* Kolom template import per KIB (harus cocok dengan parser) */
 const TPL={
   A:['NO','KODE BARANG','NAMA BARANG','NO REG','ALAMAT','LUAS','HAK','PENGGUNAAN','TGL PEROLEHAN','HARGA','KETERANGAN'],
   B:['NO','KODE BARANG','NAMA BARANG','NO REG','MERK/TYPE','UKURAN','SATUAN','JUMLAH','TGL PEROLEHAN','HARGA','KONDISI','ALAMAT','KETERANGAN'],
@@ -246,7 +204,8 @@ const TPL={
 
 /* ======================= STATE & DB ======================= */
 const D={
-  recs:[],opds:[],abbr:'halteng=halmahera tengah\nhalsel=halmahera selatan\nhalut=halmahera utara\nhalbar=halmahera barat\nhaltim=halmahera timur\ntikep=tidore kepulauan\nmalut=maluku utara\nsman=sma negeri\nsmpn=smp negeri\nsmkn=smk negeri\nsdn=sd negeri',
+  recs:[],opds:[],
+  abbr:'halteng=halmahera tengah\nhalsel=halmahera selatan\nhalut=halmahera utara\nhalbar=halmahera barat\nhaltim=halmahera timur\ntikep=tidore kepulauan\nmalut=maluku utara\nsman=sma negeri\nsmpn=smp negeri\nsmkn=smk negeri\nsdn=sd negeri',
   meta:{
     project:'',prov:'Maluku Utara',ibu:'Sofifi',url:'',secret:'',who:'',
     kop1:'PEMERINTAH PROVINSI MALUKU UTARA',kop2:'BADAN PENGELOLA KEUANGAN DAN ASET DAERAH',
@@ -262,9 +221,27 @@ const DB=new Promise((ok,no)=>{
   r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error);
 });
 const tx=async(s,m,f)=>{const d=await DB;return new Promise((ok,no)=>{const t=d.transaction(s,m),rq=f(t.objectStore(s));t.oncomplete=()=>ok(rq&&rq.result);t.onerror=()=>no(t.error)})};
-const put=(s,o)=>tx(s,'readwrite',x=>x.put(o)),all=s=>tx(s,'readonly',x=>x.getAll()),
+const put=(s,o)=>tx(s,'readwrite',x=>x.put(o)),
+      all=s=>tx(s,'readonly',x=>x.getAll()),
       putMany=(s,a)=>tx(s,'readwrite',x=>a.forEach(o=>x.put(o))),
       kv=(k,v)=>put('kv',{k,v});
+
+/* ==== FUNGSI save & saveMany (INTI PERBAIKAN BUG 1 & 2) ==== */
+async function save(r){
+  r.ts=Date.now();
+  if(!D.recs.includes(r))D.recs.push(r);
+  await put('recs',r);
+  await put('q',{id:'r'+r.id,k:'r',rid:r.id});
+  upQ();
+}
+async function saveMany(a){
+  const t=Date.now();
+  a.forEach(r=>{r.ts=t;if(!D.recs.includes(r))D.recs.push(r)});
+  await putMany('recs',a);
+  await putMany('q',a.map(r=>({id:'r'+r.id,k:'r',rid:r.id})));
+  upQ();
+}
+/* =========================================================== */
 
 /* ======================= UTIL ======================= */
 const $=s=>document.querySelector(s),
@@ -273,7 +250,8 @@ const $=s=>document.querySelector(s),
       cur=()=>S.opd=='__'?'':S.opd,
       by=id=>D.recs.find(r=>r.id===id),
       V=()=>D.recs.filter(r=>!r.del),
-      rp=n=>'Rp '+Math.round(n||0).toLocaleString('id-ID');
+      rp=n=>'Rp '+Math.round(n||0).toLocaleString('id-ID'),
+      tx_=v=>String(v??'').trim();
 
 function toast(m,t='i',ms=5000){const e=document.createElement('div');e.className='t '+t;e.textContent=m;$('#ts').append(e);setTimeout(()=>e.remove(),ms)}
 async function busy(t,f){$('#ldt').textContent=t;$('#ld').hidden=false;await new Promise(r=>setTimeout(r,30));try{return await f()}catch(e){toast(e.message||String(e),'e',8000)}finally{$('#ld').hidden=true}}
@@ -290,12 +268,10 @@ const updNet=()=>{const n=$('#net');if(!n)return;n.className='chip'+(navigator.o
 addEventListener('online',()=>{updNet();toast('Online kembali — mengirim data tertunda…');sync()});
 addEventListener('offline',()=>{updNet();toast('Offline — data aman di perangkat','w')});
 
-/* abbr & normalisasi */
 let ABR=[];
 const mkAbr=()=>{ABR=[...D.abbr.split('\n').map(l=>l.split('=')),['sma negeri','sman'],['sma n','sman'],['smp negeri','smpn'],['smk negeri','smkn'],['sd negeri','sdn']].filter(a=>a[1]).map(([a,b])=>[new RegExp('(?<![a-z0-9])'+a.trim().toLowerCase().replace(/[^a-z0-9 ]/g,'')+'(?![a-z0-9])','g'),b.trim().toLowerCase()])};
 const norm=s=>{s=String(s??'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/([a-z])(\d)/g,'$1 $2');ABR.forEach(([a,b])=>s=s.replace(a,b));return s.replace(/\s+/g,' ').trim()};
 
-/* ======================= RENDER HEADER ======================= */
 function updHeader(){
   const m=D.meta;
   $('#appTitle').textContent=m.project?`Inventarisasi Aset - ${m.project}`:'Inventarisasi Aset';
@@ -329,17 +305,22 @@ function render(){
 
 /* ======================= BERANDA ======================= */
 function vHome(){
-  const all=V(),c=all.filter(r=>r.kib==='C'&&r.st==='01'),noOpd=c.filter(r=>!r.opd).length;
-  const cA=all.filter(r=>r.kib==='A').length,cB=all.filter(r=>r.kib==='B').length,
-        cD=all.filter(r=>r.kib==='D').length,cE=all.filter(r=>r.kib==='E').length,cF=all.filter(r=>r.kib==='F').length;
+  const all=V(),noOpd=all.filter(r=>r.kib==='C'&&r.st==='01'&&!r.opd).length;
+  const cnt={A:0,B:0,C:0,D:0,E:0,F:0};
+  all.forEach(r=>{if(cnt[r.kib]!=null)cnt[r.kib]++});
   $('#v').innerHTML=`<div class="pn">
     <h3>👋 Selamat datang</h3>
-    <p class="mu" style="margin-top:0">Alur: Import → Kelompokkan per OPD → Isi 01 di lapangan (foto + GPS) → Mutasi 02/03 → Ekspor Hasil KKI.</p>
-    <div class="row"><button class="b p" data-a="imp" data-kib="${S.kib}">⬆ Import Excel Induk</button><button class="b" data-a="tpl" data-kib="C">⬇ Template KIB C</button><button class="b" data-a="new" data-st="01">+ Data manual</button><button class="b" data-a="regrup">🔀 Kelompokkan ulang</button></div>
+    <p class="mu" style="margin-top:0">Alur: Import → Kelompokkan per OPD → Isi 01 di lapangan (foto + GPS) → Mutasi 02/03 → Ekspor Hasil.</p>
+    <div class="row">
+      <button class="b p" data-a="impBeranda">⬆ Import Excel Induk</button>
+      <button class="b" data-a="tplM">⬇ Template Import (A–F)</button>
+      <button class="b" data-a="new" data-st="01">+ Data manual</button>
+      <button class="b" data-a="regrup">🔀 Kelompokkan ulang</button>
+    </div>
   </div>
-  <div class="pn"><h4>Ringkasan Data per KIB</h4>
+  <div class="pn"><h4>Data per KIB</h4>
     <div class="g3">
-      ${['A','B','C','D','E','F'].map(k=>`<div class="cd" data-a="tabKib" data-k="${k}" style="text-align:center"><b style="font-size:22px;color:${KIB_META[k].c}">${({A:cA,B:cB,C:c.length,D:cD,E:cE,F:cF})[k]}</b><small>KIB ${k} · ${KIB_META[k].n}</small></div>`).join('')}
+      ${['A','B','C','D','E','F'].map(k=>`<div class="cd" data-a="tabKib" data-k="${k}" style="text-align:center"><b style="font-size:22px;color:${KIB_META[k].c}">${cnt[k]}</b><small>KIB ${k} · ${KIB_META[k].n}</small></div>`).join('')}
     </div>
   </div>
   <div class="pn"><h4>Status</h4>
@@ -349,18 +330,42 @@ function vHome(){
 A.tabKib=t=>{S.kib=t.dataset.k;S.tab='data';S.st='01';S.p=0;render()};
 A.regrup=()=>busy('Mengelompokkan data per instansi…',async()=>{const n=await grup(false);toast(`${n} baris dikelompokkan/diperbarui`,'ok');render()});
 
+/* ========== IMPORT dari Beranda (pilih KIB dulu) ========== */
+A.impBeranda=()=>{
+  modal(`<form id="fm"><h3>Import Excel Induk</h3>
+    <label>Pilih KIB<select name="kib">
+      ${['A','B','C','D','E','F'].map(k=>`<option value="${k}"${k===S.kib?' selected':''}>KIB ${k} - ${KIB_META[k].n}</option>`).join('')}
+    </select></label>
+    <p class="mu">Pastikan file mengikuti template KIB yang dipilih.</p>
+    <div class="row"><button type="button" class="b p" data-a="doImpBeranda">Pilih File & Import</button>
+    <button type="button" class="b" data-a="close">Batal</button></div></form>`);
+};
+A.doImpBeranda=()=>{S.impKib=fd().kib;A.close();$('#fi').click()};
+
+/* ========== TEMPLATE dari Beranda (semua KIB) ========== */
+A.tplM=()=>{
+  modal(`<form id="fm"><h3>Unduh Template Import</h3>
+    <label>Pilih KIB<select name="kib">
+      ${['A','B','C','D','E','F'].map(k=>`<option value="${k}"${k===S.kib?' selected':''}>KIB ${k} - ${KIB_META[k].n}</option>`).join('')}
+    </select></label>
+    <p class="mu">Template berisi kolom yang dibutuhkan saat import untuk KIB tersebut.</p>
+    <div class="row"><button type="button" class="b p" data-a="doTpl">⬇ Unduh</button>
+    <button type="button" class="b" data-a="close">Batal</button></div></form>`);
+};
+A.doTpl=()=>{const kib=fd().kib;A.close();dlTemplate(kib)};
+
 /* ======================= DATA (per KIB) ======================= */
 function vData(){
   const km=KIB_META[S.kib];
   $('#v').innerHTML=`<div class="bar" style="margin-bottom:6px"><h3 style="margin:0">${km.n}</h3><span class="ch">KIB ${S.kib}</span></div>
     <div class="kib-sel">${['A','B','C','D','E','F'].map(k=>`<button data-a="selKib" data-k="${k}"${S.kib==k?' class="on"':''}>KIB ${k}</button>`).join('')}</div>
-    <div class="tabs">${[['01','Form ' + S.kib + '-01'],['02',S.kib+'-02 · Tambah'],['03',S.kib+'-03 · Kurang'],['04',S.kib+'-04 · Hasil']].map(([k,l])=>`<button data-a="selSt" data-k="${k}"${S.st==k?' class="on"':''}>${l}</button>`).join('')}</div>
+    <div class="tabs">${[['01','Form '+S.kib+'-01'],['02',S.kib+'-02 · Tambah'],['03',S.kib+'-03 · Kurang'],['04',S.kib+'-04 · Hasil']].map(([k,l])=>`<button data-a="selSt" data-k="${k}"${S.st==k?' class="on"':''}>${l}</button>`).join('')}</div>
     <div id="dlist"></div>`;
   if(S.st=='04'){vHasilKib();return}
   const st='0'+S.st;
   $('#dlist').innerHTML=`<div class="pn">
     <div class="row">${sel()}<input id="q" placeholder="Cari nama, alamat, reg…" value="${esc(S.q)}">${st=='01'?`<select id="f"><option value="">Semua</option><option value="belum">Belum diisi</option><option value="ADA">Ada</option><option value="TIDAK">Tidak ada</option><option value="mut">Dimutasi</option></select>`:`<button class="b p" data-a="new" data-st="${S.st}">+ Tambah</button>`}</div>
-    <div class="row"><button class="b" data-a="tpl" data-kib="${S.kib}">⬇ Template Import KIB ${S.kib}</button>${st=='01'?`<button class="b p" data-a="imp" data-kib="${S.kib}">⬆ Import KIB ${S.kib}</button>`:''}</div>
+    <div class="row"><button class="b" data-a="tpl" data-kib="${S.kib}">⬇ Template KIB ${S.kib}</button>${st=='01'?`<button class="b p" data-a="imp" data-kib="${S.kib}">⬆ Import KIB ${S.kib}</button>`:''}</div>
   </div><div id="lst"></div><div class="row" id="pg"></div>`;
   const qi=$('#q');if(qi)qi.oninput=e=>{S.q=e.target.value;S.p=0;clearTimeout(vData._t);vData._t=setTimeout(()=>lst(st),200)};
   const fs=$('#f');if(fs){fs.value=S.f;fs.onchange=e=>{S.f=e.target.value;S.p=0;lst(st)}}
@@ -392,7 +397,7 @@ function lst(st){
 }
 A.pp=t=>{S.p=Math.max(0,Math.min(+$('#pg').dataset.max-1,S.p+ +t.dataset.d));lst('0'+S.st);scrollTo(0,0)};
 
-/* ======================= FORM EDIT (dynamic per KIB) ======================= */
+/* ======================= FORM EDIT ======================= */
 async function edit(id){
   const r=by(id);if(!r)return;
   const ph=(await all('ph')).filter(p=>p.rid==id);
@@ -429,8 +434,7 @@ const fld=(f,v)=>{
 A.esave=async t=>{
   const r=by(t.dataset.id),d=fd();
   if(r.st==='01'&&d.ada==='TIDAK'&&!String(d.kd||'').startsWith('2'))return toast('Barang tidak ditemukan → pilih Kode Inventarisasi 2.x','w',7000);
-  if(d.opd){r.lock=d.opd!=r.opd||r.lock;Object.assign(r,d)}
-  else Object.assign(r,d);
+  if(d.opd){r.lock=d.opd!=r.opd||r.lock;Object.assign(r,d)}else Object.assign(r,d);
   await save(r);
   if(r.kib==='C'&&r.st==='01')await syncC03(r);
   A.close();lst('0'+S.st);
@@ -445,22 +449,42 @@ async function syncC03(r){
 const CP=r=>{const o={};['kib','nama','kode','reg','alamat','tgl','harga','kond','luas','jml','ada'].forEach(k=>o[k]=r[k]);return o};
 
 A.del=async t=>{if(!confirm('Hapus baris ini?'))return;const r=by(t.dataset.id);r.del=1;await save(r);A.close();lst('0'+S.st)};
+
+/* ========== TAMBAH MANUAL (BUG 2 — diberi KIB & OPD selector) ========== */
 A.new=t=>{
-  const st=t.dataset.st,kib=S.kib;
-  const F=FIELDS[kib]||FIELDS.C;
-  modal(`<form id="fm"><h3>Tambah data ${kib}-${st}</h3>
-    ${F.filter(f=>['nama','kode','reg','alamat','tgl','harga'].includes(f[0])).map(f=>fld(f,'')).join('')}
+  const st=t.dataset.st;
+  const kibOpts=['A','B','C','D','E','F'].map(k=>`<option value="${k}"${k===S.kib?' selected':''}>KIB ${k} - ${KIB_META[k].n}</option>`).join('');
+  const opdOpts=D.opds.length
+    ? D.opds.map(o=>`<option${o.name===S.opd?' selected':''}>${esc(o.name)}</option>`).join('')
+    : '<option value="__">(Belum terkelompok)</option>';
+  modal(`<form id="fm"><h3>Tambah data ${S.kib}-${st}</h3>
+    <div class="g2">
+      <label>KIB<select name="kib">${kibOpts}</select></label>
+      <label>Instansi<select name="opd"><option value="__">(Belum terkelompok)</option>${opdOpts}</select></label>
+    </div>
+    ${COMMON.map(f=>fld(f,'')).join('')}
     ${st==='02'?fld(['sebab','Sebab bertambah',[''].concat(SBT)],''):''}
     ${st==='03'?fld(['sebab','Sebab berkurang',[''].concat(SBK)],''):''}
+    <label>Keberadaan<select name="ada"><option value="">—</option><option value="ADA"${st==='02'?' selected':''}>ADA</option><option value="BELUM">BELUM</option><option value="TIDAK">TIDAK</option></select></label>
     <div class="row"><button type="button" class="b p" data-a="nsave" data-st="${st}">Simpan</button>
     <button type="button" class="b" data-a="close">Batal</button></div></form>`);
 };
 A.nsave=async t=>{
   const d=fd(),st=t.dataset.st;
-  if(!d.nama?.trim())return toast('Nama barang wajib diisi','w');
-  const n=V().filter(r=>r.st==='0'+st&&r.opd===cur()&&r.kib===S.kib).length;
-  await save({id:uid(),kib:S.kib,st:'0'+st,opd:cur(),no:n+1,...d,ada:st==='02'?'ADA':''});
-  A.close();toast('Tersimpan','ok');lst('0'+S.st);
+  if(!d.nama||!String(d.nama).trim())return toast('Nama barang wajib diisi','w');
+  const kib=d.kib||S.kib,opd=(d.opd&&d.opd!=='__')?d.opd:cur();
+  if(!opd){A.close();toast('Instansi belum dipilih — tersimpan di (Belum terkelompok)','w');}
+  const opdFinal=opd||'';
+  const n=V().filter(r=>r.st==='0'+st&&r.opd===opdFinal&&r.kib===kib).length;
+  const payload={id:uid(),kib,st:'0'+st,opd:opdFinal,no:n+1,...d};
+  delete payload.opd_final;
+  if(d.opd==='__')payload.opd='';
+  await save(payload);
+  A.close();toast('Tersimpan ✓','ok');
+  S.opd=opdFinal||'__';S.kib=kib;
+  if(S.tab==='beranda')vHome();
+  else if(S.tab==='data')lst('0'+st);
+  else render();
 };
 
 /* ======================= MUTASI ======================= */
@@ -539,7 +563,7 @@ function vHasilKib(){
 const hasil=(c1,c2)=>[...c1.filter(r=>r.ada!=='TIDAK'&&!r.mut),...c2];
 const sm=a=>a.reduce((s,r)=>s+(+r.harga||0),0);
 
-/* ======================= FOTO + TIMESTAMP + GPS ======================= */
+/* ======================= FOTO + TIMESTAMP ======================= */
 const pos=()=>new Promise(ok=>navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>ok({lat:p.coords.latitude,lon:p.coords.longitude}),()=>ok(null),{enableHighAccuracy:true,timeout:7000}):ok(null));
 A.gps=t=>busy('Mengambil GPS…',async()=>{const p=await pos(),r=by(t.dataset.id);if(!p)return toast('GPS tidak tersedia','w');r.lat=+p.lat.toFixed(7);r.lon=+p.lon.toFixed(7);await save(r);toast('GPS tersimpan','ok');edit(r.id)});
 A.foto=t=>{PR=t.dataset.id;$('#fc').click()};
@@ -583,11 +607,10 @@ function vMaster(){
   $('#v').innerHTML=`<div class="bar"><h3 style="margin:0">Master Data</h3></div>
     <div class="tabs">${MTAB.map(([k,l])=>`<button data-a="mtab" data-k="${k}"${(S.mtab||'instansi')==k?' class="on"':''}>${l}</button>`).join('')}</div>
     <div id="mv"></div>`;
-  (A['m_'+((S.mtab||'instansi'))]||mInstansi)();
+  const fn=A['m_'+((S.mtab||'instansi'))];if(fn)fn();else mInstansi();
 }
 A.mtab=t=>{S.mtab=t.dataset.k;vMaster()};
 
-/* --- Instansi --- */
 function mInstansi(){
   const cn={};V().filter(r=>r.st==='01').forEach(r=>cn[r.opd]=(cn[r.opd]||0)+1);
   $('#mv').innerHTML=`<div class="pn">
@@ -621,7 +644,7 @@ A.so_save=async t=>{
     if(old!=d.name){const ch=V().filter(r=>r.opd==old);ch.forEach(r=>r.opd=d.name);await saveMany(ch)}}
   await kv('opds',D.opds);A.close();mInstansi();
 };
-A.tplInst=()=>busy('Menyiapkan template…',async()=>{
+A.tplInst=()=>busy('Template…',async()=>{
   await js(XJS);
   const ws=XLSX.utils.aoa_to_sheet([
     ['Nama Instansi','Kata Kunci (pisah koma)','Alamat','No Telp','Email','Pengguna Barang','NIP Pengguna','Pengurus Barang','NIP Pengurus','Tanggal Penyelesaian'],
@@ -631,8 +654,8 @@ A.tplInst=()=>busy('Menyiapkan template…',async()=>{
   const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Instansi');
   XLSX.writeFile(wb,'Template_Import_Instansi.xlsx');
 });
-A.impInst=()=>$('#fk').click();
-$('#fk').onchange=e=>{const f=e.target.files[0];e.target.value='';f&&busy('Membaca instansi…',()=>impInstansi(f))};
+A.impInst=()=>$('#fo').click();
+$('#fo').onchange=e=>{const f=e.target.files[0];e.target.value='';f&&busy('Membaca instansi…',()=>impInstansi(f))};
 async function impInstansi(f){
   await js(XJS);
   const wb=XLSX.read(await f.arrayBuffer(),{cellDates:true}),a=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,raw:true,defval:''});
@@ -654,7 +677,6 @@ async function impInstansi(f){
   mInstansi();
 }
 
-/* --- Singkatan --- */
 function mAbbr(){
   $('#mv').innerHTML=`<div class="pn"><label>Singkatan (satu per baris: singkatan=kepanjangan)
     <textarea id="abbr" rows="10">${esc(D.abbr)}</textarea></label>
@@ -662,17 +684,15 @@ function mAbbr(){
 }
 A.sabbr=async()=>{D.abbr=$('#abbr').value;mkAbr();await kv('abbr',D.abbr);toast('Tersimpan','ok')};
 
-/* --- Parameter --- */
 function mParam(){
   $('#mv').innerHTML=`<div class="pn"><h3>Parameter</h3>
-    <p class="mu">Kode Inventarisasi (dipakai di form 01/02/03):</p>
+    <p class="mu">Kode Inventarisasi:</p>
     <table><tr><th>Kode</th><th>Uraian</th></tr>
     ${KD.map(([k,l])=>`<tr><td>${k}</td><td>${esc(l)}</td></tr>`).join('')}</table>
     <h4>Sebab bertambah</h4><ul>${SBT.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>
     <h4>Sebab berkurang</h4><ul>${SBK.map(s=>`<li>${esc(s)}</li>`).join('')}</ul></div>`;
 }
 
-/* --- Halaman & Kop --- */
 function mHalaman(){
   const m=D.meta;
   const F=(k,l,v)=>`<label>${l}<input id="h_${k}" value="${esc(v||'')}"></label>`;
@@ -682,8 +702,8 @@ function mHalaman(){
   $('#mv').innerHTML=`<div class="pn"><h3>Halaman & Kop Surat</h3>
     ${L('logoOpt','Logo Optima',m.logoOpt)}${L('logoProv','Logo Provinsi',m.logoProv)}${L('logoKab','Logo Kabupaten/Kota',m.logoKab)}
     <h4>Teks Kop (4 baris)</h4>
-    ${F('kop1','Baris 1 (PEMERINTAH ...)',m.kop1)}${F('kop2','Baris 2 (Dinas/Badan)',m.kop2)}
-    ${F('kop3','Baris 3 (Alamat)',m.kop3)}${F('kop4','Baris 4 (Telp/Email)',m.kop4)}
+    ${F('kop1','Baris 1',m.kop1)}${F('kop2','Baris 2',m.kop2)}
+    ${F('kop3','Baris 3',m.kop3)}${F('kop4','Baris 4',m.kop4)}
     <div class="row"><button class="b p" data-a="saveHalaman">Simpan</button></div>
     <h4>Pratinjau Kop</h4>
     <div style="border-bottom:3px double var(--ln);padding:10px;display:flex;gap:12px;align-items:center">
@@ -706,42 +726,34 @@ A.upLogo=t=>{
     const bm=await createImageBitmap(f),sc=Math.min(1,400/Math.max(bm.width,bm.height)),
           c=document.createElement('canvas');c.width=Math.round(bm.width*sc);c.height=Math.round(bm.height*sc);
     c.getContext('2d').drawImage(bm,0,0,c.width,c.height);
-    const b64=c.toDataURL('image/png');D.meta[k]=b64;await kv('meta',D.meta);updHeader();mHalaman();
+    D.meta[k]=c.toDataURL('image/png');await kv('meta',D.meta);updHeader();mHalaman();
   };inp.click();
 };
 A.clrLogo=async t=>{D.meta[t.dataset.k]='';await kv('meta',D.meta);updHeader();mHalaman()};
-A.saveHalaman=async()=>{
-  ['kop1','kop2','kop3','kop4'].forEach(k=>D.meta[k]=$('#h_'+k).value);
-  await kv('meta',D.meta);toast('Halaman tersimpan','ok');
-};
+A.saveHalaman=async()=>{['kop1','kop2','kop3','kop4'].forEach(k=>D.meta[k]=$('#h_'+k).value);await kv('meta',D.meta);toast('Tersimpan','ok')};
 
-/* --- Project --- */
 function mProject(){
   const m=D.meta;
   const F=(k,l,v)=>`<label>${l}<input id="p_${k}" value="${esc(v||'')}"></label>`;
   $('#mv').innerHTML=`<div class="pn"><h3>Project</h3>
-    ${F('project','Nama Project (tampil di header)',m.project)}
-    ${F('prov','Provinsi (kop & tanda tangan)',m.prov)}
+    ${F('project','Nama Project (header)',m.project)}
+    ${F('prov','Provinsi (kop & ttd)',m.prov)}
     ${F('ibu','Ibukota Provinsi',m.ibu)}
-    <p class="mu">Nama project akan tampil di header: <b>Inventarisasi Aset - {Project}</b></p>
+    <p class="mu">Header: <b>Inventarisasi Aset - ${esc(m.project||'{Project}')}</b></p>
     <div class="row"><button class="b p" data-a="saveProject">Simpan</button></div></div>`;
 }
-A.saveProject=async()=>{
-  ['project','prov','ibu'].forEach(k=>D.meta[k]=$('#p_'+k).value.trim());
-  await kv('meta',D.meta);updHeader();toast('Project tersimpan','ok');
-};
+A.saveProject=async()=>{['project','prov','ibu'].forEach(k=>D.meta[k]=$('#p_'+k).value.trim());await kv('meta',D.meta);updHeader();toast('Tersimpan','ok')};
 
-/* daftarkan handler per-sub-tab */
 A.m_instansi=mInstansi;A.m_abbr=mAbbr;A.m_param=mParam;A.m_halaman=mHalaman;A.m_project=mProject;
 
 /* ======================= PETA ======================= */
 async function vPeta(){
-  $('#v').innerHTML=`<div class="bar"><h3 style="margin:0">Peta Satelit & Denah</h3><span class="ch">KIB ${S.kib}</span></div>
+  $('#v').innerHTML=`<div class="bar"><h3 style="margin:0">Peta Satelit</h3><span class="ch">KIB ${S.kib}</span></div>
     <div class="kib-sel">${['A','B','C','D','E','F'].map(k=>`<button data-a="selKibPeta" data-k="${k}"${S.kib==k?' class="on"':''}>KIB ${k}</button>`).join('')}</div>
     <div class="pn"><div class="row">${sel()}<select id="mb"></select></div>
     <div class="row"><button class="b" data-a="loc">📍 Lokasi saya</button>
     <button class="b" data-a="ge">🌍 Google Earth</button>
-    <button class="b" data-a="prn">🖨 Cetak denah</button></div>
+    <button class="b" data-a="prn">🖨 Cetak</button></div>
     <p class="mu" id="hint">Pilih bangunan, lalu ketuk titiknya di peta.</p></div>
     <div id="mw"><div id="map"></div><div id="nA">▲<br>U</div></div><ol id="lg" style="font-size:13px"></ol>`;
   if(!S.opd)return $('#hint').textContent='Pilih instansi dulu.';
@@ -749,7 +761,7 @@ async function vPeta(){
     if(!document.getElementById('lcss')){const l=document.createElement('link');l.id='lcss';l.rel='stylesheet';l.href=LCSS;document.head.append(l)}
     await js(LJS);
     const bl=[...V().filter(r=>r.st==='01'&&r.opd===cur()&&!r.mut&&r.kib===S.kib),...V().filter(r=>r.st==='02'&&r.opd===cur()&&r.kib===S.kib)];
-    $('#mb').innerHTML='<option value="">— pilih —</option>'+bl.map((r,i)=>`<option value="${r.id}">${i+1}. ${esc(r.nama)}${r.reg?' (Reg '+esc(r.reg)+')':''}${r.lat?' ✓':''}</option>`).join('');
+    $('#mb').innerHTML='<option value="">— pilih —</option>'+bl.map((r,i)=>`<option value="${r.id}">${i+1}. ${esc(r.nama)}${r.lat?' ✓':''}</option>`).join('');
     const sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Esri'}),
           osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OSM'}),
           gp=bl.filter(r=>r.lat);
@@ -757,13 +769,13 @@ async function vPeta(){
     L.control.layers({Satelit:sat,Jalan:osm}).addTo(MAP);
     let mk=[];
     const draw=()=>{mk.forEach(m=>m.remove());mk=[];bl.forEach((r,i)=>{if(r.lat)mk.push(L.marker([r.lat,r.lon],{icon:L.divIcon({className:'mk',html:`<b>${i+1}</b>`,iconSize:[28,28]})}).addTo(MAP).bindTooltip(r.nama))});
-      $('#lg').innerHTML=bl.map(r=>`<li>${esc(r.nama)}${r.reg?' · Reg '+esc(r.reg):''} · ${esc(r.kond||'-')} · ${esc(r.luasUkur||r.luas||'-')} m²${r.lat?'':' <i class="mu">(belum ditandai)</i>'}</li>`).join('')};
+      $('#lg').innerHTML=bl.map(r=>`<li>${esc(r.nama)}${r.reg?' · '+esc(r.reg):''}${r.lat?'':' <i class="mu">(belum)</i>'}</li>`).join('')};
     draw();
-    MAP.on('click',async e=>{const r=by($('#mb').value);if(!r)return toast('Pilih bangunan dulu','w');r.lat=+e.latlng.lat.toFixed(7);r.lon=+e.latlng.lng.toFixed(7);await save(r);draw();toast('Titik tersimpan','ok',1800)});
+    MAP.on('click',async e=>{const r=by($('#mb').value);if(!r)return toast('Pilih bangunan','w');r.lat=+e.latlng.lat.toFixed(7);r.lon=+e.latlng.lng.toFixed(7);await save(r);draw();toast('Titik tersimpan','ok',1800)});
   });
 }
 A.selKibPeta=t=>{S.kib=t.dataset.k;vPeta()};
-A.loc=()=>busy('Mencari lokasi…',async()=>{const p=await pos();if(p&&MAP)MAP.setView([p.lat,p.lon],19);else toast('Lokasi tidak tersedia','w')});
+A.loc=()=>busy('Lokasi…',async()=>{const p=await pos();if(p&&MAP)MAP.setView([p.lat,p.lon],19);else toast('Tidak tersedia','w')});
 A.ge=()=>{if(!MAP)return;const c=MAP.getCenter();open(`https://earth.google.com/web/@${c.lat},${c.lng},30a,400d,35y,0h,0t,0r`,'_blank')};
 A.prn=()=>print();
 
@@ -787,8 +799,7 @@ function vKontrol(){
   $('#v').innerHTML=`<div class="pn"><h3>Kontrol Progres</h3>
     <div class="row"><button class="b p" data-a="cimp">⬆ Import Controlling</button>
     <button class="b" data-a="tplCtl">⬇ Template Controlling</button>
-    <button class="b" data-a="csync">🔄 Sinkron dari data</button>
-    <button class="b" data-a="cxl">📊 Excel</button></div>
+    <button class="b" data-a="csync">🔄 Sinkron dari data</button></div>
     <p class="mu">${C.length} instansi · <b style="color:var(--er)">${late.length}</b> terlewat · <b>${soon.length}</b> 7 hari ke depan</p>${tot}</div>
   <div class="pn"><b>Progres per tahap</b><table><tr><th>Tahap</th><th>Belum</th><th>Proses</th><th>Sudah</th><th>Nihil</th><th>%</th></tr>${th}</table></div>
   <div class="pn"><b>Per PJ</b><table><tr><th>PJ</th><th>UPB</th><th>Register</th><th>Sudah</th><th>%</th></tr>${Object.entries(pj).sort((a,b)=>b[1].n-a[1].n).map(([p,o])=>`<tr><td>${esc(p)}</td><td>${o.n}</td><td>${o.r}</td><td>${o.s}</td><td>${pc(o.s,o.r)??'-'}${o.r?'%':''}</td></tr>`).join('')}</table></div>
@@ -801,7 +812,6 @@ function vKontrol(){
   $('#cp').onchange=e=>{F.p=e.target.value;clist()};$('#cs_').onchange=e=>{F.s=e.target.value;clist()};
   $('#cq').oninput=e=>{F.q=e.target.value;clearTimeout(clist.t);clist.t=setTimeout(clist,200)};clist();
 }
-const tx_=v=>String(v??'').trim();
 function clist(){
   const F=S.cf,C=ctlAll(),td=tdy(),wk=new Date(Date.now()+6048e5).toISOString().slice(0,10),q=norm(F.q);
   const all_=c=>TH.flatMap(([k])=>KB.map(b=>c[k+b])).filter(v=>v&&v!=='NIHIL'),has=(c,s)=>TH.some(([k])=>KB.some(b=>c[k+b]===s));
@@ -812,18 +822,18 @@ function clist(){
     const pb=pc(N(c.sB),N(c.rB)),late=c.tgl&&c.tgl<td&&openT(c);
     return `<div class="cd" data-a="ce" data-n="${esc(c.opd)}">
       <b>${esc(c.opd)}</b>
-      <small>PJ: ${esc(c.pj||'-')} · Tim: ${esc(c.tim||'-')}${c.tgl?' · Turlap '+esc(c.tgl):''}</small>
-      ${late?chp('Terlewat','er'):''}${TH.map(([k,l])=>KB.filter(b=>c[k+b]).map(b=>chp(l.replace('Input KKI','Input').replace('KKI ','')+' '+b+': '+c[k+b],SC[c[k+b]])).join('')).join('')}
-      <small>Bangunan ${N(c.sB)}/${N(c.rB)}${pb==null?'':' ('+pb+'%)'}</small>
-      <div class="pb"><i style="width:${pb||0}%"></i></div></div>`}).join('')||'<p class="empty">Belum ada. Import atau tambahkan instansi.</p>';
+      <small>PJ: ${esc(c.pj||'-')}${c.tgl?' · '+esc(c.tgl):''}</small>
+      ${late?chp('Terlewat','er'):''}
+      <small>B ${N(c.sB)}/${N(c.rB)}${pb==null?'':' ('+pb+'%)'}</small>
+      <div class="pb"><i style="width:${pb||0}%"></i></div></div>`}).join('')||'<p class="empty">Belum ada.</p>';
 }
 A.ce=t=>{
   const n=t.dataset.n,c=ctlMap().get(n)||{};
   const sl=(k,l)=>fld([k,l,STS],c[k]||''),nm=(k,l)=>fld([k,l,'number'],c[k]??'');
   modal(`<form id="fm"><h3>${esc(n)}</h3>
-    ${fld(['pj','Penanggung jawab (PJ)','text'],c.pj||'')}${fld(['tim','Tim','text'],c.tim||'')}
+    ${fld(['pj','PJ','text'],c.pj||'')}${fld(['tim','Tim','text'],c.tim||'')}
     ${fld(['tgl','Jadwal turlap','date'],c.tgl||'')}${fld(['lokasi','Lokasi','text'],c.lokasi||'')}
-    ${sl('jt','Status jadwal turlap')}
+    ${sl('jt','Status jadwal')}
     ${TH.map(([k,l])=>`<b>${l}</b><div class="g3">${KB.map(b=>sl(k+b,KN[b])).join('')}</div>`).join('')}
     <b>Register tercatat</b><div class="g3">${nm('rT','Tanah')}${nm('rB','Bangunan')}${nm('rK','KDP')}</div>
     <b>Register selesai</b><div class="g3">${nm('sT','Tanah')}${nm('sB','Bangunan')}${nm('sK','KDP')}</div>
@@ -848,7 +858,7 @@ A.tplCtl=()=>busy('Template…',async()=>{await js(XJS);
   XLSX.writeFile(wb,'Template_Controlling.xlsx');
 });
 A.cimp=()=>$('#fk').click();
-$('#fk').addEventListener('change',e=>{const f=e.target.files[0];e.target.value='';f&&busy('Membaca controlling…',()=>impCtl(f))},false);
+$('#fk').onchange=e=>{const f=e.target.files[0];e.target.value='';f&&busy('Membaca controlling…',()=>impCtl(f))};
 
 /* ======================= SINKRON ======================= */
 function vSync(){
@@ -859,25 +869,21 @@ function vSync(){
     ${I('url','URL Web App Apps Script','url')}
     ${I('secret','Kunci rahasia','password')}
     ${I('who','Nama petugas')}
-    ${I('prov','Provinsi (kop KKI)')}
-    ${I('ibu','Ibukota provinsi')}
+    ${I('prov','Provinsi')}${I('ibu','Ibukota')}
     <div class="row"><button class="b p" data-a="msave">Simpan</button>
-    <button class="b" data-a="ping">🔌 Tes koneksi</button>
-    <button class="b" data-a="kirim">⬆ Kirim sekarang</button>
-    <button class="b" data-a="tarik">⬇ Tarik data</button></div>
+    <button class="b" data-a="ping">🔌 Tes</button>
+    <button class="b" data-a="kirim">⬆ Kirim</button>
+    <button class="b" data-a="tarik">⬇ Tarik</button></div>
     <p class="mu" id="qi"></p></div>`;
   upQ().then(()=>{const q=$('#qi');if(q)q.textContent=$('#qc').textContent});
 }
-A.msave=async()=>{
-  ['project','url','secret','who','prov','ibu'].forEach(k=>{const el=$('#m_'+k);if(el)D.meta[k]=el.value.trim()});
-  await kv('meta',D.meta);updHeader();toast('Tersimpan','ok');
-};
+A.msave=async()=>{['project','url','secret','who','prov','ibu'].forEach(k=>{const el=$('#m_'+k);if(el)D.meta[k]=el.value.trim()});await kv('meta',D.meta);updHeader();toast('Tersimpan','ok')};
 async function post(b){
   const m=D.meta;if(!m.url)throw new Error('URL Apps Script belum diisi');
   const r=await fetch(m.url,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({secret:m.secret,...b})}),
         j=await r.json();if(!j.ok)throw new Error(j.error||'Gagal');return j;
 }
-A.ping=()=>busy('Tes koneksi…',async()=>{await A.msave();
+A.ping=()=>busy('Tes…',async()=>{await A.msave();
   const r=await fetch(D.meta.url+'?secret='+encodeURIComponent(D.meta.secret)),j=await r.json();
   toast(j.ok?'Terhubung ✓':j.error,j.ok?'ok':'e')});
 A.kirim=()=>sync(true);
@@ -886,7 +892,7 @@ async function sync(manual){
   if(syncing)return;if(!navigator.onLine)return manual&&toast('Offline','w');
   if(!D.meta.url)return manual&&toast('Isi URL Apps Script','w');syncing=1;
   try{
-    const q=await all('q');if(!q.length){manual&&toast('Semua sudah terkirim','ok');return}
+    const q=await all('q');if(!q.length){manual&&toast('Semua terkirim','ok');return}
     await busy(`Mengirim ${q.length} data…`,async()=>{
       const rq=q.filter(x=>x.k==='r'),M=new Map(D.recs.map(r=>[r.id,r]));
       for(let i=0;i<rq.length;i+=100){
@@ -901,19 +907,21 @@ async function sync(manual){
       }
     });
     toast(`Berhasil: ${q.length} data terkirim`,'ok');
-  }catch(e){toast('Gagal: '+e.message+' — data tetap aman','e',8000)}
+  }catch(e){toast('Gagal: '+e.message,'e',8000)}
   finally{syncing=0;upQ()}
 }
-A.tarik=()=>busy('Menarik data…',async()=>{
+A.tarik=()=>busy('Menarik…',async()=>{
   const j=await post({action:'get'}),M=new Map(D.recs.map(r=>[r.id,r])),up=[];
   j.items.forEach(it=>{const l=M.get(it.id);if(!l||+it.ts>l.ts){const r=JSON.parse(it.j);if(l)Object.assign(l,r);else D.recs.push(r);up.push(l||r)}});
-  await putMany('recs',up);toast(`${up.length} rekaman diperbarui`,'ok');render();
+  await putMany('recs',up);toast(`${up.length} rekaman`,'ok');render();
 });
 
 /* ======================= IMPORT KIB ======================= */
-A.tpl=t=>{const kib=t.dataset.kib;dlTemplate(kib)};
+A.tpl=t=>{const kib=t.dataset.kib||S.kib;dlTemplate(kib)};
 async function dlTemplate(kib){
-  await busy('Menyiapkan template…',async()=>{
+  kib=kib||S.kib||'C';
+  if(!TPL[kib])return toast('Template tidak tersedia','e');
+  await busy('Menyiapkan…',async()=>{
     await js(XJS);
     const heads=TPL[kib],sample=heads.map((h,i)=>i===0?'1':(i===heads.length-1?'Contoh keterangan':''));
     const ws=XLSX.utils.aoa_to_sheet([heads,sample]);
@@ -922,143 +930,5 @@ async function dlTemplate(kib){
     XLSX.writeFile(wb,`Template_Import_KIB_${kib}.xlsx`);
   });
 }
-A.imp=t=>{S.impKib=t.dataset.kib;$('#fi').click()};
-$('#fi').onchange=e=>{const f=e.target.files[0];e.target.value='';f&&busy('Membaca '+f.name+'…',()=>importX(f,S.impKib||S.kib))};
-const iso=d=>d instanceof Date?new Date(d.getTime()+432e5).toISOString().slice(0,10):String(d??'').slice(0,10);
-
-async function importX(f,kib){
-  await js(XJS);
-  const buf=await f.arrayBuffer();
-  const names=XLSX.read(buf,{bookSheets:true}).SheetNames;
-  let use=[names[0]];
-  if(names.length>1&&confirm(`File punya ${names.length} sheet.\nOK = semua sheet, Batal = sheet pertama saja.`))use=names;
-  const seen=new Set(V().filter(r=>r.kib===kib).map(r=>[r.kode,r.reg,r.nama,r.tgl,r.harga].join('|')));
-  const add=[];let dup=0;
-  for(const sn of use){
-    const wb=XLSX.read(buf,{cellDates:true,sheets:sn}),
-          a=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:true,defval:''}),
-          h=a.findIndex(r=>/^(NO)$/i.test(String(r[0]).trim()));
-    if(h<0)continue;
-    for(let i=h+1;i<a.length;i++){
-      const r=a[i];
-      if(String(r[0]).trim().toUpperCase()==='JUMLAH')break;
-      if(!String(r[1]).trim()&&!String(r[2]).trim())continue;
-      const o=parseRow(kib,r);
-      if(!o)continue;
-      const k=[o.kode,o.reg,o.nama,o.tgl,o.harga].join('|');
-      if(seen.has(k)){dup++;continue}
-      seen.add(k);add.push(o);
-    }
-  }
-  if(!add.length)return toast('Tidak ada baris baru'+(dup?` (${dup} duplikat)`:''),'w');
-  await saveMany(add);
-  const g=await grup(false);
-  toast(`Import KIB ${kib}: ${add.length} baru, ${dup} duplikat, ${g} diregroup`,'ok',9000);
-  render();
-}
-function parseRow(kib,r){
-  const base={id:uid(),kib,st:'01',opd:'',no:0};
-  if(kib==='C'){
-    const o={...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),alamat:tx_(r[4]),
-      luas:r[5],tgl:iso(r[6]),jml:r[7],harga:r[8],ada:tx_(r[9]),bert:tx_(r[10]),beton:tx_(r[11]),
-      kond:tx_(r[12]),guna:tx_(r[13]),kuasa:tx_(r[14]),jmlLap:r[15],luasUkur:r[16],
-      rehab:tx_(r[17]),kap:tx_(r[18]),indukLain:tx_(r[19]),reff:tx_(r[20]),kd:tx_(r[21]),
-      y:tx_(r[24]),ket:tx_(r[25])};
-    if(!o.nama&&!o.kode)return null;return o;
-  }
-  if(kib==='A')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),alamat:tx_(r[4]),luas:r[5],hak:tx_(r[6]),guna:tx_(r[7]),tgl:iso(r[8]),harga:r[9],ket:tx_(r[10])};
-  if(kib==='B')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),merk:tx_(r[4]),ukuran:tx_(r[5]),satuan:tx_(r[6]),jml:r[7],tgl:iso(r[8]),harga:r[9],kond:tx_(r[10]),alamat:tx_(r[11]),ket:tx_(r[12])};
-  if(kib==='D')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),konstruksi:tx_(r[4]),panjang:r[5],lebar:r[6],luas:r[7],alamat:tx_(r[8]),tgl:iso(r[9]),harga:r[10],kond:tx_(r[11]),ket:tx_(r[12])};
-  if(kib==='E')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),merk:tx_(r[4]),ukuran:tx_(r[5]),jml:r[6],alamat:tx_(r[7]),tgl:iso(r[8]),harga:r[9],kond:tx_(r[10]),ket:tx_(r[11])};
-  if(kib==='F')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),kontrak:tx_(r[4]),nilai:r[5],progress:r[6],mulai:iso(r[7]),selesai:iso(r[8]),alamat:tx_(r[9]),harga:r[10],ket:tx_(r[11])};
-  return null;
-}
-async function grup(all){
-  let ch=[];
-  const P=D.opds.map(o=>({n:o.name,k:(o.keys||[]).map(norm).filter(Boolean).map(k=>new RegExp('(?<![a-z0-9])'+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?![0-9])'))}));
-  V().forEach(r=>{
-    if(r.st!=='01'||r.lock||(r.opd&&!all))return;
-    const T=[[norm(r.nama),3],[norm(r.alamat),2],[norm(r.y),3],[norm(r.ket),1]];
-    let b='',bs=0;
-    P.forEach(p=>{let s=0;p.k.forEach(re=>T.forEach(([t,w])=>{if(re.test(t))s+=w}));if(s>bs){bs=s;b=p.n}});
-    if(b!==r.opd){r.opd=b;ch.push(r)}
-  });
-  if(ch.length)await saveMany(ch);return ch.length;
-}
-async function impCtl(f){
-  await js(XJS);
-  const wb=XLSX.read(await f.arrayBuffer(),{cellDates:true}),
-        nm=n=>wb.SheetNames.find(s=>s.trim().toLowerCase()===n),
-        pg=nm('progres'),jd=nm('jadwal mingguan');
-  if(!pg)throw new Error('Sheet "Progres" tidak ditemukan');
-  const M=ctlMap(),out=[];let nO=0;
-  const get=n=>{n=n.trim();let o=D.opds.find(x=>norm(x.name)==norm(n));if(!o){o={name:n,keys:[n]};D.opds.push(o);nO++}return o.name},
-        rec=n=>{let r=M.get(n);if(!r){r={id:'ctl:'+n,st:'ctl',opd:n};M.set(n,r)}if(!out.includes(r))out.push(r);return r},
-        sv=v=>{v=tx_(v).toUpperCase();return STS.includes(v)?v:''},
-        nz=v=>typeof v==='number'?v:'';
-  const rows=XLSX.utils.sheet_to_json(wb.Sheets[pg],{header:1,raw:true,defval:''});
-  for(let i=10;i<rows.length;i++){
-    const r=rows[i],u=tx_(r[1]);
-    if(!u||/^jumlah/i.test(u)||r[0]===''||isNaN(+r[0]))continue;
-    const c=rec(get(u));
-    Object.assign(c,{tim:tx_(r[2]),jt:sv(r[3]),pj:tx_(r[27])||c.pj||'',
-      rT:nz(r[17]),rB:nz(r[18]),rK:nz(r[19]),sT:nz(r[20]),sB:nz(r[21]),sK:nz(r[22]),final:nz(r[16])});
-    [['tl',4],['in',7],['dn',10],['ft',13]].forEach(([k,j])=>KB.forEach((b,x)=>c[k+b]=sv(r[j+x])));
-  }
-  await saveMany(out);await kv('opds',D.opds);mkAbr();
-  toast(`Controlling: ${out.length} instansi, ${nO} baru`,'ok',9000);render();
-}
-
-/* ======================= EKSPOR EXCEL KKI ======================= */
-A.xl=t=>{const kib=t.dataset.kib||S.kib;exportKib(kib)};
-async function exportKib(kib){
-  await busy('Menyusun Excel KKI…',async()=>{
-    const o=D.opds.find(x=>x.name==cur());
-    if(!o)return toast('Pilih instansi dulu','w');
-    await js(EXJS);
-    const W=new ExcelJS.Workbook(),m=D.meta,rs=V().filter(r=>r.opd===cur()&&r.kib===kib);
-    const c1=rs.filter(r=>r.st==='01').sort((a,b)=>(a.no||0)-(b.no||0)),
-          c2=rs.filter(r=>r.st==='02'),c3=rs.filter(r=>r.st==='03'),h=hasil(c1,c2);
-    const FIELDS_K=(FIELDS[kib]||FIELDS.C);
-    const H=FIELDS_K.map(f=>[String(f[1]).toUpperCase(),'',Math.max(12,Math.min(30,String(f[1]).length+2))]);
-    const put=async(name,title,code,rows)=>{
-      const ws=W.addWorksheet(name,{views:[{state:'frozen',ySplit:8,xSplit:3}]}),
-            n=H.length;
-      for(let i=1;i<=4;i++){ws.mergeCells(i,1,i,n-1);ws.getRow(i).font={bold:true,size:i===1?13:11}}
-      ws.getCell(1,1).value='Kertas Kerja Inventarisasi/Validasi (KKI)';
-      ws.getCell(2,1).value=title;ws.getCell(3,1).value=(o.name||'').toUpperCase();
-      ws.getCell(4,1).value='Pemerintah Daerah Provinsi '+(m.prov||'');
-      ws.getCell(2,n).value='FORM - KKI';ws.getCell(3,n).value=code;
-      ws.getCell(3,n).font=ws.getCell(2,n).font={bold:true};
-      H.forEach(([l,s,w],i)=>{const c=i+1;ws.getColumn(c).width=w;ws.getCell(6,c).value=l;ws.getCell(8,c).value=c});
-      rows.forEach((r,i)=>FIELDS_K.forEach((f,j)=>ws.getCell(9+i,j+1).value=r[f[0]]??''));
-      ws.getColumn(5).numFmt='#,##0';
-    };
-    await put('Form_'+kib+'_01','DAFTAR RINCIAN BARANG HASIL INVENTARISASI','FORM '+kib+'-01',c1);
-    await put('Form_'+kib+'_02','USULAN MUTASI TAMBAH','FORM '+kib+'-02',c2);
-    await put('Form_'+kib+'_03','USULAN MUTASI KURANG','FORM '+kib+'-03',c3);
-    await put('Form_'+kib+'_04','USULAN DAFTAR HASIL','FORM '+kib+'-04',h);
-    const b=await W.xlsx.writeBuffer(),a=document.createElement('a');
-    a.href=URL.createObjectURL(new Blob([b],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
-    a.download=`KKI_KIB_${kib}_${(o.name||'').replace(/[^\w]+/g,'_')}.xlsx`;a.click();
-    setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('Excel selesai','ok');
-  });
-}
-A.cxl=async()=>{};
-
-/* ======================= INIT ======================= */
-(async()=>{
-  const [recs,k]=await Promise.all([all('recs'),all('kv')]);
-  D.recs=recs;
-  k.forEach(x=>{
-    if(x.k==='opds')D.opds=x.v;
-    else if(x.k==='abbr')D.abbr=x.v;
-    else if(x.k==='meta')Object.assign(D.meta,x.v);
-    else if(x.k==='last')S.opd=x.v;
-  });
-  mkAbr();updNet();upQ();render();sync();
-  if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
-})();
-</script>
-</body>
-</html>
+A.imp=t=>{S.impKib=t.dataset.kib||S.kib;$('#fi').click()};
+$('#fi').onchange=e=>{const f=e.target.files[0];e.target.value='';f&&busy
