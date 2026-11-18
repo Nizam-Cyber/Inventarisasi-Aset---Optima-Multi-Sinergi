@@ -138,6 +138,27 @@ footer{text-align:center;padding:20px;color:var(--mu);font-size:12px;margin-top:
 .stats div{background:var(--sf);border:1px solid var(--ln);border-radius:22px;padding:16px}
 .stats b{display:block;font-size:clamp(26px,5vw,38px);font-weight:700;color:var(--ac);letter-spacing:-.03em;line-height:1.1}
 .stats span{color:var(--mu);font-size:12.5px}
+/* --- Tabel data (preview + edit) --- */
+.gw{position:relative;overflow:auto;max-height:68vh;border:1px solid var(--ln);border-radius:20px;background:var(--sf);box-shadow:var(--sh);margin-bottom:10px}
+.gt{width:max-content;min-width:100%;border:0;border-radius:0;overflow:visible;font-size:13px}
+.gt th{position:sticky;top:0;z-index:3;background:var(--sf2);white-space:nowrap;border-right:1px solid var(--ln);cursor:default}
+.gt td{white-space:nowrap;max-width:300px;overflow:hidden;text-overflow:ellipsis;border-right:1px solid var(--ln);padding:7px 10px}
+.gt td.n{text-align:right;font-variant-numeric:tabular-nums}
+.gt .s0{position:sticky;left:0;z-index:2;background:var(--sf2);min-width:46px;text-align:center;color:var(--mu)}
+.gt .s1{position:sticky;left:46px;z-index:2;background:var(--sf2);min-width:78px;padding:4px 6px}
+.gt th.s0,.gt th.s1{z-index:4}
+.gt tbody tr:hover td:not(.sel){background:color-mix(in srgb,var(--pr) 10%,var(--sf))}
+.gt tbody tr:hover td.s0,.gt tbody tr:hover td.s1{background:var(--sf2)}
+.gw.ed td[data-j]{cursor:cell;user-select:none;-webkit-user-select:none}
+.gw.ed th[data-hj],.gw.ed td.s0{cursor:pointer}
+.gt td.sel{background:color-mix(in srgb,var(--pr) 30%,var(--sf))}
+.gt td.cur{outline:2px solid var(--ac);outline-offset:-2px}
+.gt td.fl{outline:2px dashed var(--ac);outline-offset:-2px;background:color-mix(in srgb,var(--ac) 12%,var(--sf))}
+.gt td input,.gt td select{padding:5px 7px;border-radius:8px;min-width:130px;width:100%}
+#fh{position:absolute;width:12px;height:12px;background:var(--ac);border:2px solid var(--sf);border-radius:4px;cursor:crosshair;z-index:6;touch-action:none}
+#fh::after{content:"";position:absolute;inset:-14px}
+.ib{border:0;background:none;cursor:pointer;font-size:15px;padding:3px 5px;border-radius:8px}
+.ib:hover{background:var(--ln)}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation-duration:.01ms!important}}
 @media print{header,nav,aside,footer,.bar,.row,#hint,#ts{display:none!important}body{padding:0;background:#fff;color:#000}#map{height:70vh}}
 </style>
@@ -261,6 +282,39 @@ const TPL={
   F:['NO','KODE BARANG','NAMA BARANG','NO REG','NO KONTRAK','NILAI KONTRAK','PROGRESS','TGL MULAI','TGL SELESAI','ALAMAT','HARGA','KETERANGAN']
 };
 
+/* ===== Field KIB A, C, F mengikuti template import & form KKI ===== */
+const YT=['','YA','TIDAK'],ADA3=['','ADA','TIDAK','BELUM'],KOND=['','B','KB','RB'];
+const T_=[['kode','Kode Barang','text'],['nama','Nama Barang','text'],['reg','No. Register','text']];
+const NH_=[['hAwal','Nilai Perolehan Awal (Rp)','number'],['kapit','Kapitalisasi/Koreksi (Rp)','number'],['harga','Nilai Perolehan Akhir (Rp)','number']];
+const KDF=['kd','Kode Inventarisasi',[''].concat(KD)];
+FIELDS.A=[...T_,['alamat','Letak/Lokasi/Alamat','text'],['guna','Penggunaan','text'],['hak','Hak/Bukti Kepemilikan','text'],['hakNo','Nomor Sertifikat','text'],['hakTgl','Tgl Sertifikat','date'],
+  ['luas','Luas Tanah (m²)','number'],['tgl','Tgl Perolehan','date'],['jml','Jumlah Bidang','number'],...NH_,['asalUsul','Asal Usul','text'],
+  ['ada','Keberadaan',ADA3],['pakai','Penggunaan (YA/TIDAK)',YT],['kuasa','Penguasaan',YT],['sesuai','Kesesuaian Bukti',['','SESUAI','TDK SESUAI']],
+  ['patok','Tanda Batas/Patok',YT],['pagar','Pagar',YT],['papan','Papan Nama',YT],['kap','Kapitalisasi ke Induk',YT],['indukLain','Aset Induk di OPD Lain',YT],
+  ['reff','Reff No. Urut Induk','text'],KDF,['y','Aset induk/mutasi OPD lain','text'],['ket','Keterangan','text'],['jenis','Jenis Aset','text']];
+FIELDS.C=[...T_,['alamat','Alamat/Lokasi','text'],['luas','Luas Bangunan (m²)','number'],['tgl','Tgl Perolehan','date'],['jml','Jumlah Bangunan','number'],...NH_,
+  ['dokTgl','Tgl Dokumen','date'],['dokNo','No. Dokumen','text'],['ada','Keberadaan',ADA3],['bert','Bertingkat',YT],['beton','Beton',YT],['kond','Kondisi',KOND],
+  ['guna','Penggunaan',YT],['kuasa','Penguasaan',YT],['jmlLap','Jumlah unit di lapangan','number'],['luasUkur','Luas hasil ukur (m²)','number'],
+  ['rehab','Bangunan rehab',YT],['kap','Kapitalisasi ke induk',YT],['indukLain','Aset induk di OPD lain',YT],['reff','Reff induk','text'],KDF,
+  ['y','Aset induk/mutasi OPD lain','text'],['ket','Keterangan','text'],['jenis','Jenis Aset','text']];
+FIELDS.F=[...T_,['alamat','Lokasi','text'],['dokTgl','Tgl Dokumen','date'],['dokNo','No. Dokumen','text'],['bert','Bertingkat',YT],['beton','Beton',YT],
+  ['luas','Luas Lantai (m²)','number'],['dok2Tgl','Tgl Dokumen Tanah','date'],['dok2No','No. Dokumen Tanah','text'],['statusTanah','Status Tanah','text'],
+  ['asalUsul','Asal Usul','text'],['kond','Kondisi',KOND],['tgl','Tgl Perolehan','date'],['jml','Jumlah Barang','number'],...NH_,
+  ['ada','Keberadaan',ADA3],KDF,['ket','Keterangan','text'],['jenis','Jenis Aset','text']];
+/* Header template import (persis seperti file contoh) + 2 baris contoh */
+TPL.A=['Nama UPB','Bid','Unit','Sub Unit','Upb','Kode Barang','Nama Barang','No_Reg8','Alamat','Penggunaan','Hak_Tanah','Sertifikat_Tanggal','Sertifikat_Nomor','Luas_M2','Tgl_Perolehan','Jumlah Bid. Tanah','Nilai Perolehan Awal','Kapitalisasi/Koreksi','Nilai Perolehan Akhir','Asal_usul','Keterangan','Jenis Aset'];
+TPL.C=['Kd Bid','Kd Unit','Kd Sub','Kd UPB','Kode UPB','Nama UPB','Kode Barang','Nama Barang','No_Reg8','Lokasi','Luas_Lantai','Tgl_Perolehan','Jumlah Bangunan','Nilai Perolehan Awal','Kapitalisasi/Koreksi','Nilai Perolehan Akhir','Dokumen_Tanggal','Dokumen_Nomor','Kondisi','Keterangan','Jenis Aset'];
+TPL.F=['Kode UPB','Nama UPB','Kode Barang','Nama Barang','No_Reg8','Lokasi','Dokumen_Tanggal','Dokumen_Nomor','Bertingkat_Tidak','Beton_Tidak','Luas_Lantai','Dokumen_Tanggal','Dokumen_Nomor','Status_Tanah','Asal_usul','Kondisi','Tgl_Perolehan','Jumlah Brg','Nilai Perolehan Awal','Kapitalisasi/Koreksi','Nilai Perolehan Akhir','Keterangan','Jenis Aset'];
+const SMP={
+ A:[['Biro Pemerintahan dan Otonomi Daerah',4,'1','1','1','1.3.1.1.1.1.1','Tanah Bangunan Rumah Negara Golongan I',1,'Desa Balbar Kec. Oba Utara Kota Tikep','Rumah Dinas Wagub','Hak Pakai','2013-10-10','4',5963,'2001-12-12',1,59250000,0,59250000,'Pembelian','Tanah Rumah Dinas Wakil Gubernur','Aset Tetap'],
+    ['Biro Pemerintahan dan Otonomi Daerah',4,'1','1','1','1.3.1.1.1.1.1','Tanah Bangunan Rumah Negara Golongan I',2,'Desa Guraping Kec. Oba Utara Kota Tikep','-','Hak Pakai','2014-12-04','00012',4499,'2013-12-23',1,456725000,0,456725000,'Pembelian','Direncanakan tanah Untuk Bangunan  Jalan masuk ke perumahan eselon II','Aset Tetap']],
+ C:[[11,3,1,8,'11.3.1.8','P3D Dinas Ketahanan Pangan dan Pertanian TALIABU','1.3.3.1.1.2.14','Bangunan Gudang Lain-lain (dst)',1,'','','2016-12-31',1,123225000,0,123225000,'2018-12-21','032/98/BUP','Kurang Baik','Bangunan Gapura Hutan Kota','Aset Tetap'],
+    [11,4,1,1,'11.4.1.1','Dinas Pangan','1.3.3.1.1.1.1','Bangunan Gedung Kantor Permanen',7,'Jl. 40 Desa Balbar Kec. Oba Utara Kota Tikep','','2015-06-15',1,761960000,2426888415.64,3188848415.64,'','','Baik','Kantor Dinas Pangan','Aset Tetap']],
+ F:[['7.1.1.1','Dinas Kesehatan','1.3.3.1.1.6.1','Bangunan Rumah Sakit Umum',17,'RSUD SOFIFI','','','Tidak','Beton','','','','Tanah Milik Pemda','Pembelian','Baik','2023-12-31',1,12619380300,0,12619380300,'','KDP'],
+    ['7.1.1.1','Dinas Kesehatan','1.3.3.1.1.6.1','Bangunan Rumah Sakit Umum',18,'Jln, Raya 40 Sofifi Kota Tidore Kepulauan','','07/SP-ANDALALIN/PPK/IX/2022','','','','','07/SP-ANDALALIN/PPK/IX/2022','','Pembelian','Baik','2025-12-31',1,99850000,0,99850000,'pekerjaan Jasa Konsultan Andalalin RSU Sofifi Prov.MU','KDP']]
+};
+
+
 /* ======================= STATE & DB ======================= */
 const D={
   recs:[],opds:[],
@@ -271,7 +325,7 @@ const D={
     kop3:'Jl. ...',kop4:'',logoOpt:'',logoProv:'',logoKab:''
   }
 };
-const S={tab:'beranda',kib:'C',st:'01',opd:'',q:'',f:'',p:0};
+const S={tab:'beranda',kib:'C',st:'01',opd:'',q:'',f:'',p:0,edit:0};
 let MAP=null,MT=null,PR=null,syncing=0;
 
 const DB=new Promise((ok,no)=>{
@@ -352,7 +406,7 @@ const TABS=[
   ['master','Master','⚙️'],
   ['sinkron','Sinkron','☁️']
 ];
-A.tab=t=>{S.tab=t.dataset.k;S.p=0;S.q='';S.f='';render()};
+A.tab=t=>{S.tab=t.dataset.k;S.p=0;S.q='';S.f='';S.edit=0;render()};
 
 function render(){
   updHeader();
@@ -368,7 +422,7 @@ function render(){
 function vHome(){
   const all=V(),noOpd=all.filter(r=>r.kib==='C'&&r.st==='01'&&!r.opd).length;
   const cnt={A:0,B:0,C:0,D:0,E:0,F:0};
-  all.forEach(r=>{if(cnt[r.kib]!=null)cnt[r.kib]++});
+  all.forEach(r=>{if(r.st==='01'&&cnt[r.kib]!=null)cnt[r.kib]++});
   const PAL={A:['#23885a','#fff'],B:['#f4883c','#3b1f14'],C:['#55291f','#fff'],D:['#fbc531','#3b1f14'],E:['#f47c8c','#3b1f14'],F:['#1f8f8a','#fff']};
   $('#v').innerHTML=`<section class="hero">
     <div>
@@ -395,7 +449,7 @@ function vHome(){
     <div><b>${all.length.toLocaleString('id-ID')}</b><span>Total rekaman</span></div>
   </div>`;
 }
-A.tabKib=t=>{S.kib=t.dataset.k;S.tab='data';S.st='01';S.p=0;render()};
+A.tabKib=t=>{S.kib=t.dataset.k;S.tab='data';S.st='01';S.p=0;S.edit=0;render()};
 A.regrup=()=>busy('Mengelompokkan data per instansi…',async()=>{const n=await grup(false);toast(`${n} baris dikelompokkan/diperbarui`,'ok');render()});
 
 /* ========== IMPORT dari Beranda (pilih KIB dulu) ========== */
@@ -422,58 +476,234 @@ A.tplM=()=>{
 };
 A.doTpl=()=>{const kib=fd().kib;A.close();dlTemplate(kib)};
 
-/* ======================= DATA (per KIB) ======================= */
-function vData(){
-  const km=KIB_META[S.kib];
-  $('#v').innerHTML=`<div class="bar" style="margin-bottom:6px"><h3 style="margin:0">${km.n}</h3><span class="ch">KIB ${S.kib}</span></div>
-    <div class="kib-sel">${['A','B','C','D','E','F'].map(k=>`<button data-a="selKib" data-k="${k}"${S.kib==k?' class="on"':''}>KIB ${k}</button>`).join('')}</div>
-    <div class="tabs">${[['01','Form '+S.kib+'-01'],['02',S.kib+'-02 · Tambah'],['03',S.kib+'-03 · Kurang'],['04',S.kib+'-04 · Hasil']].map(([k,l])=>`<button data-a="selSt" data-k="${k}"${S.st==k?' class="on"':''}>${l}</button>`).join('')}</div>
-    <div id="dlist"></div>`;
-  if(S.st=='04'){vHasilKib();return}
-  const st='0'+S.st;
-  $('#dlist').innerHTML=`<div class="pn">
-    <div class="row">${sel()}<input id="q" placeholder="Cari nama, alamat, reg…" value="${esc(S.q)}">${st=='01'?`<select id="f"><option value="">Semua</option><option value="belum">Belum diisi</option><option value="ADA">Ada</option><option value="TIDAK">Tidak ada</option><option value="mut">Dimutasi</option></select>`:`<button class="b p" data-a="new" data-st="${S.st}">+ Tambah</button>`}</div>
-    <div class="row"><button class="b" data-a="tpl" data-kib="${S.kib}">⬇ Template KIB ${S.kib}</button>${st=='01'?`<button class="b p" data-a="imp" data-kib="${S.kib}">⬆ Import KIB ${S.kib}</button>`:''}</div>
-  </div><div id="lst"></div><div class="row" id="pg"></div>`;
-  const qi=$('#q');if(qi)qi.oninput=e=>{S.q=e.target.value;S.p=0;clearTimeout(vData._t);vData._t=setTimeout(()=>lst(st),200)};
-  const fs=$('#f');if(fs){fs.value=S.f;fs.onchange=e=>{S.f=e.target.value;S.p=0;lst(st)}}
-  lst(st);
-}
-A.selKib=t=>{S.kib=t.dataset.k;S.st='01';S.p=0;render()};
-A.selSt=t=>{S.st=t.dataset.k;S.p=0;render()};
+/* ======================= DATA (per KIB): preview dulu, edit ala spreadsheet ======================= */
+const EX={'02':[['sebab','Sebab bertambah',[''].concat(SBT)],['asal','Asal OPD/UPB','text'],['reff','Reff No. Urut 01','text'],['km','Keterangan mutasi','text']],
+          '03':[['sebab','Sebab berkurang',[''].concat(SBK)],['tujuan','Tujuan OPD/UPB','text'],['reff','Reff No. Urut 01','text'],['km','Keterangan mutasi','text']]};
+const cols=(kib,st)=>{const ex=EX[st]||[],b=(FIELDS[kib]||FIELDS.C).filter(f=>!ex.some(e=>e[0]===f[0]));return[...b,...ex]};
+const NUMK=new Set(['luas','jml','hAwal','kapit','harga','jmlLap','luasUkur','panjang','lebar','nilai','progress']),MONEY=new Set(['hAwal','kapit','harga','nilai']);
+const G={rows:[],cols:[],a:null,b:null,drag:0,fill:null,ed:null,dirty:new Set(),syn:new Set(),t:0,off:2,ro:true};
+const cv=(r,c)=>{const v=r[c[0]];if(v==null||v==='')return'';return MONEY.has(c[0])&&!isNaN(+v)?Math.round(+v).toLocaleString('id-ID'):esc(v)};
 
+function vData(){
+  endEd(true);G.a=G.b=null;
+  const st=S.st,ed=S.edit&&st!=='04';
+  const B=(a,l,x='',e='')=>`<button class="b ${x}" data-a="${a}"${e}>${l}</button>`;
+  const lab={'01':`Form ${S.kib}-01 · Induk`,'02':`${S.kib}-02 · Tambah`,'03':`${S.kib}-03 · Kurang`,'04':`${S.kib}-04 · Hasil`};
+  let r2;
+  if(st==='04')r2=B('xl','📊 Unduh Excel KKI','p',` data-kib="${S.kib}"`);
+  else if(ed)r2=B('gedit','👁 Selesai edit','p')+B('addrow','+ Baris','',' data-n="1"')+B('addrow','+10','',' data-n="10"')+B('fdown','⬇ Isi bawah')+B('fright','➡ Isi kanan')+B('gclear','🧹 Kosongkan')+B('gpaste','📋 Tempel')+B('gdelrows','🗑 Hapus baris')+
+    `<span class="mu" id="gs">Klik sel lalu ketik. Seret kotak kecil di pojok sel untuk menyalin ke bawah atau samping.</span>`;
+  else r2=B('gedit','✏️ Edit tabel','p')+B('new','+ Tambah (form)','',` data-st="${st}"`)+B('tpl','⬇ Template','',` data-kib="${S.kib}"`)+(st==='01'?B('imp','⬆ Import','',` data-kib="${S.kib}"`):'')+B('xl','📊 Unduh Excel','',` data-kib="${S.kib}"`);
+  $('#v').innerHTML=`<div class="bar" style="margin-bottom:6px"><h3 style="margin:0">${KIB_META[S.kib].n}</h3><span class="ch">${ed?'Mode edit tabel':'Preview'}</span></div>
+    <div class="kib-sel">${['A','B','C','D','E','F'].map(k=>`<button data-a="selKib" data-k="${k}"${S.kib==k?' class="on"':''}>KIB ${k}</button>`).join('')}</div>
+    <div class="tabs">${['01','02','03','04'].map(k=>`<button data-a="selSt" data-k="${k}"${st==k?' class="on"':''}>${lab[k]}</button>`).join('')}</div>
+    <div class="pn"><div class="row">${sel()}${st!=='04'?`<input id="q" placeholder="Cari nama, alamat, reg…" value="${esc(S.q)}">`:''}${st==='01'?`<select id="f"><option value="">Semua</option><option value="belum">Belum diisi</option><option value="ADA">Ada</option><option value="TIDAK">Tidak ada</option><option value="mut">Dimutasi</option></select>`:''}</div>
+    <div class="row">${r2}</div></div>
+    ${st==='04'?'<div id="hs"></div>':''}<div id="lst"></div><div class="row" id="pg"></div>`;
+  const qi=$('#q');if(qi)qi.oninput=e=>{endEd(true);S.q=e.target.value;S.p=0;clearTimeout(vData._t);vData._t=setTimeout(drawGrid,200)};
+  const fs=$('#f');if(fs){fs.value=S.f;fs.onchange=e=>{endEd(true);S.f=e.target.value;S.p=0;drawGrid()}}
+  drawGrid();if(st==='04')vHasilKib();
+}
+A.selKib=t=>{S.kib=t.dataset.k;S.st='01';S.p=0;S.edit=0;render()};
+A.selSt=t=>{S.st=t.dataset.k;S.p=0;S.edit=0;render()};
 function sel(){return `<select id="so"><option value="">— pilih instansi —</option><option value="__"${S.opd=='__'?' selected':''}>(Belum terkelompok)</option>${D.opds.map(o=>`<option${o.name==S.opd?' selected':''}>${esc(o.name)}</option>`).join('')}</select>`}
 document.addEventListener('change',e=>{if(e.target.id=='so'){S.opd=e.target.value;S.p=0;kv('last',S.opd);render()}});
 
-function lst(st){
-  if(!S.opd){$('#lst').innerHTML='<p class="mu">Pilih instansi dulu.</p>';$('#pg').innerHTML='';return}
-  let a=V().filter(r=>r.st==st&&r.opd===cur()&&r.kib===S.kib);
+function rowsNow(){
+  const rs=V().filter(r=>r.opd===cur()&&r.kib===S.kib),st=S.st;
+  if(st==='04')return hasil(rs.filter(r=>r.st==='01'),rs.filter(r=>r.st==='02'),rs.filter(r=>r.st==='03'));
+  let a=rs.filter(r=>r.st===st);
   if(S.q){const q=norm(S.q);a=a.filter(r=>norm([r.nama,r.alamat,r.reg,r.kode,r.ket].join(' ')).includes(q))}
-  if(S.f)a=a.filter(r=>S.f=='belum'?(!r.ada||r.ada=='BELUM')&&!r.mut:S.f=='mut'?r.mut:r.ada==S.f);
-  a.sort((x,y)=>(x.no||1e9)-(y.no||1e9));
-  const N=40,pg=Math.ceil(a.length/N)||1;S.p=Math.min(S.p,pg-1);
-  const ch=(t,c)=>`<i class="ch ${c}">${esc(t)}</i>`;
-  $('#lst').innerHTML=a.slice(S.p*N,S.p*N+N).map(r=>`<div class="cd" data-a="edit" data-id="${r.id}">
-    <b>${r.no?r.no+'. ':''}${esc(r.nama)}</b>
-    <small>${esc(r.kode||'')} · Reg ${esc(r.reg||'')} · ${esc(r.tgl||'')} · ${rp(r.harga)}</small>
-    <small>${esc(r.alamat||'')}</small>
-    ${r.mut?ch('Dimutasi','wa'):r.ada=='ADA'?ch('Ada','ok'):r.ada=='TIDAK'?ch('Tidak ada','er'):st=='01'?ch('Belum','wa'):''}
-    ${r.kond?ch('Kondisi '+r.kond,''):''}${r.lat?ch('GPS','ok'):''}${r.sebab?ch(r.sebab,''):''}
-  </div>`).join('')||'<p class="empty">Belum ada data. Import template atau tambah manual.</p>';
-  $('#pg').innerHTML=`<button class="b" data-a="pp" data-d="-1">‹</button><span class="mu">${a.length} baris · hal ${S.p+1}/${pg}</span><button class="b" data-a="pp" data-d="1">›</button>`;
+  if(S.f&&st==='01')a=a.filter(r=>S.f=='belum'?(!r.ada||r.ada=='BELUM')&&!r.mut:S.f=='mut'?r.mut:r.ada==S.f);
+  return a.sort((x,y)=>(x.no||1e9)-(y.no||1e9));
+}
+function drawGrid(){
+  const el=$('#lst');if(!el)return;
+  if(!S.opd){el.innerHTML='<p class="empty">Pilih instansi dulu.</p>';$('#pg').innerHTML='';return}
+  const h4=S.st==='04',a=rowsNow(),N=50,pg=Math.ceil(a.length/N)||1,C=cols(S.kib,h4?'01':S.st);
+  S.p=Math.max(0,Math.min(S.p,pg-1));
+  G.rows=a.slice(S.p*N,S.p*N+N);G.cols=C;G.ro=h4||!S.edit;G.a=G.b=null;G.off=h4?1:2;
+  const hd=`<th class="s0">No</th>${h4?'':'<th class="s1"></th>'}${C.map((c,j)=>`<th data-hj="${j}">${esc(c[1])}</th>`).join('')}`;
+  const bd=G.rows.map((r,i)=>`<tr data-i="${i}"><td class="s0">${h4?S.p*N+i+1:(r.no||'')}</td>${h4?'':`<td class="s1"><button class="ib" data-a="edit" data-id="${r.id}" title="Edit lengkap (form, foto, GPS)">✏️</button><button class="ib" data-a="rdel" data-id="${r.id}" title="Hapus">🗑</button></td>`}${C.map((c,j)=>`<td data-j="${j}"${NUMK.has(c[0])?' class="n"':''}>${cv(r,c)}</td>`).join('')}</tr>`).join('');
+  el.innerHTML=`<div class="gw${G.ro?'':' ed'}"><table class="gt" id="gt"><thead><tr>${hd}</tr></thead><tbody>${bd||`<tr><td colspan="${C.length+2}" class="empty">Belum ada data. Import template, tambah lewat form, atau ${S.edit?'klik “+ Baris”':'masuk Edit tabel lalu “+ Baris”'}.</td></tr>`}</tbody></table><div id="fh" hidden></div></div>`;
+  $('#pg').innerHTML=`<button class="b" data-a="pp" data-d="-1">‹</button><span class="mu">${a.length} baris · total ${rp(sm(a))} · hal ${S.p+1}/${pg}</span><button class="b" data-a="pp" data-d="1">›</button>`;
   $('#pg').dataset.max=pg;
 }
-A.pp=t=>{S.p=Math.max(0,Math.min(+$('#pg').dataset.max-1,S.p+ +t.dataset.d));lst('0'+S.st);scrollTo(0,0)};
+const lst=()=>{if(S.tab==='data')drawGrid()};
+A.pp=t=>{endEd(true);S.p=Math.max(0,Math.min(+$('#pg').dataset.max-1,S.p+ +t.dataset.d));drawGrid();scrollTo(0,0)};
+
+/* --- CRUD baris --- */
+async function delRec(r){const ch=V().filter(x=>x.link===r.id);r.del=1;ch.forEach(x=>x.del=1);await saveMany([r,...ch])}
+A.rdel=async t=>{if(!confirm('Hapus baris ini?'))return;await delRec(by(t.dataset.id));drawGrid();toast('Baris dihapus','ok',2500)};
+A.gedit=()=>{endEd(true);S.edit=S.edit?0:1;vData()};
+A.addrow=async t=>{
+  if(!S.opd)return toast('Pilih instansi dulu','w');
+  const n=+t.dataset.n||1,o=cur(),mx=V().filter(r=>r.kib===S.kib&&r.st===S.st&&r.opd===o).reduce((m,r)=>Math.max(m,+r.no||0),0);
+  await saveMany(Array.from({length:n},(_,i)=>({id:uid(),kib:S.kib,st:S.st,opd:o,no:mx+i+1,ada:S.st==='02'?'ADA':''})));
+  S.q='';S.f='';S.p=1e6;drawGrid();
+};
+A.gdelrows=async()=>{if(!G.a)return toast('Pilih sel pada baris yang akan dihapus','w');const r=rng(),n=r.i2-r.i1+1;
+  if(!confirm(`Hapus ${n} baris terpilih?`))return;for(let i=r.i1;i<=r.i2;i++)await delRec(G.rows[i]);drawGrid();toast(n+' baris dihapus','ok',2500)};
+
+/* --- pilihan sel --- */
+const rng=()=>({i1:Math.min(G.a.i,G.b.i),i2:Math.max(G.a.i,G.b.i),j1:Math.min(G.a.j,G.b.j),j2:Math.max(G.a.j,G.b.j)});
+const cell=(i,j)=>{const t=$('#gt'),tr=t&&t.tBodies[0].rows[i];return tr&&tr.cells[j+G.off]};
+const ci=td=>({i:+td.parentNode.dataset.i,j:+td.dataset.j});
+const gridOn=()=>S.edit&&S.tab==='data'&&S.st!=='04'&&G.a&&$('#gt');
+function paint(){
+  document.querySelectorAll('#gt td.sel,#gt td.cur,#gt td.fl').forEach(e=>e.classList.remove('sel','cur','fl'));
+  const fh=$('#fh');if(!fh)return;
+  if(!G.a||G.ro){fh.hidden=true;return}
+  const r=rng();for(let i=r.i1;i<=r.i2;i++)for(let j=r.j1;j<=r.j2;j++){const c=cell(i,j);c&&c.classList.add('sel')}
+  const c0=cell(G.a.i,G.a.j);c0&&c0.classList.add('cur');
+  const e=cell(r.i2,r.j2);if(e){fh.hidden=false;fh.style.left=(e.offsetLeft+e.offsetWidth-6)+'px';fh.style.top=(e.offsetTop+e.offsetHeight-6)+'px'}
+}
+function mv(di,dj,ext){
+  if(!G.a)return;const b=G.b||G.a,p={i:Math.max(0,Math.min(G.rows.length-1,b.i+di)),j:Math.max(0,Math.min(G.cols.length-1,b.j+dj))};
+  if(ext)G.b=p;else G.a=G.b=p;paint();const c=cell(p.i,p.j);c&&c.scrollIntoView&&c.scrollIntoView({block:'nearest',inline:'nearest'});
+}
+function refresh(){
+  const t=$('#gt');if(!t)return;
+  G.rows.forEach((r,i)=>{const tr=t.tBodies[0].rows[i];if(!tr)return;G.cols.forEach((c,j)=>{const td=tr.cells[j+G.off];if(td&&!(G.ed&&G.ed.td===td))td.innerHTML=cv(r,c)})});
+}
+
+/* --- nilai sel --- */
+function setVal(r,c,val){
+  const k=c[0],t=c[2];let v=String(val??'').trim();
+  if(NUMK.has(k)||t==='number'){const n=numv(v);v=n===undefined?'':n}
+  else if(t==='date')v=dt(v);
+  else if(k==='kond')v=kondN(v);
+  else if(Array.isArray(t)){const o=t.map(x=>Array.isArray(x)?x:[x,x]).find(x=>String(x[0]).toLowerCase()===v.toLowerCase()||String(x[1]).toLowerCase()===v.toLowerCase());if(o)v=o[0]}
+  if(String(r[k]??'')===String(v))return;
+  r[k]=v;G.dirty.add(r);if(r.kib==='C'&&r.st==='01'&&(k==='ada'||k==='kd'))G.syn.add(r);
+}
+function flush(){
+  clearTimeout(G.t);
+  G.t=setTimeout(async()=>{
+    if(!G.dirty.size)return;const a=[...G.dirty],sy=[...G.syn];G.dirty.clear();G.syn.clear();
+    await saveMany(a);for(const r of sy)await syncC03(r);
+    const g=$('#gs');if(g)g.textContent='✓ '+a.length+' baris tersimpan'+(navigator.onLine?'':' (offline, terkirim saat online)');
+  },250);
+}
+function openEd(ch){
+  if(!G.a||G.ed||G.ro)return;
+  const{i,j}=G.a,td=cell(i,j),c=G.cols[j],r=G.rows[i],t=c[2];if(!td)return;let h;
+  if(Array.isArray(t)){const cu=String(r[c[0]]??''),op=t.map(o=>Array.isArray(o)?o:[o,o]);if(cu&&!op.some(o=>o[0]===cu))op.push([cu,cu]);
+    h=`<select>${op.map(o=>`<option value="${esc(o[0])}"${o[0]===cu?' selected':''}>${esc(o[0]?o[1]:'—')}</option>`).join('')}</select>`}
+  else h=`<input type="${t==='date'?'date':'text'}" value="${esc(ch!==undefined?ch:(r[c[0]]??''))}"${t==='number'?' inputmode="decimal"':''}>`;
+  td.innerHTML=h;const el=td.firstChild;G.ed={td,i,j,el};el.focus();
+  if(el.tagName==='SELECT')el.onchange=()=>endEd(true);
+  else if(ch===undefined&&el.select)el.select();
+  el.onblur=()=>setTimeout(()=>{if(G.ed&&G.ed.el===el)endEd(true)},0);
+}
+function endEd(save){
+  const e=G.ed;if(!e)return;G.ed=null;
+  const r=G.rows[e.i],c=G.cols[e.j];if(save)setVal(r,c,e.el.value);
+  e.td.innerHTML=cv(r,c);flush();
+}
+
+/* --- seret isi (fill handle) --- */
+function freg(r,t){
+  const dr=t.i>r.i2?t.i-r.i2:t.i<r.i1?t.i-r.i1:0,dc=t.j>r.j2?t.j-r.j2:t.j<r.j1?t.j-r.j1:0;
+  if(!dr&&!dc)return null;
+  if(Math.abs(dr)>=Math.abs(dc))return dr>0?{i1:r.i2+1,i2:t.i,j1:r.j1,j2:r.j2,v:1}:{i1:t.i,i2:r.i1-1,j1:r.j1,j2:r.j2,v:1};
+  return dc>0?{i1:r.i1,i2:r.i2,j1:r.j2+1,j2:t.j,v:0}:{i1:r.i1,i2:r.i2,j1:t.j,j2:r.j1-1,v:0};
+}
+function paintFill(){
+  document.querySelectorAll('#gt td.fl').forEach(e=>e.classList.remove('fl'));
+  const f=G.fill.to&&freg(G.fill.r,G.fill.to);if(!f)return;
+  for(let i=f.i1;i<=f.i2;i++)for(let j=f.j1;j<=f.j2;j++){const c=cell(i,j);c&&c.classList.add('fl')}
+}
+function applyFill(){
+  const r=G.fill.r,f=G.fill.to&&freg(r,G.fill.to);if(!f)return paint();
+  const h=r.i2-r.i1+1,w=r.j2-r.j1+1,md=(a,n)=>((a%n)+n)%n;
+  for(let i=f.i1;i<=f.i2;i++)for(let j=f.j1;j<=f.j2;j++){
+    const si=f.v?r.i1+md(i-r.i1,h):i,sj=f.v?j:r.j1+md(j-r.j1,w);
+    setVal(G.rows[i],G.cols[j],G.rows[si][G.cols[sj][0]]);
+  }
+  G.a={i:Math.min(r.i1,f.i1),j:Math.min(r.j1,f.j1)};G.b={i:Math.max(r.i2,f.i2),j:Math.max(r.j2,f.j2)};
+  refresh();flush();paint();
+}
+function fillBtn(dir){
+  if(!G.a)return toast('Klik sel dulu','w');
+  const r=rng();
+  if(dir){if(r.i1===r.i2){const n=parseInt(prompt('Isi ke bawah berapa baris?','5'));if(!n)return;r.i2=Math.min(G.rows.length-1,r.i1+n)}
+    for(let j=r.j1;j<=r.j2;j++)for(let i=r.i1+1;i<=r.i2;i++)setVal(G.rows[i],G.cols[j],G.rows[r.i1][G.cols[j][0]])}
+  else{if(r.j1===r.j2){const n=parseInt(prompt('Isi ke kanan berapa kolom?','3'));if(!n)return;r.j2=Math.min(G.cols.length-1,r.j1+n)}
+    for(let i=r.i1;i<=r.i2;i++)for(let j=r.j1+1;j<=r.j2;j++)setVal(G.rows[i],G.cols[j],G.rows[i][G.cols[r.j1][0]])}
+  G.a={i:r.i1,j:r.j1};G.b={i:r.i2,j:r.j2};refresh();flush();paint();
+}
+A.fdown=()=>fillBtn(1);A.fright=()=>fillBtn(0);
+A.gclear=()=>{if(!G.a)return toast('Klik sel dulu','w');const r=rng();for(let i=r.i1;i<=r.i2;i++)for(let j=r.j1;j<=r.j2;j++)setVal(G.rows[i],G.cols[j],'');refresh();flush()};
+function pasteText(tx){
+  if(!G.a)return toast('Klik sel tujuan dulu','w');
+  const rows=tx.replace(/\r/g,'').replace(/\n$/,'').split('\n').map(l=>l.split('\t')),r=rng();
+  if(rows.length===1&&rows[0].length===1&&(r.i2>r.i1||r.j2>r.j1)){for(let i=r.i1;i<=r.i2;i++)for(let j=r.j1;j<=r.j2;j++)setVal(G.rows[i],G.cols[j],rows[0][0])}
+  else{rows.forEach((cs,di)=>{const rec=G.rows[r.i1+di];if(!rec)return;cs.forEach((v,dj)=>{const c=G.cols[r.j1+dj];if(c)setVal(rec,c,v)})});
+    G.b={i:Math.min(G.rows.length-1,r.i1+rows.length-1),j:Math.min(G.cols.length-1,r.j1+rows[0].length-1)}}
+  refresh();flush();paint();
+}
+A.gpaste=async()=>{try{pasteText(await navigator.clipboard.readText())}catch(_){toast('Izin clipboard ditolak. Klik sel lalu tekan Ctrl+V','w')}};
+
+/* --- event --- */
+document.addEventListener('pointerdown',e=>{
+  if(!S.edit||S.tab!=='data'||S.st==='04'||!$('#gt'))return;
+  if(e.target.closest('#fh')){if(!G.a)return;e.preventDefault();G.fill={r:rng(),to:null};return}
+  const th=e.target.closest('#gt th[data-hj]');
+  if(th){endEd(true);const j=+th.dataset.hj;G.a={i:0,j};G.b={i:Math.max(0,G.rows.length-1),j};paint();return}
+  const s0=e.target.closest('#gt td.s0');
+  if(s0){endEd(true);const i=+s0.parentNode.dataset.i;G.a={i,j:0};G.b={i,j:G.cols.length-1};paint();return}
+  const td=e.target.closest('#gt td[data-j]');
+  if(!td){if(G.ed&&!e.target.closest('#gt'))endEd(true);return}
+  if(G.ed&&G.ed.td===td)return;
+  endEd(true);const p=ci(td);
+  if(e.shiftKey&&G.a)G.b=p;else G.a=G.b=p;
+  G.drag=1;paint();
+});
+document.addEventListener('pointermove',e=>{
+  if(!G.drag&&!G.fill)return;
+  const el=document.elementFromPoint(e.clientX,e.clientY),c=el&&el.closest&&el.closest('#gt td[data-j]');if(!c)return;
+  const p=ci(c);
+  if(G.fill){G.fill.to=p;paintFill()}
+  else if(G.drag&&e.pointerType!=='touch'){G.b=p;paint()}
+});
+document.addEventListener('pointerup',()=>{if(G.fill){applyFill();G.fill=null}G.drag=0});
+document.addEventListener('pointercancel',()=>{G.drag=0;if(G.fill){G.fill=null;paint()}});
+document.addEventListener('dblclick',e=>{if(gridOn()&&e.target.closest('#gt td[data-j]'))openEd()});
+document.addEventListener('keydown',e=>{
+  if(!gridOn())return;
+  if(G.ed){
+    if(e.key==='Enter'){e.preventDefault();endEd(true);mv(1,0)}
+    else if(e.key==='Tab'){e.preventDefault();endEd(true);mv(0,e.shiftKey?-1:1)}
+    else if(e.key==='Escape'){e.preventDefault();endEd(false)}
+    return;
+  }
+  if(e.target.closest&&e.target.closest('input,select,textarea,dialog'))return;
+  const k=e.key,m=e.ctrlKey||e.metaKey,D4={ArrowDown:[1,0],ArrowUp:[-1,0],ArrowLeft:[0,-1],ArrowRight:[0,1]};
+  if(D4[k]){e.preventDefault();mv(D4[k][0],D4[k][1],e.shiftKey)}
+  else if(k==='Tab'){e.preventDefault();mv(0,e.shiftKey?-1:1)}
+  else if(k==='Enter'||k==='F2'){e.preventDefault();openEd()}
+  else if(k==='Delete'||k==='Backspace'){e.preventDefault();A.gclear()}
+  else if(m&&k.toLowerCase()==='d'){e.preventDefault();fillBtn(1)}
+  else if(m&&k.toLowerCase()==='r'){e.preventDefault();fillBtn(0)}
+  else if(!m&&!e.altKey&&k.length===1){e.preventDefault();openEd(k)}
+});
+document.addEventListener('copy',e=>{
+  if(!gridOn()||G.ed||(e.target.closest&&e.target.closest('input,select,textarea')))return;
+  const r=rng(),L=[];for(let i=r.i1;i<=r.i2;i++){const x=[];for(let j=r.j1;j<=r.j2;j++)x.push(String(G.rows[i][G.cols[j][0]]??''));L.push(x.join('\t'))}
+  e.clipboardData.setData('text/plain',L.join('\n'));e.preventDefault();
+});
+document.addEventListener('paste',e=>{
+  if(!gridOn()||G.ed||(e.target.closest&&e.target.closest('input,select,textarea')))return;
+  const tx=(e.clipboardData||window.clipboardData).getData('text');if(!tx)return;e.preventDefault();pasteText(tx);
+});
+
 
 /* ======================= FORM EDIT ======================= */
 async function edit(id){
   const r=by(id);if(!r)return;
   const ph=(await all('ph')).filter(p=>p.rid==id);
-  const base=FIELDS[r.kib]||FIELDS.C;
-  let extra=[];
-  if(r.st==='02')extra=[['sebab','Sebab bertambah',[''].concat(SBT)],['asal','Asal OPD','text']];
-  if(r.st==='03')extra=[['sebab','Sebab berkurang',[''].concat(SBK)],['tujuan','Tujuan OPD','text']];
-  const F=[...base,...extra];
+  const F=cols(r.kib,r.st);
   modal(`<form id="fm">
     <h3>${esc(r.nama)}</h3>
     <small class="mu">${esc(r.kode||'')} · Reg ${esc(r.reg||'')} · ${rp(r.harga)}</small>
@@ -495,17 +725,17 @@ A.edit=t=>edit(t.dataset.id);
 
 const fld=(f,v)=>{
   const [k,l,t]=f;
-  if(Array.isArray(t))return `<label>${l}<select name="${k}">${t.map(o=>{const[a,b]=Array.isArray(o)?[o[0],o[0]+' '+o[1]]:[o,o];return `<option value="${esc(a)}"${a==v?' selected':''}>${esc(b||'—')}</option>`}).join('')}</select></label>`;
+  if(Array.isArray(t))return `<label>${l}<select name="${k}">${(v!==''&&!t.some(o=>(Array.isArray(o)?o[0]:o)==v)?[...t,v]:t).map(o=>{const[a,b]=Array.isArray(o)?[o[0],o[0]+' '+o[1]]:[o,o];return `<option value="${esc(a)}"${a==v?' selected':''}>${esc(b||'—')}</option>`}).join('')}</select></label>`;
   return `<label>${l}<input name="${k}" type="${t}" value="${esc(v)}"${t==='number'?' step="any" inputmode="decimal"':''}></label>`;
 };
 
 A.esave=async t=>{
-  const r=by(t.dataset.id),d=fd();
+  const r=by(t.dataset.id),d=fd();for(const k in d)if(NUMK.has(k)){const n=numv(d[k]);d[k]=n===undefined?'':n}
   if(r.st==='01'&&d.ada==='TIDAK'&&!String(d.kd||'').startsWith('2'))return toast('Barang tidak ditemukan → pilih Kode Inventarisasi 2.x','w',7000);
   if(d.opd){r.lock=d.opd!=r.opd||r.lock;Object.assign(r,d)}else Object.assign(r,d);
   await save(r);
   if(r.kib==='C'&&r.st==='01')await syncC03(r);
-  A.close();lst('0'+S.st);
+  A.close();lst();
 };
 async function syncC03(r){
   const L=V().find(x=>x.st==='03'&&x.link===r.id);
@@ -516,7 +746,7 @@ async function syncC03(r){
 }
 const CP=r=>{const o={};['kib','nama','kode','reg','alamat','tgl','harga','kond','luas','jml','ada'].forEach(k=>o[k]=r[k]);return o};
 
-A.del=async t=>{if(!confirm('Hapus baris ini?'))return;const r=by(t.dataset.id);r.del=1;await save(r);A.close();lst('0'+S.st)};
+A.del=async t=>{if(!confirm('Hapus baris ini?'))return;await delRec(by(t.dataset.id));A.close();lst()};
 
 /* ========== TAMBAH MANUAL (FIX BUG) ========== */
 A.new=t=>{
@@ -543,15 +773,15 @@ A.nsave=async t=>{
   const kib=d.kib||S.kib,opd=(d.opd&&d.opd!=='__')?d.opd:cur();
   if(!opd){A.close();toast('Instansi belum dipilih — tersimpan di (Belum terkelompok)','w');}
   const opdFinal=opd||'';
-  const n=V().filter(r=>r.st==='0'+st&&r.opd===opdFinal&&r.kib===kib).length;
-  const payload={id:uid(),kib,st:'0'+st,opd:opdFinal,no:n+1,...d};
+  const n=V().filter(r=>r.st===st&&r.opd===opdFinal&&r.kib===kib).reduce((m,r)=>Math.max(m,+r.no||0),0);
+  const payload={id:uid(),kib,st,opd:opdFinal,no:n+1,...d};
   delete payload.opd_final;
   if(d.opd==='__')payload.opd='';
   await save(payload);
   A.close();toast('Tersimpan ✓','ok');
   S.opd=opdFinal||'__';S.kib=kib;
   if(S.tab==='beranda')vHome();
-  else if(S.tab==='data')lst('0'+st);
+  else if(S.tab==='data')lst();
   else render();
 };
 
@@ -593,14 +823,14 @@ A.smut=async()=>{
   r.mut=mid;out.push(r);
   out.push({id:uid(),st:'03',kib:r.kib,opd:r.opd,...CP(r),sebab:MT.sb,tujuan:to,reff:r.no,reffId:r.id,mid,km:'Mutasi Kurang ke '+to});
   for(let i=0;i<MT.n;i++)out.push({id:uid(),st:'02',kib:r.kib,opd:to,no:n2+i+1,...CP(r),nama:d['nama'+i],kode:d['kode'+i],alamat:d['alamat'+i],luas:d['luas'+i],luasUkur:d['luas'+i],harga:d['harga'+i],jml:1,jmlLap:1,ada:'ADA',sebab:d.sbt,asal:r.opd,reff:r.no,reffId:r.id,mid,km:'Mutasi Tambah dari '+r.opd});
-  await saveMany(out);A.close();toast(`Mutasi tersimpan (${r.kib}-03: 1, ${r.kib}-02: ${MT.n})`,'ok');lst('0'+S.st);
+  await saveMany(out);A.close();toast(`Mutasi tersimpan (${r.kib}-03: 1, ${r.kib}-02: ${MT.n})`,'ok');lst();
 };
 A.undo=async t=>{
   const r=by(t.dataset.id);if(!r||!r.mut)return;
   if(!confirm('Batalkan mutasi? Baris 02/03 terkait dihapus.'))return;
   const ch=V().filter(x=>x.mid==r.mut&&x.id!=r.id);
   ch.forEach(x=>x.del=1);r.mut='';await saveMany([r,...ch]);
-  A.close();lst('0'+S.st);
+  A.close();lst();
 };
 
 /* ======================= HASIL ======================= */
@@ -616,7 +846,7 @@ function vHasilKib(){
   if(!S.opd){$('#hs').innerHTML='<p class="empty">Pilih instansi dulu.</p>';return}
   const rs=V().filter(r=>r.opd===cur()&&r.kib===S.kib);
   const c1=rs.filter(r=>r.st==='01'),c2=rs.filter(r=>r.st==='02'),c3=rs.filter(r=>r.st==='03');
-  const h=hasil(c1,c2),sel1=c1.filter(r=>r.ada&&r.ada!=='BELUM').length;
+  const h=hasil(c1,c2,c3),sel1=c1.filter(r=>r.ada&&r.ada!=='BELUM').length;
   const diff=sm(c1)-sm(c3)+sm(c2)-sm(h);
   $('#hs').innerHTML=`<div class="pn"><table>
     <tr><th>Kategori</th><th>Baris</th><th>Nilai</th></tr>
@@ -628,7 +858,7 @@ function vHasilKib(){
   <p class="mu">Terisi di lapangan: ${sel1}/${c1.length} · Keseimbangan: ${Math.abs(diff)<1?'<b style="color:var(--ok)">OK ✓</b>':'<b style="color:var(--er)">selisih '+rp(diff)+'</b>'}</p>
   <div class="row"><button class="b p" data-a="xl" data-kib="${S.kib}">📊 Unduh Excel KKI KIB ${S.kib}</button></div></div>`;
 }
-const hasil=(c1,c2)=>[...c1.filter(r=>r.ada!=='TIDAK'&&!r.mut),...c2];
+const hasil=(c1,c2,c3=[])=>{const o=new Set(c3.map(x=>x.reffId||x.link).filter(Boolean)),rf=new Set(c3.filter(x=>!x.reffId&&!x.link&&x.reff).map(x=>String(x.reff)));return[...c1.filter(r=>r.ada!=='TIDAK'&&!r.mut&&!o.has(r.id)&&!rf.has(String(r.no))),...c2]};
 const sm=a=>a.reduce((s,r)=>s+(+r.harga||0),0);
 
 /* ======================= FOTO + TIMESTAMP ======================= */
@@ -700,7 +930,7 @@ A.eo=t=>{
     ${F('kepala','Pengguna Barang / Ka. OPD',o.kepala)}${F('nipKepala','NIP Pengguna Barang',o.nipKepala)}
     ${F('pengurus','Pengurus Barang',o.pengurus)}${F('nipPengurus','NIP Pengurus Barang',o.nipPengurus)}
     <label>Tanggal penyelesaian (isi setelah ${S.kib}-01 selesai)<input name="tgl" type="date" value="${esc(o.tgl||'')}"></label>
-    <div class="row"><button type="button" class="b p" data-a="so_save" data-n="${esc(o.name)}">Simpan</button>
+    <div class="row"><button type="button" class="b p" data-a="so_save" data-n="${esc(o.name)}">Simpan</button>${o.name?`<button type="button" class="b d" data-a="odel" data-n="${esc(o.name)}">🗑 Hapus</button>`:''}
     <button type="button" class="b" data-a="close">Batal</button></div></form>`);
 };
 A.so_save=async t=>{
@@ -711,6 +941,12 @@ A.so_save=async t=>{
   if(i<0)D.opds.push(d);else{const old=D.opds[i].name;D.opds[i]=d;
     if(old!=d.name){const ch=V().filter(r=>r.opd==old);ch.forEach(r=>r.opd=d.name);await saveMany(ch)}}
   await kv('opds',D.opds);A.close();mInstansi();
+};
+A.odel=async t=>{
+  const n=t.dataset.n,rs=V().filter(r=>r.opd===n);
+  if(!confirm(rs.length?`Instansi ini punya ${rs.length} baris data. Hapus instansi dan pindahkan datanya ke (Belum terkelompok)?`:`Hapus instansi "${n}"?`))return;
+  rs.forEach(r=>{r.opd='';r.no=0});if(rs.length){fixNo(rs);await saveMany(rs)}
+  D.opds=D.opds.filter(x=>x.name!==n);await kv('opds',D.opds);if(S.opd===n)S.opd='';A.close();mInstansi();toast('Instansi dihapus','ok',2500);
 };
 A.tplInst=()=>busy('Template…',async()=>{
   await js(XJS);
@@ -991,64 +1227,119 @@ async function dlTemplate(kib){
   if(!TPL[kib])return toast('Template tidak tersedia','e');
   await busy('Menyiapkan…',async()=>{
     await js(XJS);
-    const heads=TPL[kib],sample=heads.map((h,i)=>i===0?'1':(i===heads.length-1?'Contoh keterangan':''));
-    const ws=XLSX.utils.aoa_to_sheet([heads,sample]);
-    ws['!cols']=heads.map(h=>({wch:Math.max(12,Math.min(40,h.length+2))}));
-    const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Template_'+kib);
-    XLSX.writeFile(wb,`Template_Import_KIB_${kib}.xlsx`);
+    const heads=TPL[kib],sm=SMP[kib]||[],
+          rows=sm.length?sm:[heads.map((h,i)=>i===0?'1':(i===heads.length-1?'Contoh keterangan':''))];
+    const ws=XLSX.utils.aoa_to_sheet([heads,...rows]);
+    Object.keys(ws).forEach(a=>{const c=ws[a];if(a[0]!=='!'&&c.t==='s'&&/^\d{4}-\d\d-\d\d$/.test(c.v)){c.t='n';c.v=Date.parse(c.v+'T00:00:00Z')/864e5+25569;c.z='yyyy-mm-dd';delete c.w}});
+    ws['!cols']=heads.map(h=>({wch:Math.max(14,Math.min(40,h.length+2))}));
+    const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Sheet1');
+    XLSX.writeFile(wb,`template_import_KIB_${kib}.xlsx`);
   });
 }
 A.imp=t=>{S.impKib=t.dataset.kib||S.kib;$('#fi').click()};
 $('#fi').onchange=e=>{const f=e.target.files[0];e.target.value='';f&&busy('Membaca '+f.name+'…',()=>importX(f,S.impKib||S.kib))};
-const iso=d=>d instanceof Date?new Date(d.getTime()+432e5).toISOString().slice(0,10):String(d??'').slice(0,10);
+const isD=d=>d&&typeof d.getTime==='function',iso=d=>isD(d)?new Date(d.getTime()+432e5).toISOString().slice(0,10):String(d??'').slice(0,10);
 
-async function importX(f,kib){
+const nh=s=>String(s??'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+const numv=v=>{if(typeof v==='number')return isFinite(v)?v:undefined;let s=String(v??'').trim().replace(/[Rp\s]/gi,'');if(!s)return undefined;
+  if(/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(s))s=s.replace(/\./g,'').replace(',','.');else s=s.replace(',','.');
+  const n=parseFloat(s);return isNaN(n)?undefined:n};
+const dt=v=>{if(isD(v))return isNaN(v.getTime())?'':iso(v);if(typeof v==='number'&&v>20000&&v<80000)return new Date(Math.round((v-25569)*864e5)).toISOString().slice(0,10);
+  const s=String(v??'').trim();let m;
+  if((m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/)))return `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`;
+  if((m=s.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})/)))return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;return s};
+const kondN=v=>{const s=nh(v);return s==='baik'?'B':s==='kurang baik'?'KB':s==='rusak berat'?'RB':tx_(v).toUpperCase()};
+const ynN=v=>{const s=nh(v);return /^(ya|y|beton|bertingkat)$/.test(s)?'YA':/^(tidak|t|non)/.test(s)?'TIDAK':tx_(v).toUpperCase()};
+const HM={'kode barang':'kode','nama barang':'nama','no reg8':'reg','no reg':'reg','alamat':'alamat','lokasi':'alamat','tgl perolehan':'tgl','nilai perolehan awal':'hAwal',
+  'kapitalisasi koreksi':'kapit','nilai perolehan akhir':'harga','keterangan':'ket','jenis aset':'jenis','kondisi':'kond','kode upb':'kodeUpb','nama upb':'__opd',
+  'penggunaan':'guna','hak tanah':'hak','sertifikat tanggal':'hakTgl','sertifikat nomor':'hakNo','luas m2':'luas','luas lantai':'luas','jumlah bid tanah':'jml',
+  'jumlah bangunan':'jml','jumlah brg':'jml','asal usul':'asalUsul','status tanah':'statusTanah','bertingkat tidak':'bert','beton tidak':'beton','dokumen tanggal':'dokTgl','dokumen nomor':'dokNo'};
+const DTK=new Set(['tgl','hakTgl','dokTgl','dok2Tgl']),NMK=new Set(['luas','jml','hAwal','kapit','harga']);
+const dk=r=>[r.kib,r.opd,r.kode,r.reg,r.nama,r.tgl,r.harga].join('|');
+
+function parseSheet(a,kibSel){
+  let hi=-1;
+  for(let i=0;i<Math.min(a.length,40);i++){const h=a[i].map(nh);if(h.includes('kode barang')&&h.includes('nama barang')){hi=i;break}}
+  if(hi<0)return{kib:kibSel,recs:[]};
+  const first=a[hi].map(nh).find(x=>x);
+  if(first==='no'||/^no urut/.test(first||''))return{kib:kibSel,recs:legacyRows(a,hi,kibSel)};
+  const H=a[hi].map(nh),seen={};
+  const map=H.map(h=>{let k=HM[h];if(!k)return null;if(seen[k])k={dokTgl:'dok2Tgl',dokNo:'dok2No'}[k]||null;if(k)seen[k]=1;return k});
+  const iu=H.indexOf('kode upb');
+  if(iu>=0&&!map.includes('__opd')&&iu+1<H.length&&!map[iu+1])map[iu+1]='__opd';
+  const kib=H.includes('hak tanah')?'A':H.includes('bertingkat tidak')?'F':H.includes('kd bid')?'C':kibSel,recs=[];
+  for(let i=hi+1;i<a.length;i++){
+    const r=a[i],o={id:uid(),kib,st:'01',opd:'',no:0};
+    map.forEach((k,j)=>{
+      if(!k)return;let v=r[j];if(v===''||v==null)return;
+      if(k==='__opd'){o.opdName=tx_(v);return}
+      if(NMK.has(k))v=numv(v);else if(DTK.has(k))v=dt(v);else if(k==='kond')v=kondN(v);else if(k==='bert'||k==='beton')v=ynN(v);else v=tx_(v);
+      if(v!==undefined&&v!=='')o[k]=v});
+    if(!o.kode&&!o.nama)continue;
+    if(o.harga==null&&(o.hAwal!=null||o.kapit!=null))o.harga=(o.hAwal||0)+(o.kapit||0);
+    recs.push(o);
+  }
+  return{kib,recs};
+}
+function legacyRows(a,h,kib){
+  const out=[];
+  for(let i=h+1;i<a.length;i++){
+    const r=a[i];
+    if(String(r[0]).trim().toUpperCase()==='JUMLAH')break;
+    if(!String(r[1]).trim()&&!String(r[2]).trim())continue;
+    const o=parseRow(kib,r);if(o)out.push(o);
+  }
+  return out;
+}
+function ensureOpd(n){n=String(n).trim();const k=norm(n);let o=D.opds.find(x=>norm(x.name)===k);if(!o){o={name:n,keys:[n]};D.opds.push(o);ensureOpd.n=1}return o.name}
+function fixNo(rs){
+  const set=new Set(rs),M={};
+  V().forEach(r=>{if(r.kib&&r.no&&!set.has(r)){const k=r.kib+'|'+r.st+'|'+r.opd;M[k]=Math.max(M[k]||0,+r.no||0)}});
+  rs.forEach(r=>{if(!r.no){const k=r.kib+'|'+r.st+'|'+r.opd;r.no=M[k]=(M[k]||0)+1}});
+}
+async function importX(f,kibSel){
   await js(XJS);
-  const buf=await f.arrayBuffer();
-  const names=XLSX.read(buf,{bookSheets:true}).SheetNames;
+  const buf=await f.arrayBuffer(),names=XLSX.read(buf,{bookSheets:true}).SheetNames;
   let use=[names[0]];
   if(names.length>1&&confirm(`File punya ${names.length} sheet.\nOK = semua sheet, Batal = sheet pertama saja.`))use=names;
-  const seen=new Set(V().filter(r=>r.kib===kib).map(r=>[r.kode,r.reg,r.nama,r.tgl,r.harga].join('|')));
-  const add=[];let dup=0;
+  const seen=new Set(V().filter(r=>r.st==='01'&&r.kib).map(dk)),add=[],kc={};let dup=0;ensureOpd.n=0;
   for(const sn of use){
     const wb=XLSX.read(buf,{cellDates:true,sheets:sn}),
-          a=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:true,defval:''}),
-          h=a.findIndex(r=>/^(NO)$/i.test(String(r[0]).trim()));
-    if(h<0)continue;
-    for(let i=h+1;i<a.length;i++){
-      const r=a[i];
-      if(String(r[0]).trim().toUpperCase()==='JUMLAH')break;
-      if(!String(r[1]).trim()&&!String(r[2]).trim())continue;
-      const o=parseRow(kib,r);
-      if(!o)continue;
-      const k=[o.kode,o.reg,o.nama,o.tgl,o.harga].join('|');
-      if(seen.has(k)){dup++;continue}
-      seen.add(k);add.push(o);
-    }
+          a=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:true,defval:''}),p=parseSheet(a,kibSel);
+    p.recs.forEach(o=>{
+      if(o.opdName){o.opd=ensureOpd(o.opdName)}delete o.opdName;
+      const k=dk(o);if(seen.has(k)){dup++;return}
+      seen.add(k);add.push(o);kc[o.kib]=(kc[o.kib]||0)+1});
   }
-  if(!add.length)return toast('Tidak ada baris baru'+(dup?` (${dup} duplikat)`:''),'w');
-  await saveMany(add);
-  const g=await grup(false);
-  toast(`Import KIB ${kib}: ${add.length} baru, ${dup} duplikat, ${g} diregroup`,'ok',9000);
+  if(!add.length)return toast(dup?`Semua ${dup} baris sudah ada di aplikasi (duplikat), tidak ada yang ditambahkan`:'Tidak ada baris terbaca. Pastikan baris judul memuat "Kode Barang" dan "Nama Barang"','w',8000);
+  fixNo(add);await saveMany(add);
+  if(ensureOpd.n){await kv('opds',D.opds);mkAbr()}
+  const g=await grup(false),ks=Object.keys(kc);
+  const first=add.find(o=>o.opd);
+  S.kib=ks[0]||kibSel;S.tab='data';S.st='01';S.p=0;S.q='';S.f='';S.edit=0;
+  S.opd=first?first.opd:(add.some(o=>!o.opd)?'__':S.opd);kv('last',S.opd);
+  toast(`Import KIB ${ks.join(', ')}: ${add.length} baris baru, ${dup} duplikat${ensureOpd.n?', instansi baru ditambahkan':''}${g?`, ${g} dikelompokkan`:''}`,'ok',9000);
   render();
 }
 function parseRow(kib,r){
   const base={id:uid(),kib,st:'01',opd:'',no:0};
   if(kib==='C'){
     const o={...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),alamat:tx_(r[4]),
-      luas:r[5],tgl:iso(r[6]),jml:r[7],harga:r[8],ada:tx_(r[9]),bert:tx_(r[10]),beton:tx_(r[11]),
+      luas:r[5],tgl:dt(r[6]),jml:r[7],harga:r[8],ada:tx_(r[9]),bert:tx_(r[10]),beton:tx_(r[11]),
       kond:tx_(r[12]),guna:tx_(r[13]),kuasa:tx_(r[14]),jmlLap:r[15],luasUkur:r[16],
       rehab:tx_(r[17]),kap:tx_(r[18]),indukLain:tx_(r[19]),reff:tx_(r[20]),kd:tx_(r[21]),
       y:tx_(r[24]),ket:tx_(r[25])};
     if(!o.nama&&!o.kode)return null;return o;
   }
-  if(kib==='A')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),alamat:tx_(r[4]),luas:r[5],hak:tx_(r[6]),guna:tx_(r[7]),tgl:iso(r[8]),harga:r[9],ket:tx_(r[10])};
-  if(kib==='B')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),merk:tx_(r[4]),ukuran:tx_(r[5]),satuan:tx_(r[6]),jml:r[7],tgl:iso(r[8]),harga:r[9],kond:tx_(r[10]),alamat:tx_(r[11]),ket:tx_(r[12])};
-  if(kib==='D')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),konstruksi:tx_(r[4]),panjang:r[5],lebar:r[6],luas:r[7],alamat:tx_(r[8]),tgl:iso(r[9]),harga:r[10],kond:tx_(r[11]),ket:tx_(r[12])};
-  if(kib==='E')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),merk:tx_(r[4]),ukuran:tx_(r[5]),jml:r[6],alamat:tx_(r[7]),tgl:iso(r[8]),harga:r[9],kond:tx_(r[10]),ket:tx_(r[11])};
-  if(kib==='F')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),kontrak:tx_(r[4]),nilai:r[5],progress:r[6],mulai:iso(r[7]),selesai:iso(r[8]),alamat:tx_(r[9]),harga:r[10],ket:tx_(r[11])};
+  if(kib==='A')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),alamat:tx_(r[4]),guna:tx_(r[5]),hak:tx_(r[6]),hakNo:tx_(r[7]),hakTgl:dt(r[8]),
+    luas:r[9],tgl:dt(r[10]),jml:r[11],harga:r[12],asalUsul:tx_(r[13]),ada:tx_(r[14]),pakai:tx_(r[15]),kuasa:tx_(r[16]),sesuai:tx_(r[17]),patok:tx_(r[18]),pagar:tx_(r[19]),papan:tx_(r[20]),
+    kap:tx_(r[21]),indukLain:tx_(r[22]),reff:tx_(r[23]),kd:tx_(r[24]),y:tx_(r[27]),ket:tx_(r[28])};
+  if(kib==='B')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),merk:tx_(r[4]),ukuran:tx_(r[5]),satuan:tx_(r[6]),jml:r[7],tgl:dt(r[8]),harga:r[9],kond:tx_(r[10]),alamat:tx_(r[11]),ket:tx_(r[12])};
+  if(kib==='D')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),konstruksi:tx_(r[4]),panjang:r[5],lebar:r[6],luas:r[7],alamat:tx_(r[8]),tgl:dt(r[9]),harga:r[10],kond:tx_(r[11]),ket:tx_(r[12])};
+  if(kib==='E')return{...base,kode:tx_(r[1]),nama:tx_(r[2]),reg:tx_(r[3]),merk:tx_(r[4]),ukuran:tx_(r[5]),jml:r[6],alamat:tx_(r[7]),tgl:dt(r[8]),harga:r[9],kond:tx_(r[10]),ket:tx_(r[11])};
   return null;
 }
+
 async function grup(all){
   let ch=[];
   const P=D.opds.map(o=>({n:o.name,k:(o.keys||[]).map(norm).filter(Boolean).map(k=>new RegExp('(?<![a-z0-9])'+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?![0-9])'))}));
@@ -1057,9 +1348,9 @@ async function grup(all){
     const T=[[norm(r.nama),3],[norm(r.alamat),2],[norm(r.y),3],[norm(r.ket),1]];
     let b='',bs=0;
     P.forEach(p=>{let s=0;p.k.forEach(re=>T.forEach(([t,w])=>{if(re.test(t))s+=w}));if(s>bs){bs=s;b=p.n}});
-    if(b!==r.opd){r.opd=b;ch.push(r)}
+    if(b!==r.opd){r.opd=b;r.no=0;ch.push(r)}
   });
-  if(ch.length)await saveMany(ch);return ch.length;
+  if(ch.length){fixNo(ch);await saveMany(ch)}return ch.length;
 }
 async function impCtl(f){
   await js(XJS);
@@ -1094,10 +1385,9 @@ async function exportKib(kib){
     await js(EXJS);
     const W=new ExcelJS.Workbook(),m=D.meta,rs=V().filter(r=>r.opd===cur()&&r.kib===kib);
     const c1=rs.filter(r=>r.st==='01').sort((a,b)=>(a.no||0)-(b.no||0)),
-          c2=rs.filter(r=>r.st==='02'),c3=rs.filter(r=>r.st==='03'),h=hasil(c1,c2);
-    const FIELDS_K=(FIELDS[kib]||FIELDS.C);
-    const H=FIELDS_K.map(f=>[String(f[1]).toUpperCase(),'',Math.max(12,Math.min(30,String(f[1]).length+2))]);
-    const put=async(name,title,code,rows)=>{
+          c2=rs.filter(r=>r.st==='02'),c3=rs.filter(r=>r.st==='03'),h=hasil(c1,c2,c3);
+    const put=async(name,title,code,rows,st)=>{
+      const FIELDS_K=cols(kib,st),H=FIELDS_K.map(f=>[String(f[1]).toUpperCase(),'',Math.max(12,Math.min(30,String(f[1]).length+2))]);
       const ws=W.addWorksheet(name,{views:[{state:'frozen',ySplit:8,xSplit:3}]}),
             n=H.length;
       for(let i=1;i<=4;i++){ws.mergeCells(i,1,i,n-1);ws.getRow(i).font={bold:true,size:i===1?13:11}}
@@ -1110,10 +1400,10 @@ async function exportKib(kib){
       rows.forEach((r,i)=>FIELDS_K.forEach((f,j)=>ws.getCell(9+i,j+1).value=r[f[0]]??''));
       ws.getColumn(5).numFmt='#,##0';
     };
-    await put('Form_'+kib+'_01','DAFTAR RINCIAN BARANG HASIL INVENTARISASI','FORM '+kib+'-01',c1);
-    await put('Form_'+kib+'_02','USULAN MUTASI TAMBAH','FORM '+kib+'-02',c2);
-    await put('Form_'+kib+'_03','USULAN MUTASI KURANG','FORM '+kib+'-03',c3);
-    await put('Form_'+kib+'_04','USULAN DAFTAR HASIL','FORM '+kib+'-04',h);
+    await put('Form_'+kib+'_01','DAFTAR RINCIAN BARANG HASIL INVENTARISASI','FORM '+kib+'-01',c1,'01');
+    await put('Form_'+kib+'_02','USULAN MUTASI TAMBAH','FORM '+kib+'-02',c2,'02');
+    await put('Form_'+kib+'_03','USULAN MUTASI KURANG','FORM '+kib+'-03',c3,'03');
+    await put('Form_'+kib+'_04','USULAN DAFTAR HASIL','FORM '+kib+'-04',h,'01');
     const b=await W.xlsx.writeBuffer(),a=document.createElement('a');
     a.href=URL.createObjectURL(new Blob([b],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
     a.download=`KKI_KIB_${kib}_${(o.name||'').replace(/[^\w]+/g,'_')}.xlsx`;a.click();
