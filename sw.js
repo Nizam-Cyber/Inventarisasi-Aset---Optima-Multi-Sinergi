@@ -1,4 +1,4 @@
-const V = 'inv-shell-v2', TILES = 'inv-tiles', MAX_TILES = 600;
+const V = 'inv-shell-v3', TILES = 'inv-tiles', MAX_TILES = 600;
 const LIBS = [
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css',
