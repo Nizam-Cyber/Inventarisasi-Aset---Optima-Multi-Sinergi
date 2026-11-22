@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#fdf3e7">
+<meta name="theme-color" content="#fe4247">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script>(function(){var t="light";try{t=localStorage.getItem("inv-theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light")}catch(e){}document.documentElement.setAttribute("data-theme",t);var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t=="dark"?"#1a110d":"#fdf3e7"})()</script>
+<script>(function(){var t="light";try{t=localStorage.getItem("inv-theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light")}catch(e){}document.documentElement.setAttribute("data-theme",t);var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t=="dark"?"#140d0b":"#fe4247"})()</script>
 <title>Inventarisasi Aset</title>
 <style>
 :root{
-  --bg:#fdf3e7;--sf:#fff;--sf2:#fff8ef;--ink:#3b1f14;--mu:#8a7262;--ln:#f0e0cc;
+  --bg:#fe4247;--sf:#fff;--sf2:#fff8ef;--ink:#3b1f14;--mu:#8a7262;--ln:#f0e0cc;
   --pr:#fbc531;--pr2:#f6b100;--pi:#3b1f14;--ac:#e8761f;
   --ok:#1f9d5f;--er:#d93f3f;--wa:#c27800;
   --sh:0 1px 2px rgba(85,41,31,.05),0 6px 18px -8px rgba(85,41,31,.12);
@@ -19,7 +19,7 @@
   color-scheme:light;
 }
 :root[data-theme="dark"]{
-  --bg:#1a110d;--sf:#261913;--sf2:#2e1f18;--ink:#f8eadc;--mu:#b39b8a;--ln:#3d2b21;
+  --bg:#140d0b;--sf:#261913;--sf2:#2e1f18;--ink:#f8eadc;--mu:#b39b8a;--ln:#3d2b21;
   --pr:#fbc531;--pr2:#f6b100;--pi:#2a1a10;--ac:#f4883c;
   --ok:#4cd08a;--er:#ff7a7a;--wa:#f5b04a;
   --sh:0 1px 2px rgba(0,0,0,.3),0 8px 20px -10px rgba(0,0,0,.5);
@@ -211,8 +211,65 @@ nav button.pulse .ic,aside button.pulse .ic{animation:pls 1.4s ease-in-out infin
 .ivbar{position:sticky;bottom:calc(84px + env(safe-area-inset-bottom));z-index:15;display:flex;gap:8px;justify-content:space-between;align-items:center;padding:8px 10px;margin-top:10px;background:color-mix(in srgb,var(--sf) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--ln);border-radius:999px;box-shadow:var(--shg)}
 .ivbar .b.p{flex:1}
 @media(min-width:900px){.ivbar{bottom:12px}}
+/* --- V3: menu bawah pas, peta jadwal, kamera --- */
+nav{padding:6px 0;gap:0;scroll-snap-type:x mandatory}
+nav button{flex:0 0 20%;min-width:0;scroll-snap-align:start;padding:7px 1px 6px;font-size:clamp(9px,2.6vw,11px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jmap{height:320px;border-radius:16px;border:1px solid var(--ln);z-index:0}
+#fo{position:fixed;inset:0;z-index:500;background:#000}#fo iframe{width:100%;height:100%;border:0}
+.inf summary{cursor:pointer;font-weight:600;margin:8px 0}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation-duration:.01ms!important}}
 @media print{header,nav,aside,footer,.bar,.row,#hint,#ts{display:none!important}body{padding:0;background:#fff;color:#000}#map{height:70vh}}
+/* ===== Tema v2: merah Kok Bisa + gaya tegas ala Perpustakaan Skill ===== */
+:root{--bg:#fff6ea;--sf:#fff;--sf2:#fff0de;--ink:#17120f;--mu:#6b5a4e;--ln:#ecd9c4;--pr:#fe4247;--pr2:#e5262c;--pi:#fff;--ac:#fe4247;--bd:#17120f;--hs:#17120f}
+:root[data-theme="dark"]{--bg:#140d0b;--sf:#211613;--sf2:#2b1c17;--ink:#fff1e6;--mu:#c2a999;--ln:#3d2b21;--pr:#fe4247;--pr2:#ff6a6e;--pi:#fff;--ac:#ff6a6e;--bd:rgba(255,241,230,.55);--hs:rgba(254,66,71,.75)}
+h1,h2,h3{font-weight:800;letter-spacing:-.03em}
+header{background:var(--pr);color:#fff;border:2px solid var(--bd);box-shadow:3px 3px 0 var(--hs);backdrop-filter:none}
+.brand-text small{color:rgba(255,255,255,.88)}
+header .chip{background:#fff;color:#17120f;border:2px solid #17120f}
+header .chip.off{color:#b3141a}
+header .chip.pulse{color:#b3141a}
+.pn,.cd,.stats div,.tile,.gw,aside,.ivbar{border:2px solid var(--bd);box-shadow:4px 4px 0 var(--hs)}
+nav{border:2px solid var(--bd);box-shadow:4px 4px 0 var(--hs);background:var(--sf)}
+dialog{border:2px solid var(--bd);box-shadow:8px 8px 0 var(--hs)}
+.cd:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--hs);border-color:var(--bd)}
+.tile{border-width:2px}.tile:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--hs)}
+.b{border:2px solid var(--bd);box-shadow:2px 2px 0 var(--hs);font-weight:700}
+.b:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--hs);background:var(--sf2)}
+.b:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--hs)}
+.b.p{background:var(--pr);color:#fff;border-color:var(--bd);box-shadow:3px 3px 0 var(--hs)}
+.b.p:hover{background:var(--pr2)}
+.b.d{border-color:var(--er)}
+input,select,textarea{border:2px solid var(--bd);background:var(--sf)}
+aside button.on,nav button.on,.kib-sel button.on{background:var(--pr);color:#fff;box-shadow:none}
+aside button.on{border:2px solid var(--bd)}
+.kib-sel button{border:2px solid var(--bd)}
+.tabs button{border:2px solid var(--bd);color:var(--ink);font-weight:700}
+.tabs button.on{background:var(--ink);color:var(--bg)}
+.ch{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;font-weight:700;letter-spacing:.02em;border:1.5px solid var(--bd);color:var(--ink);background:var(--sf2)}
+.ch.ok{color:var(--ok);border-color:var(--ok)}.ch.er{color:var(--er);border-color:var(--er)}.ch.wa{color:var(--wa);border-color:var(--wa)}
+@keyframes plc{0%,100%{background:var(--pr)}33%{background:#c81d23}66%{background:#ff7a59}}
+.rb span{border:2px solid var(--bd)}
+.rb input:checked+span{background:var(--pr);color:#fff;box-shadow:3px 3px 0 var(--hs)}
+.rb input[value=TIDAK]:checked+span,.rb input[value=RB]:checked+span,.rb input[value="TDK SESUAI"]:checked+span{background:#17120f;color:#fff}
+.hero{background:var(--pr);color:#fff;border:2px solid var(--bd);box-shadow:6px 6px 0 var(--hs);border-radius:28px}
+.hero h1{color:#fff;font-weight:800;font-size:clamp(28px,5vw,48px)}
+.hero h1 em,.sec em{font-style:italic;font-weight:800}
+.hero h1 em{color:#ffe27a}.sec em{color:var(--pr)}
+.hero p{color:rgba(255,255,255,.92)}
+.hero .b{background:#fff;color:#17120f;border-color:#17120f;box-shadow:3px 3px 0 #17120f}
+.hero .b.p{background:#ffe27a}
+.art .a1{background:#ffe27a;border:2px solid #17120f}.art .a2{background:#fff;border:2px solid #17120f}.art .a3{background:#17120f}
+.art .a4{border-color:#fff}.art .a5{background:#17120f}
+:root[data-theme="dark"] .art .a5{background:#17120f}
+.sec{font-size:clamp(22px,4vw,30px);font-weight:800;margin:26px 4px 12px}
+.stats b{color:var(--pr)}
+.mq{overflow:hidden;white-space:nowrap;background:#17120f;color:#fff;border:2px solid var(--bd);border-radius:999px;margin:0 0 18px;padding:9px 0;font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.08em}
+:root[data-theme="dark"] .mq{background:var(--pr)}
+.mq div{display:inline-block;padding-left:100%;animation:mq 28s linear infinite}
+@keyframes mq{to{transform:translateX(-100%)}}
+footer{background:var(--pr);color:#fff;font-weight:700;border:2px solid var(--bd);border-radius:24px;margin:24px 10px 10px;box-shadow:4px 4px 0 var(--hs)}
+@media(prefers-reduced-motion:reduce){.mq div{animation:none;padding-left:12px}}
+@media(max-width:640px){header{box-shadow:2px 2px 0 var(--hs)}.pn,.cd,.stats div,.tile,.gw{box-shadow:3px 3px 0 var(--hs)}}
 </style>
 </head>
 <body>
@@ -428,9 +485,9 @@ const A={};
 const modal=h=>{$('#dlg').innerHTML=h;$('#dlg').showModal()};
 const fd=()=>Object.fromEntries(new FormData($('#fm')));
 A.close=()=>$('#dlg').close();
-const setTheme=t=>{document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('inv-theme',t)}catch(_){}const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t=='dark'?'#1a110d':'#fdf3e7';const b=$('#tg');if(b)b.textContent=t=='dark'?'☀️':'🌙'};
+const setTheme=t=>{document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('inv-theme',t)}catch(_){}const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t=='dark'?'#140d0b':'#fe4247';const b=$('#tg');if(b)b.textContent=t=='dark'?'☀️':'🌙'};
 A.theme=()=>setTheme(document.documentElement.dataset.theme=='dark'?'light':'dark');
-document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(t&&A[t.dataset.a])A[t.dataset.a](t,e)});
+/* dispatcher klik dipasang di modul V3-C */
 const updNet=()=>{const n=$('#net');if(!n)return;n.className='chip'+(navigator.onLine?'':' off');n.innerHTML='<span class="dot"></span>'+(navigator.onLine?'Online':'Offline')};
 addEventListener('online',()=>{updNet();toast('Online kembali — mengirim data tertunda…');sync()});
 addEventListener('offline',()=>{updNet();toast('Offline — data aman di perangkat','w')});
@@ -448,24 +505,13 @@ function updHeader(){
 }
 let QN=0;
 async function upQ(){const n=(await all('q')).length;QN=n;const q=$('#qc');if(q)q.textContent=n?n+' belum terkirim':'Semua terkirim';pulses()}
-function pulses(){
-  document.querySelectorAll('.pulse').forEach(e=>e.classList.remove('pulse'));
-  const on=(sel)=>document.querySelectorAll(sel).forEach(e=>e.classList.add('pulse')),base=V().filter(r=>r.kib&&r.st==='01');
-  if(QN||!D.meta.url)on('[data-a=tab][data-k=sinkron]');
-  if(QN)on('#qc,[data-a=kirim]');
-  if(!D.meta.url)on('[data-a=msave]');
-  if(S.tab==='beranda'){if(!base.length)on('[data-a=impBeranda]');else if(base.some(r=>r.kib==='C'&&!r.opd))on('[data-a=regrup]')}
-  if(G.dirty.size)on('[data-a=gsave]');
-  if(typeof planes==='function'&&planes().some(p=>planAct(p)&&p.date<=today()))on('[data-a=tab][data-k=inv]');
-  if(S.tab==='data'&&G.rows&&G.rows.some(r=>!r.wKode&&(r.alamat||r.ket))&&WS.ready)on('[data-a=wquick]');
-  if(S.tab==='data'&&!G.rows.length&&S.opd&&S.st==='01')on('[data-a=imp]');
-}
 
 /* ======================= NAV ======================= */
 const TABS=[
   ['beranda','Beranda','🏠'],
   ['data','Data','📋'],
   ['inv','Inventarisasi','🧭'],
+  ['jadwal','Jadwal','🗓'],
   ['hasil','Hasil','📊'],
   ['peta','Peta','🗺️'],
   ['kontrol','Kontrol','✅'],
@@ -482,7 +528,7 @@ function render(){
   const html=TABS.map(([k,l,ic])=>`<button data-a="tab" data-k="${k}"${S.tab==k?' class="on"':''}><span class="ic">${ic}</span>${l}</button>`).join('');
   $('#nav').innerHTML=html;$('#side').innerHTML=html;
   if(MAP){try{MAP.remove()}catch(_){}MAP=null}
-  ({beranda:vHome,data:vData,inv:vInv,hasil:vHasil,peta:vPeta,kontrol:vKontrol,master:vMaster,sinkron:vSync})[S.tab]();
+  ({beranda:vHome,data:vData,inv:vInv,jadwal:vJadwal,hasil:vHasil,peta:vPeta,kontrol:vKontrol,master:vMaster,sinkron:vSync})[S.tab]();
   upQ();pulses();
 }
 
@@ -492,9 +538,9 @@ function vHome(){
   const cnt={A:0,B:0,C:0,D:0,E:0,F:0};
   all.forEach(r=>{if(r.st==='01'&&cnt[r.kib]!=null)cnt[r.kib]++});
   const PAL={A:['#23885a','#fff'],B:['#f4883c','#3b1f14'],C:['#55291f','#fff'],D:['#fbc531','#3b1f14'],E:['#f47c8c','#3b1f14'],F:['#1f8f8a','#fff']};
-  $('#v').innerHTML=`<section class="hero">
+  $('#v').innerHTML=`${setupBanner()}<section class="hero">
     <div>
-      <h1>Inventarisasi aset daerah, dari lapangan sampai laporan.</h1>
+      <h1>Inventarisasi aset daerah, <em>dari lapangan sampai laporan.</em></h1>
       <p>Import kertas kerja induk, kelompokkan per OPD, isi 01 di lapangan dengan foto dan GPS, lalu catat mutasi 02/03 dan ekspor hasilnya.</p>
       <div class="row">
         <button class="b p" data-a="impBeranda">⬆ Import Excel Induk</button>
@@ -507,8 +553,9 @@ function vHome(){
     </div>
     <div class="art" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i><i class="a5"></i></div>
   </section>
+  <div class="mq" aria-hidden="true"><div>ONLINE &amp; OFFLINE · FOTO + GPS · JADWAL INVENTARISASI · PETA WILAYAH · UNDO / REDO · AUTO SINKRON · ONLINE &amp; OFFLINE · FOTO + GPS · JADWAL INVENTARISASI · PETA WILAYAH · UNDO / REDO · AUTO SINKRON ·</div></div>
   ${jadwalHome()}
-  <h2 class="sec">Data per KIB</h2>
+  <h2 class="sec">Data per <em>KIB</em></h2>
   <div class="tiles">
     ${['A','B','C','D','E','F'].map(k=>`<button class="tile" data-a="tabKib" data-k="${k}" style="--t:${PAL[k][0]};--tc:${PAL[k][1]}"><em>KIB ${k}</em><b>${cnt[k].toLocaleString('id-ID')}</b><span>${KIB_META[k].n}</span></button>`).join('')}
   </div>
@@ -995,7 +1042,7 @@ const sm=a=>a.reduce((s,r)=>s+(+r.harga||0),0);
 /* ======================= FOTO + TIMESTAMP ======================= */
 const pos=()=>new Promise(ok=>navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>ok({lat:p.coords.latitude,lon:p.coords.longitude}),()=>ok(null),{enableHighAccuracy:true,timeout:7000}):ok(null));
 A.gps=t=>busy('Mengambil GPS…',async()=>{const p=await pos(),r=by(t.dataset.id);if(!p)return toast('GPS tidak tersedia','w');r.lat=+p.lat.toFixed(7);r.lon=+p.lon.toFixed(7);await save(r);toast('GPS tersimpan','ok');edit(r.id)});
-A.foto=t=>{PR=t.dataset.id;$('#fc').click()};
+/* A.foto: kamera timestamp, lihat V3-C */
 A.lamp=t=>{PR=t.dataset.id;$('#fg').click()};
 $('#fc').onchange=e=>addPhoto(e,true);
 $('#fg').onchange=e=>addPhoto(e,false);
@@ -1031,7 +1078,7 @@ async function addPhoto(e,st){
 }
 
 /* ======================= MASTER ======================= */
-const MTAB=[['instansi','Instansi','🏢'],['abbr','Singkatan','🔤'],['param','Parameter','🎛'],['halaman','Halaman & Kop','📄'],['project','Project','🏷'],['wilayah','Wilayah','🗺']];
+const MTAB=[['instansi','Instansi','🏢'],['abbr','Singkatan','🔤'],['param','Parameter','🎛'],['halaman','Halaman & Kop','📄'],['project','Project','🏷'],['wilayah','Wilayah','🗺'],['sekolah','Sekolah','🏫'],['barang','Nama Barang','📦'],['kontak','Kontak','☎']];
 function vMaster(){
   $('#v').innerHTML=`<div class="bar"><h3 style="margin:0">Master Data</h3></div>
     <div class="tabs">${MTAB.map(([k,l])=>`<button data-a="mtab" data-k="${k}"${(S.mtab||'instansi')==k?' class="on"':''}>${l}</button>`).join('')}</div>
@@ -1045,11 +1092,12 @@ function mInstansi(){
   $('#mv').innerHTML=`<div class="pn">
     <div class="row"><button class="b p" data-a="eo" data-n="">+ Tambah Instansi</button>
     <button class="b" data-a="impInst">⬆ Import Instansi</button>
-    <button class="b" data-a="tplInst">⬇ Template Instansi</button></div>
+    <button class="b" data-a="tplInst">⬇ Template Instansi</button>
+    <button class="b" data-a="opdMerge">🧹 Rapikan nama</button><button class="b" data-a="alsync">🏠 Samakan alamat</button></div>
     <p class="mu">Kata kunci dicocokkan ke nama barang, alamat, kolom aset induk/mutasi OPD lain, dan keterangan.</p>
   </div>`+D.opds.map(o=>`<div class="cd" data-a="eo" data-n="${esc(o.name)}"><b>${esc(o.name)}</b>
     <small>${cn[o.name]||0} baris · kata kunci: ${esc((o.keys||[]).join(', '))||'-'}</small>
-    <small>${esc(o.alamat||'')} ${o.kepala?'· '+esc(o.kepala):''}</small></div>`).join('')||'<p class="empty">Belum ada instansi.</p>';
+    <small>${esc(o.alamat||'')} ${o.kepala?'· '+esc(o.kepala):''}</small><small>${o.lat!=null&&o.lat!==''?'📍 '+(+o.lat).toFixed(5)+', '+(+o.lon).toFixed(5)+' ('+(o.latSrc==='sekolah'?'dari data sekolah':'manual')+')':'koordinat belum ada'}</small></div>`).join('')||'<p class="empty">Belum ada instansi.</p>';
 }
 A.eo=t=>{
   const o=D.opds.find(x=>x.name==t.dataset.n)||{name:'',keys:[]};
@@ -1058,6 +1106,7 @@ A.eo=t=>{
     ${F('name','Nama instansi',o.name)}
     <label>Kata kunci (pisah koma)<textarea name="keys" rows="3">${esc((o.keys||[]).join(', '))}</textarea></label>
     ${F('alamat','Alamat',o.alamat)}${F('telp','No. Telp',o.telp)}${F('email','Email',o.email)}
+    ${F('lat','Lintang (latitude)',o.lat)}${F('lon','Bujur (longitude)',o.lon)}
     ${F('kepala','Pengguna Barang / Ka. OPD',o.kepala)}${F('nipKepala','NIP Pengguna Barang',o.nipKepala)}
     ${F('pengurus','Pengurus Barang',o.pengurus)}${F('nipPengurus','NIP Pengurus Barang',o.nipPengurus)}
     <label>Tanggal penyelesaian (isi setelah ${S.kib}-01 selesai)<input name="tgl" type="date" value="${esc(o.tgl||'')}"></label>
@@ -1070,7 +1119,8 @@ A.so_save=async t=>{
   d.name=d.name.trim();d.keys=d.keys.split(/[,\n]/).map(s=>s.trim()).filter(Boolean);
   if(!d.keys.length)d.keys=[d.name];
   const i=D.opds.findIndex(x=>x.name==t.dataset.n);
-  if(i<0)D.opds.push(d);else{const old=D.opds[i].name;D.opds[i]=d;
+  const lt=numv(d.lat),ln=numv(d.lon);d.lat=lt;d.lon=ln;
+  if(i<0){d.latSrc=lt!=null?'manual':'';D.opds.push(d)}else{const old=D.opds[i].name,pv=D.opds[i];d.latSrc=lt==null?'':(pv.lat===lt&&pv.lon===ln?pv.latSrc:'manual');D.opds[i]=Object.assign({},pv,d);
     if(old!=d.name){const ch=V().filter(r=>r.opd==old);ch.forEach(r=>r.opd=d.name);await saveMany(ch)}}
   await kv('opds',D.opds);A.close();mInstansi();
 };
@@ -1120,14 +1170,6 @@ function mAbbr(){
 }
 A.sabbr=async()=>{if(!confirm('Simpan daftar singkatan?'))return;D.abbr=$('#abbr').value;mkAbr();await kv('abbr',D.abbr);toast('Tersimpan','ok')};
 
-function mParam(){
-  $('#mv').innerHTML=`<div class="pn"><h3>Parameter</h3>
-    <p class="mu">Kode Inventarisasi:</p>
-    <table><tr><th>Kode</th><th>Uraian</th></tr>
-    ${KD.map(([k,l])=>`<tr><td>${k}</td><td>${esc(l)}</td></tr>`).join('')}</table>
-    <h4>Sebab bertambah</h4><ul>${SBT.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>
-    <h4>Sebab berkurang</h4><ul>${SBK.map(s=>`<li>${esc(s)}</li>`).join('')}</ul></div>`;
-}
 
 function mHalaman(){
   const m=D.meta;
@@ -1297,25 +1339,13 @@ A.cimp=()=>$('#fk').click();
 $('#fk').onchange=e=>{const f=e.target.files[0];e.target.value='';f&&busy('Membaca controlling…',()=>impCtl(f))};
 
 /* ======================= SINKRON ======================= */
-function vSync(){
-  const m=D.meta;
-  const I=(k,l,t='text')=>`<label>${l}<input id="m_${k}" type="${t}" value="${esc(m[k]||'')}"></label>`;
-  $('#v').innerHTML=`<div class="pn"><h3>Google Spreadsheet & Drive</h3>
-    ${I('project','Nama Project (header)')}
-    ${I('url','URL Web App Apps Script','url')}
-    ${I('secret','Kunci rahasia','password')}
-    ${I('who','Nama petugas')}
-    ${I('prov','Provinsi')}${I('ibu','Ibukota')}
-    <div class="row"><button class="b p" data-a="msave">Simpan</button>
-    <button class="b" data-a="ping">🔌 Tes</button>
-    <button class="b" data-a="kirim">⬆ Kirim</button>
-    <button class="b" data-a="tarik">⬇ Tarik</button></div>
-    <div class="row"><button class="b" data-a="cekSrv">🔎 Cek jumlah di server</button>
-    <button class="b" data-a="kirimSemua">♻ Kirim ulang semua data</button></div>
-    <p class="mu" id="qi"></p></div>`;
-  upQ().then(()=>{const q=$('#qi');if(q)q.textContent=$('#qc').textContent});
-}
-const msv=async()=>{['project','url','secret','who','prov','ibu'].forEach(k=>{const el=$('#m_'+k);if(el)D.meta[k]=el.value.trim()});await kv('meta',D.meta);updHeader();toast('Tersimpan','ok')};
+const msv=async()=>{
+  const old={...D.meta};['project','url','secret','who','prov','ibu'].forEach(k=>{const el=$('#m_'+k);if(el)D.meta[k]=el.value.trim()});
+  await kv('meta',D.meta);updHeader();toast('Tersimpan','ok');
+  if(D.meta.url&&D.meta.secret){const ch=['project','prov','ibu'].some(k=>old[k]!==D.meta[k]&&D.meta[k]);
+    if(ch){try{await post({action:'metaset',force:1,meta:{project:D.meta.project,prov:D.meta.prov,ibu:D.meta.ibu}})}catch(_){}}else await metaSync()}
+  pulses();
+};
 A.msave=async()=>{if(!confirm('Simpan pengaturan koneksi?'))return;await msv()};
 async function post(b){
   const m=D.meta;if(!m.url)throw new Error('URL Apps Script belum diisi');
@@ -1436,7 +1466,6 @@ function legacyRows(a,h,kib){
   }
   return out;
 }
-function ensureOpd(n){n=String(n).trim();const k=norm(n);let o=D.opds.find(x=>norm(x.name)===k);if(!o){o={name:n,keys:[n]};D.opds.push(o);ensureOpd.n=1}return o.name}
 function fixNo(rs){
   const set=new Set(rs),M={};
   V().forEach(r=>{if(r.kib&&r.no&&!set.has(r)){const k=r.kib+'|'+r.st+'|'+r.opd;M[k]=Math.max(M[k]||0,+r.no||0)}});
@@ -1447,7 +1476,7 @@ async function importX(f,kibSel){
   const buf=await f.arrayBuffer(),names=XLSX.read(buf,{bookSheets:true}).SheetNames;
   let use=[names[0]];
   if(names.length>1&&confirm(`File punya ${names.length} sheet.\nOK = semua sheet, Batal = sheet pertama saja.`))use=names;
-  const seen=new Set(V().filter(r=>r.st==='01'&&r.kib).map(dk)),add=[],kc={};let dup=0;ensureOpd.n=0;
+  const seen=new Set(V().filter(r=>r.st==='01'&&r.kib).map(dk)),add=[],kc={};let dup=0;ensureOpd.n=0;ensureOpd.fix=[];ensureOpd.al=0;
   for(const sn of use){
     const wb=XLSX.read(buf,{cellDates:true,sheets:sn}),
           a=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:true,defval:''}),p=parseSheet(a,kibSel);
@@ -1459,7 +1488,7 @@ async function importX(f,kibSel){
   if(!add.length)return toast(dup?`Semua ${dup} baris sudah ada di aplikasi (duplikat), tidak ada yang ditambahkan`:'Tidak ada baris terbaca. Pastikan baris judul memuat "Kode Barang" dan "Nama Barang"','w',8000);
   fixNo(add);await saveMany(add);
   if(ensureOpd.n){await kv('opds',D.opds);mkAbr()}
-  const g=await grup(false),ks=Object.keys(kc);
+  const g=await grup(false),ks=Object.keys(kc);await postImport(add);
   const first=add.find(o=>o.opd);
   S.kib=ks[0]||kibSel;S.tab='data';S.st='01';S.p=0;S.q='';S.f='';S.edit=0;
   S.opd=first?first.opd:(add.some(o=>!o.opd)?'__':S.opd);kv('last',S.opd);
@@ -1694,6 +1723,7 @@ const WCOLS=[['wDesa','Desa/Kel (terbaca)','text'],['wKec','Kecamatan (terbaca)'
 
 /* ---------- Menu Master > Wilayah ---------- */
 function mWilayah(){
+  if(!$('#mv'))return;
   const gs=wgs(),cnt={};V().forEach(r=>(r.wGid||[]).forEach(g=>cnt[g]=(cnt[g]||0)+1));
   const base=V().filter(r=>r.kib&&r.st==='01'),mp=base.filter(r=>r.wKode).length;
   $('#mv').innerHTML=`<div class="pn"><h3>Data wilayah offline</h3>
@@ -1973,7 +2003,7 @@ A.ivics=t=>{const p=by(t.dataset.id),d=p.date.replace(/-/g,''),e=d,x=s=>String(s
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));a.download=`jadwal_${d}.ics`;a.click()};
 function jadwalHome(){
   const ps=planes().filter(planAct).slice(0,3);if(!ps.length)return'';
-  return `<h2 class="sec">Jadwal inventarisasi</h2>${ps.map(p=>{const d=dTo(p.date),n=(p.ids||[]).length;return `<div class="cd${d<=0?' pulse':''}" data-a="ivstart" data-id="${p.id}"><b>${esc(p.name)}</b><small>📅 ${fdate(p.date)} · ${d<0?`terlambat ${-d} hari`:d===0?'hari ini':d+' hari lagi'} · ${planDone(p)}/${n} data</small></div>`}).join('')}`;
+  return `<h2 class="sec">Jadwal <em>inventarisasi</em></h2>${ps.map(p=>{const d=dTo(p.date),n=(p.ids||[]).length;return `<div class="cd${d<=0?' pulse':''}" data-a="ivstart" data-id="${p.id}"><b>${esc(p.name)}</b><small>📅 ${fdate(p.date)} · ${d<0?`terlambat ${-d} hari`:d===0?'hari ini':d+' hari lagi'} · ${planDone(p)}/${n} data</small></div>`}).join('')}`;
 }
 
 /* ---------- Isi lapangan (HP) ---------- */
@@ -1997,13 +2027,14 @@ function ivLap(){
   $('#iv').innerHTML=`<div class="pn"><div class="bar"><b>${IV.i+1} dari ${ids.length}</b><span class="mu">${done} selesai</span></div><div class="pb"><i style="width:${Math.round(done/ids.length*100)}%"></i></div>
     <h3 style="margin:12px 0 2px">${esc(r.nama||'(tanpa nama)')}</h3>
     <p class="mu" style="margin:0">KIB ${r.kib} · ${esc(r.kode||'')} · Reg ${esc(r.reg||'-')}<br>${esc(r.opd||'(Belum terkelompok)')}<br>📍 ${esc(r.alamat||'-')}${r.wKec?' · '+esc(r.wKec):''} · ${rp(r.harga)}</p>
+    <p class="mu" id="ivgps" style="margin:6px 0 0"></p>
     ${ivDone(r.id)?'<i class="ch ok">Sudah diisi</i>':''}
     ${ks.map(k=>`<div class="qf"><b>${QF[k][0]}</b><div class="rg">${QF[k][1].map(([v,l])=>`<label class="rb"><input type="radio" name="q_${k}" value="${v}"${r[k]===v?' checked':''}><span>${l}</span></label>`).join('')}</div></div>`).join('')}
     <div class="qf" id="ivrz"${r.ada==='TIDAK'?'':' hidden'}><b>Alasan tidak ada</b><select id="ivr"><option value="">— pilih alasan —</option>${KDT.map(([c,l])=>`<option value="${c}"${r.kd===c?' selected':''}>${c} ${esc(l)}</option>`).join('')}</select></div>
     <div class="qf"><b>Catatan</b><textarea id="ivk" rows="2" placeholder="Keterangan di lapangan">${esc(r.ket||'')}</textarea></div>
-    <div class="row"><button class="b" data-a="foto" data-id="${r.id}">📷 Foto <span id="ivph"></span></button><button class="b" data-a="gps" data-id="${r.id}">📍 GPS${r.lat?' ✓':''}</button><button class="b" data-a="ivlist">📋 Daftar</button></div></div>
+    <div class="row"><button class="b" data-a="foto" data-id="${r.id}">📷 Foto <span id="ivph"></span></button><button class="b" data-a="ivgps">↻ Ambil ulang GPS</button><button class="b" data-a="ivlist">📋 Daftar</button></div></div>
   <div class="ivbar"><button class="b" data-a="ivprev"${IV.i?'':' disabled'}>‹</button><button class="b" data-a="ivskip">Lewati ›</button><button class="b p" data-a="ivsave">💾 Simpan &amp; lanjut</button></div>`;
-  ivPh();pulses();
+  ivPh();ivGps();pulses();
 }
 async function ivPh(){const e=$('#ivph'),r=by(IV.ids[IV.i]);if(!e||!r)return;const n=(await all('ph')).filter(p=>p.rid==r.id).length;e.textContent=n?`(${n})`:''}
 A.ivprev=()=>{if(IV.i>0){IV.i--;ivLap()}};
@@ -2017,6 +2048,7 @@ A.ivsave=async()=>{
   const ada=v.ada||r.ada;
   if(!ada||ada==='BELUM')return toast('Pilih dulu: Ada atau Tidak ada','w');
   if(ada==='TIDAK'){const z=$('#ivr').value;if(z)v.kd=z;else if(r.kib==='C'&&!/^[23]/.test(r.kd||''))return toast('Pilih alasan barang tidak ada','w')}
+  if(IV.pos&&Date.now()-IV.pos.t<12e4){v.lat=+IV.pos.lat.toFixed(7);v.lon=+IV.pos.lon.toFixed(7);v.acc=Math.round(IV.pos.acc)}
   v.ket=$('#ivk').value.trim();
   hb();hn(r);Object.assign(r,v,{invAt:Date.now(),invBy:D.meta.who||'',invPlan:IV.pid});await save(r);hc();
   if(r.kib==='C')await syncC03(r);
@@ -2027,6 +2059,598 @@ A.ivsave=async()=>{
 };
 
 if(A.xl){const _xl=A.xl;A.xl=(t,e)=>{if(S.opd==='*')return toast('Pilih satu instansi untuk unduh Excel','w');return _xl(t,e)}}
+
+/* ======================= V3-A: parameter, master nama barang, kontak, sekolah, instansi otomatis ======================= */
+const ASAL=['','Pembelian (APBD)','Hibah dari Provinsi','Hibah dari Pusat','Hibah dari Lainnya','CSR','Lain-Lain'];
+const PD_DEF={kd:KD.map(([k,l])=>[k,String(k).split('.')[0],l]),kond:[['B','Baik'],['KB','Kurang Baik'],['RB','Rusak Berat']],asal:ASAL.filter(Boolean),sbt:[...SBT],sbk:[...SBK]};
+const pdp=()=>D.param||(D.param=JSON.parse(JSON.stringify(PD_DEF)));
+function applyParam(){
+  const p=D.param||PD_DEF;
+  KD.length=0;p.kd.forEach(([k,j,l])=>KD.push([k,l]));
+  Object.keys(KDL).forEach(k=>delete KDL[k]);KD.forEach(([k,l])=>KDL[k]=l);
+  KDF[2].length=0;KDF[2].push('',...KD);
+  KDT.length=0;KDT.push(...KD.filter(k=>/^[23]/.test(k[0])));
+  KOND.length=0;KOND.push('',...p.kond.map(([k,l])=>[k,l]));
+  ASAL.length=0;ASAL.push('',...p.asal);
+  SBT.length=0;SBT.push(...p.sbt);SBK.length=0;SBK.push(...p.sbk);
+  EX['02'][0][2].length=0;EX['02'][0][2].push('',...SBT);EX['03'][0][2].length=0;EX['03'][0][2].push('',...SBK);
+  QF.kond[1]=p.kond.map(([k,l])=>[k,l]);
+}
+['B','D','E'].forEach(k=>FIELDS[k].forEach(f=>{if(f[0]==='kond')f[2]=KOND}));
+['A','F'].forEach(k=>FIELDS[k].forEach(f=>{if(f[0]==='asalUsul')f[2]=ASAL}));
+const PGR=[['kd','KD INVENT, KD JNS INVENT, KET. INVENT',['KD INVENT','KD JNS INVENT','KET. INVENT']],['kond','Kondisi',['Kode','Keterangan']],['asal','Asal Usul',['Asal Usul']],['sbt','Keterangan mutasi bertambah',['Keterangan']],['sbk','Keterangan mutasi berkurang',['Keterangan']]];
+function mParam(){
+  if(!$('#mv'))return;
+  const p=pdp();
+  $('#mv').innerHTML=PGR.map(([g,t,h])=>`<div class="pn"><div class="bar"><h3 style="margin:0;font-size:16px">${t}</h3><button class="b p sm" data-a="pedit" data-g="${g}" data-i="-1">+ Tambah</button></div>
+    <table><tr>${h.map(x=>`<th>${x}</th>`).join('')}<th></th></tr>${p[g].map((r,i)=>{const c=Array.isArray(r)?r:[r];return `<tr>${c.map(x=>`<td>${esc(x)}</td>`).join('')}<td style="white-space:nowrap"><button class="ib" data-a="pedit" data-g="${g}" data-i="${i}">✏️</button><button class="ib" data-a="pdel" data-g="${g}" data-i="${i}">🗑</button></td></tr>`}).join('')}</table></div>`).join('')
+    +'<div class="row"><button class="b d" data-a="preset">↺ Kembalikan semua ke bawaan</button></div><p class="mu">Parameter ini menjadi pilihan di form, tabel, dan menu Inventarisasi.</p>';
+}
+A.pedit=t=>{
+  const g=t.dataset.g,i=+t.dataset.i,p=pdp(),P=PGR.find(x=>x[0]===g),r=i>=0?p[g][i]:null,v=Array.isArray(r)?r:[r??''];
+  modal(`<form id="fm" onsubmit="return false"><h3>${i>=0?'Ubah':'Tambah'}: ${P[1]}</h3>${P[2].map((l,j)=>`<label>${l}<input name="f${j}" value="${esc(v[j]||'')}"></label>`).join('')}
+    <div class="row"><button type="button" class="b p" data-a="psave" data-g="${g}" data-i="${i}">Simpan</button><button type="button" class="b" data-a="close">Batal</button></div></form>`);
+};
+A.psave=async t=>{
+  const g=t.dataset.g,i=+t.dataset.i,p=pdp(),n=PGR.find(x=>x[0]===g)[2].length,F=new FormData($('#fm')),v=[...Array(n).keys()].map(j=>String(F.get('f'+j)||'').trim());
+  if(!v[0])return toast('Isian pertama wajib diisi','w');
+  if(g==='kd'&&!v[1])v[1]=v[0].split('.')[0];
+  if(!confirm('Simpan parameter ini?'))return;
+  const val=n===1?v[0]:v;if(i>=0)p[g][i]=val;else p[g].push(val);
+  await kv('param',p);applyParam();A.close();mParam();
+};
+A.pdel=async t=>{
+  const g=t.dataset.g,i=+t.dataset.i,p=pdp(),r=p[g][i];
+  if(g==='kd'){const n=V().filter(x=>x.kd===r[0]).length;if(!confirm(n?`Kode ini dipakai ${n} data. Tetap hapus dari pilihan?`:'Hapus parameter ini?'))return}
+  else if(!confirm('Hapus parameter ini?'))return;
+  p[g].splice(i,1);await kv('param',p);applyParam();mParam();
+};
+A.preset=async()=>{if(!confirm('Kembalikan semua parameter ke bawaan?'))return;D.param=JSON.parse(JSON.stringify(PD_DEF));await kv('param',D.param);applyParam();mParam()};
+A.m_param=mParam;
+
+/* --- util file --- */
+const pickFile=(acc,cb)=>{const i=document.createElement('input');i.type='file';i.accept=acc;i.onchange=()=>i.files[0]&&cb(i.files[0]);i.click()};
+async function readSheet(f){await js(XJS);const wb=XLSX.read(await f.arrayBuffer(),{type:'array'});return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,raw:true,defval:''})}
+
+/* --- Master nama barang + kode rekening --- */
+const BLV=['Akun','Kelompok','Jenis','Objek','Rincian Objek','Sub Rincian Objek','Sub-sub Rincian Objek'];
+const brg=()=>D.brg||(D.brg=[]);
+const BSEED=[['1','Aset'],['1.3','Aset Tetap'],['1.3.1','Tanah'],['1.3.2','Peralatan dan Mesin'],['1.3.3','Gedung dan Bangunan'],['1.3.4','Jalan, Jaringan, dan Irigasi'],['1.3.5','Aset Tetap Lainnya'],['1.3.6','Konstruksi Dalam Pengerjaan']];
+const bkey=k=>String(k).split('.').map(x=>x.padStart(4,'0')).join('.');
+function brgAdd(k,u){k=String(k||'').trim();u=String(u||'').trim();if(!k||!u)return 0;const a=brg();if(a.some(x=>x.k===k))return 0;a.push({k,u});return 1}
+async function brgLearn(rs){let n=0;rs.forEach(r=>{if(r.kode&&r.nama)n+=brgAdd(r.kode,r.nama)});if(n)await kv('brg',brg());return n}
+function mBarang(){
+  if(!$('#mv'))return;
+  if(!brg().length){BSEED.forEach(([k,u])=>brgAdd(k,u));kv('brg',brg())}
+  const q=wn(S.bq||''),a=brg().filter(x=>!q||wn(x.k+' '+x.u).includes(q)).sort((x,y)=>bkey(x.k)<bkey(y.k)?-1:1),N=40,pg=Math.max(1,Math.ceil(a.length/N));
+  S.bp=Math.max(0,Math.min(S.bp||0,pg-1));
+  $('#mv').innerHTML=`<div class="pn"><div class="row"><button class="b p" data-a="bedit" data-k="">+ Tambah</button><button class="b" data-a="bimp">⬆ Import Excel/CSV</button><button class="b" data-a="bxl">⬇ Unduh</button></div>
+    <input id="bq" placeholder="Cari kode atau uraian" value="${esc(S.bq||'')}">
+    <p class="mu">${a.length} baris. Kode dipecah otomatis (1 = Akun, 1.3 = Kelompok, 1.3.2 = Jenis, dan seterusnya). Nama barang dari import KIB masuk otomatis.</p></div>
+    <div class="gw" style="max-height:58vh"><table class="gt"><thead><tr><th>Kode</th>${BLV.map(l=>`<th>${l}</th>`).join('')}<th>Uraian</th><th></th></tr></thead><tbody>${a.slice(S.bp*N,S.bp*N+N).map(x=>{const p=x.k.split('.');
+    return `<tr><td><b>${esc(x.k)}</b></td>${BLV.map((_,i)=>`<td>${esc(p[i]??'')}</td>`).join('')}<td>${esc(x.u)}</td><td style="white-space:nowrap"><button class="ib" data-a="bedit" data-k="${esc(x.k)}">✏️</button><button class="ib" data-a="bdel" data-k="${esc(x.k)}">🗑</button></td></tr>`}).join('')}</tbody></table></div>
+    <div class="row"><button class="b" data-a="bpg" data-d="-1">‹</button><span class="mu">hal ${S.bp+1}/${pg}</span><button class="b" data-a="bpg" data-d="1">›</button></div>`;
+  const q_=$('#bq');q_.oninput=e=>{S.bq=e.target.value;S.bp=0;S.bqf=1;clearTimeout(mBarang._t);mBarang._t=setTimeout(mBarang,250)};
+  if(S.bqf){q_.focus();q_.setSelectionRange(q_.value.length,q_.value.length);S.bqf=0}
+}
+A.m_barang=mBarang;
+A.bpg=t=>{S.bp=Math.max(0,(S.bp||0)+ +t.dataset.d);mBarang()};
+A.bedit=t=>{
+  const x=brg().find(b=>b.k===t.dataset.k);
+  modal(`<form id="fm" onsubmit="return false"><h3>${x?'Ubah':'Tambah'} nama barang</h3>
+    <label>Kode rekening (mis. 1.3.2 atau 1.3.2.01.01.01.001)<input name="k" value="${esc(x?x.k:'')}"></label>
+    <label>Uraian<input name="u" value="${esc(x?x.u:'')}"></label>
+    <p class="mu">Akun, kelompok, jenis, objek, rincian objek, sub rincian, dan sub-sub rincian diambil otomatis dari kode.</p>
+    <div class="row"><button type="button" class="b p" data-a="bsave" data-k="${esc(t.dataset.k||'')}">Simpan</button><button type="button" class="b" data-a="close">Batal</button></div></form>`);
+};
+A.bsave=async t=>{
+  const F=new FormData($('#fm')),k=String(F.get('k')||'').trim(),u=String(F.get('u')||'').trim(),old=t.dataset.k;
+  if(!/^\d+(\.\d+)*$/.test(k)||!u)return toast('Isi kode angka bertitik (mis. 1.3.2) dan uraian','w');
+  if(k!==old&&brg().some(b=>b.k===k))return toast('Kode sudah ada','w');
+  if(!confirm('Simpan nama barang ini?'))return;
+  const a=brg(),i=a.findIndex(b=>b.k===old);if(i>=0)a[i]={k,u};else a.push({k,u});
+  await kv('brg',a);A.close();mBarang();
+};
+A.bdel=async t=>{if(!confirm('Hapus baris master ini?'))return;D.brg=brg().filter(b=>b.k!==t.dataset.k);await kv('brg',D.brg);mBarang()};
+A.bimp=()=>pickFile('.xlsx,.xls,.csv',f=>busy('Membaca file…',async()=>{
+  const a=await readSheet(f);let hi=a.findIndex(r=>r.some(c=>/kode|uraian/.test(nh(c))));if(hi<0)hi=0;
+  const H=a[hi].map(nh),ck=Math.max(0,H.findIndex(h=>/kode/.test(h))),cu=(i=>i>=0?i:ck+1)(H.findIndex(h=>/uraian|nama/.test(h)));
+  let n=0;a.slice(hi+1).forEach(r=>{n+=brgAdd(r[ck],r[cu])});await kv('brg',brg());toast(`${n} baris baru ditambahkan`,'ok');mBarang();
+}));
+A.bxl=()=>busy('Menyiapkan…',async()=>{await js(XJS);const rows=[['Kode',...BLV,'Uraian'],...brg().sort((x,y)=>bkey(x.k)<bkey(y.k)?-1:1).map(x=>{const p=x.k.split('.');return[x.k,...BLV.map((_,i)=>p[i]??''),x.u]})];
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),'Master Nama Barang');XLSX.writeFile(wb,'master_nama_barang.xlsx')});
+
+/* --- Kontak (contact person) --- */
+const kts=()=>D.kontak||(D.kontak=[]);
+function mKontak(){
+  if(!$('#mv'))return;
+  $('#mv').innerHTML=`<div class="pn"><div class="row"><button class="b p" data-a="kedit" data-id="">+ Kontak</button></div><p class="mu">Contact person dipakai di menu Jadwal dan Excel jadwal.</p></div>`
+   +(kts().map(k=>`<div class="cd" data-a="kedit" data-id="${k.id}"><b>${esc(k.nama)}</b><small>${esc(k.hp||'-')}${k.ket?' · '+esc(k.ket):''}</small></div>`).join('')||'<p class="empty">Belum ada kontak.</p>');
+}
+A.m_kontak=mKontak;
+A.kedit=t=>{
+  const k=kts().find(x=>x.id===t.dataset.id)||{};
+  modal(`<form id="fm" onsubmit="return false"><h3>${k.id?'Ubah':'Tambah'} contact person</h3>
+    <label>Nama<input name="nama" value="${esc(k.nama||'')}"></label><label>No. HP<input name="hp" inputmode="tel" value="${esc(k.hp||'')}" placeholder="+62 8xx"></label>
+    <label>Keterangan (jabatan/instansi)<input name="ket" value="${esc(k.ket||'')}"></label>
+    <div class="row"><button type="button" class="b p" data-a="ksave" data-id="${esc(k.id||'')}">Simpan</button>${k.id?`<button type="button" class="b d" data-a="kdel" data-id="${k.id}">🗑 Hapus</button>`:''}<button type="button" class="b" data-a="close">Batal</button></div></form>`);
+};
+const kRefresh=()=>{if(S.tab==='master')mKontak();else if(S.tab==='jadwal')jdForm()};
+A.ksave=async t=>{
+  const F=new FormData($('#fm')),nama=String(F.get('nama')||'').trim();if(!nama)return toast('Nama wajib diisi','w');
+  if(!confirm('Simpan kontak ini?'))return;
+  const o={id:t.dataset.id||uid(),nama,hp:String(F.get('hp')||'').trim(),ket:String(F.get('ket')||'').trim()},a=kts(),i=a.findIndex(x=>x.id===o.id);
+  if(i>=0)a[i]=o;else{a.push(o);if(S.tab==='jadwal')JD.cp=o.id}
+  await kv('kontak',a);A.close();kRefresh();
+};
+A.kdel=async t=>{if(!confirm('Hapus kontak ini?'))return;D.kontak=kts().filter(x=>x.id!==t.dataset.id);if(JD.cp===t.dataset.id)JD.cp='';await kv('kontak',D.kontak);A.close();kRefresh()};
+
+/* --- Master sekolah (koordinat dari file unduhan sekolah.data.kemendikdasmen.go.id) --- */
+const sk=()=>D.sek||(D.sek=[]);
+const skTok=(n,kab)=>{const s=wn((n||'')+' '+(kab||'')).replace(/\b(sma|smk|smp|sd|mts|mi|ma|slb)n\b/g,'$1 negeri').replace(/\bman\b/g,'ma negeri').replace(/\b0+(\d)/g,'$1');
+  return new Set(s.split(' ').filter(t=>t&&!['upb','uptd','di','dan','kabupaten','kab','kota','provinsi','prov'].includes(t)))};
+function matchSekolah(names){
+  const S_=sk();if(!S_.length)return 0;
+  if(!matchSekolah.ix||matchSekolah.n!==S_.length){const ix=new Map();S_.forEach((s,i)=>{s.t=skTok(s.n,s.kab);s.t.forEach(t=>{if(!ix.has(t))ix.set(t,[]);ix.get(t).push(i)})});matchSekolah.ix=ix;matchSekolah.n=S_.length}
+  const ix=matchSekolah.ix;let n=0;
+  (names||D.opds.map(o=>o.name)).forEach(nm=>{
+    const o=D.opds.find(x=>x.name===nm);if(!o||o.latSrc==='manual')return;
+    const T=skTok(nm),cnt=new Map();T.forEach(t=>{const l=ix.get(t);if(l&&l.length<3000)l.forEach(i=>cnt.set(i,(cnt.get(i)||0)+1))});
+    let best=null;
+    cnt.forEach((c,i)=>{if(c<2)return;const s=S_[i],sc=c/(T.size+s.t.size-c),sub=s.t.size>=3&&[...s.t].every(t=>T.has(t)),v=sc>=.8?sc:sub?.79:0;if(v&&(!best||v>best.v))best={s,v}});
+    if(best&&(o.lat!==best.s.lat||o.lon!==best.s.lon)){o.lat=best.s.lat;o.lon=best.s.lon;o.npsn=best.s.npsn||'';o.latSrc='sekolah';n++}
+  });
+  return n;
+}
+function mSekolah(){
+  if(!$('#mv'))return;
+  const has=D.opds.filter(o=>o.lat!=null&&o.lat!==''),no=D.opds.filter(o=>o.lat==null||o.lat==='');
+  $('#mv').innerHTML=`<div class="pn"><h3>Koordinat sekolah</h3>
+    <p class="mu">Unduh data sekolah dari sekolah.data.kemendikdasmen.go.id (Excel atau CSV), lalu unggah di sini. Kolom yang dikenali: Nama Sekolah, NPSN, Lintang (latitude), Bujur (longitude), Kabupaten/Kota, dan link peta bila ada. Nama sekolah dicocokkan ke nama instansi (SMAN 04 sama dengan SMA Negeri 4).</p>
+    <div class="row"><button class="b p" data-a="sekimp">⬆ Unggah data sekolah</button><button class="b" data-a="sekmatch">🔁 Cocokkan ulang</button><button class="b d" data-a="sekclr">🗑 Hapus data sekolah</button></div>
+    <p><b>${sk().length.toLocaleString('id-ID')}</b> sekolah tersimpan · <b>${has.length}</b> instansi sudah berkoordinat · <b>${no.length}</b> belum</p></div>
+    <div class="pn"><h4>Instansi belum berkoordinat</h4>${no.slice(0,40).map(o=>`<div class="cd" data-a="eo" data-n="${esc(o.name)}"><b>${esc(o.name)}</b></div>`).join('')||'<p class="empty">Semua instansi sudah punya koordinat.</p>'}</div>`;
+}
+A.m_sekolah=mSekolah;
+A.sekimp=()=>pickFile('.xlsx,.xls,.csv',f=>busy('Membaca data sekolah…',async()=>{
+  const a=await readSheet(f),hi=a.findIndex(r=>r.some(c=>/lintang|latitude|^lat$/.test(nh(c))));
+  if(hi<0)return toast('Kolom Lintang/Latitude tidak ditemukan. Periksa file unduhan','w',8000);
+  const H=a[hi].map(nh),F=re=>H.findIndex(h=>re.test(h)),cn=[/^nama sekolah$/,/^nama satuan pendidikan$/,/^nama$/,/nama|sekolah/].map(F).find(i=>i>=0),
+        cla=F(/lintang|latitude|^lat$/),clo=F(/bujur|longitude|^lon$|^lng$|^long$/),cnp=F(/npsn/),ckb=F(/kabupaten|kab kota|^kota$/),cli=F(/link|url|maps|peta/);
+  if(cn==null||clo<0)return toast('Kolom nama sekolah atau bujur tidak ditemukan','w',8000);
+  const m=new Map(sk().map(s=>[s.npsn||s.n,s]));let n=0;
+  a.slice(hi+1).forEach(r=>{const lat=numv(r[cla]),lon=numv(r[clo]),nm=String(r[cn]||'').trim();
+    if(!nm||lat==null||lon==null||lat<-12||lat>7||lon<94||lon>142)return;
+    const o={n:nm,lat,lon,npsn:cnp>=0?String(r[cnp]||'').trim():'',kab:ckb>=0?String(r[ckb]||'').trim():'',link:cli>=0?String(r[cli]||'').trim():''};
+    m.set(o.npsn||o.n,o);n++});
+  D.sek=[...m.values()].map(({n,lat,lon,npsn,kab,link})=>({n,lat,lon,npsn,kab,link}));await kv('sekolah',D.sek);
+  matchSekolah.ix=null;const c=matchSekolah();await kv('opds',D.opds);toast(`${n} sekolah dibaca, ${c} instansi cocok`,'ok',8000);mSekolah();
+}));
+A.sekmatch=async()=>{matchSekolah.ix=null;const c=matchSekolah();await kv('opds',D.opds);toast(c+' instansi diperbarui koordinatnya','ok');mSekolah()};
+A.sekclr=async()=>{if(!confirm('Hapus semua data sekolah yang tersimpan? Koordinat instansi tidak berubah.'))return;D.sek=[];matchSekolah.ix=null;await kv('sekolah',[]);mSekolah()};
+
+/* --- Instansi otomatis dari import: nama beda, singkatan, typo --- */
+const opdKey=n=>norm(n).replace(/\b0+(\d)/g,'$1');
+const digs=s=>(String(s).match(/\d+/g)||[]).join(',');
+function canonOpd(n){
+  const k=opdKey(n),al=D.oalias||(D.oalias={});if(al[k])return al[k];
+  const a=k.replace(/ /g,'');let best=null;
+  for(const o of D.opds){
+    const k2=opdKey(o.name);if(k2===k)return o.name;
+    const b=k2.replace(/ /g,''),L=Math.max(a.length,b.length),mx=L<12?1:L<25?2:3;
+    if(a.length>5&&digs(a)===digs(b)){const d=dl(a,b,mx);if(d<=mx&&(!best||d<best.d))best={n:o.name,d}}
+  }
+  if(best){al[k]=best.n;if(ensureOpd.fix)ensureOpd.fix.push(`${n} → ${best.n}`);ensureOpd.al=1;return best.n}
+  return null;
+}
+function ensureOpd(n){n=String(n).trim();const c=canonOpd(n);if(c)return c;D.opds.push({name:n,keys:[n]});ensureOpd.n=1;return n}
+async function learnAbbr(){
+  const have=new Set(D.abbr.split('\n').map(l=>l.split('=')[0].trim()).filter(Boolean)),add=[],SW=new Set(['dan','dengan','di','yang','untuk','pada','se']);
+  const acr=n=>wn(n).split(' ').filter(w=>w&&!SW.has(w)).map(w=>w[0]).join(''),ac=new Map(),toks=new Set();
+  D.opds.forEach(o=>{const a=acr(o.name);if(a.length>=3)ac.set(a,wn(o.name));wn(o.name).split(' ').forEach(t=>{if(t.length>=3&&t.length<=9)toks.add(t)})});
+  toks.forEach(t=>{if(have.has(t))return;const m=t.match(/^(sma|smk|smp|sd|mts|mi|slb)n$/);
+    if(ac.has(t)&&ac.get(t)!==t){add.push(`${t}=${ac.get(t)}`);have.add(t)}else if(m){add.push(`${t}=${m[1]} negeri`);have.add(t)}});
+  if(!add.length)return 0;
+  D.abbr=(D.abbr.trim()+'\n'+add.join('\n')).trim();mkAbr();await kv('abbr',D.abbr);return add.length;
+}
+A.opdMerge=()=>{
+  const cnt=new Map();V().forEach(r=>{if(r.kib&&r.opd)cnt.set(r.opd,(cnt.get(r.opd)||0)+1)});D.opds.forEach(o=>{if(!cnt.has(o.name))cnt.set(o.name,0)});
+  const nm=[...cnt.keys()],par=nm.map((_,i)=>i),f=i=>par[i]===i?i:(par[i]=f(par[i])),ky=nm.map(n=>opdKey(n).replace(/ /g,''));
+  for(let i=0;i<nm.length;i++)for(let j=i+1;j<nm.length;j++){const a=ky[i],b=ky[j],L=Math.max(a.length,b.length),mx=L<12?1:L<25?2:3;
+    if(a===b||(a.length>5&&digs(a)===digs(b)&&dl(a,b,mx)<=mx))par[f(j)]=f(i)}
+  const gr=new Map();nm.forEach((n,i)=>{const r=f(i);if(!gr.has(r))gr.set(r,[]);gr.get(r).push(n)});
+  const ms=[...gr.values()].filter(g=>g.length>1).map(g=>{g.sort((x,y)=>cnt.get(y)-cnt.get(x)||y.length-x.length);return{to:g[0],from:g.slice(1)}});
+  if(!ms.length)return toast('Tidak ada nama instansi yang mirip','ok');
+  A.opdMergeGo=async()=>{
+    if(!confirm(`Gabungkan ${ms.length} kelompok nama instansi?`))return;
+    const ch=[];hb();
+    ms.forEach(m=>{V().filter(r=>r.kib&&m.from.includes(r.opd)).forEach(r=>{hn(r);r.opd=m.to;r.no=0;ch.push(r)});
+      const tgt=D.opds.find(o=>o.name===m.to)||(D.opds.push({name:m.to,keys:[m.to]}),D.opds[D.opds.length-1]);
+      m.from.forEach(fr=>{const o=D.opds.find(x=>x.name===fr);if(o){(o.keys||[]).forEach(k=>{tgt.keys=tgt.keys||[];if(!tgt.keys.includes(k))tgt.keys.push(k)});['lat','lon','alamat','kepala','nipKepala','pengurus','nipPengurus','telp','email'].forEach(k=>{if(o[k]&&!tgt[k])tgt[k]=o[k]})}
+        D.opds=D.opds.filter(x=>x.name!==fr);(D.oalias||(D.oalias={}))[opdKey(fr)]=m.to})});
+    fixNo(ch);hc();await saveMany(ch);await kv('opds',D.opds);await kv('oalias',D.oalias);A.close();toast(`${ch.length} baris dipindahkan. Ctrl+Z untuk membatalkan`,'ok',6000);mInstansi();
+  };
+  modal(`<h3>Rapikan nama instansi</h3><p class="mu">Nama yang sangat mirip digabung ke nama yang paling banyak dipakai.</p><table><tr><th>Digabung ke</th><th>Dari</th></tr>${ms.map(m=>`<tr><td>${esc(m.to)}</td><td>${m.from.map(esc).join('<br>')}</td></tr>`).join('')}</table><div class="row"><button class="b p" data-a="opdMergeGo">Gabungkan</button><button class="b" data-a="close">Batal</button></div>`);
+};
+
+/* --- Alamat/lokasi disamakan per instansi (ambil yang paling lengkap) --- */
+const ADR_STOP=new Set('jalan jl jln desa kel kelurahan kec kecamatan kab kabupaten kota provinsi prov dusun dsn rt rw no nomor di'.split(' '));
+const adrTok=a=>new Set(wn(a).split(' ').filter(t=>t&&!ADR_STOP.has(t)));
+const adrEmpty=a=>{const s=String(a??'').trim();return !s||/^[-–—.\/\s]+$/.test(s)||/^(tidak ada|belum ada|n\/a|na)$/i.test(s)};
+const adrCompat=(A_,B_)=>{const i=[...A_].filter(t=>B_.has(t)).length,m=Math.min(A_.size,B_.size);return m>0&&(m===1?i===1:i>=Math.max(2,Math.ceil(m*.6)))};
+function addrPlan(rows){
+  const cnt=new Map();rows.forEach(r=>{if(!adrEmpty(r.alamat)){const a=String(r.alamat).trim();cnt.set(a,(cnt.get(a)||0)+1)}});
+  const ad=[...cnt.keys()].map(a=>({a,t:adrTok(a),n:cnt.get(a)})).sort((x,y)=>y.t.size-x.t.size||y.a.length-x.a.length),cl=[];
+  ad.forEach(x=>{const c=cl.find(c=>adrCompat(x.t,c.m.t));if(c){c.mem.push(x);c.n+=x.n}else cl.push({m:x,mem:[x],n:x.n})});
+  if(!cl.length)return[];
+  const dom=cl.slice().sort((a,b)=>b.n-a.n||b.m.t.size-a.m.t.size)[0],to=new Map();
+  cl.forEach(c=>c.mem.forEach(x=>{if(x.a!==c.m.a)to.set(x.a,c.m.a)}));
+  return rows.flatMap(r=>{if(adrEmpty(r.alamat))return[{r,to:dom.m.a}];const a=String(r.alamat).trim();return to.has(a)?[{r,to:to.get(a)}]:[]});
+}
+function addrChanges(opds){
+  const sets=opds?new Set(opds):null,by_=new Map();
+  V().forEach(r=>{if(r.kib&&r.st==='01'&&r.opd&&(!sets||sets.has(r.opd))){if(!by_.has(r.opd))by_.set(r.opd,[]);by_.get(r.opd).push(r)}});
+  return[...by_.values()].flatMap(addrPlan);
+}
+async function addrSync(opds,o={}){
+  const ch=addrChanges(opds);if(!ch.length)return 0;
+  hb();ch.forEach(({r,to})=>{hn(r);r.alamat=to});hc();await saveMany(ch.map(c=>c.r));return ch.length;
+}
+A.alsync=()=>{
+  const ch=addrChanges(S.opd&&S.opd!=='*'&&S.opd!=='__'?[S.opd]:null);
+  if(!ch.length)return toast('Alamat sudah seragam di setiap instansi','ok');
+  modal(`<h3>Samakan alamat per instansi</h3><p class="mu">${ch.length} baris akan diisi dengan alamat paling lengkap dari instansi yang sama. Alamat yang memang berbeda lokasi tidak diubah.</p>
+    <table><tr><th>Instansi</th><th>Lama</th><th>Baru</th></tr>${ch.slice(0,12).map(({r,to})=>`<tr><td>${esc(r.opd)}</td><td>${esc(r.alamat||'(kosong)')}</td><td>${esc(to)}</td></tr>`).join('')}</table>
+    <div class="row"><button class="b p" data-a="alsyncGo">Terapkan</button><button class="b" data-a="close">Batal</button></div>`);
+  A.alsyncGo=async()=>{if(!confirm(`Ubah alamat ${ch.length} baris?`))return;await addrSync(S.opd&&S.opd!=='*'&&S.opd!=='__'?[S.opd]:null);A.close();toast(ch.length+' alamat diseragamkan. Ctrl+Z untuk membatalkan','ok',6000);if(S.tab==='data')drawGrid()};
+};
+async function postImport(add){
+  const nm=[...new Set(add.map(o=>o.opd).filter(Boolean))],info=[];
+  if(ensureOpd.al)await kv('oalias',D.oalias);
+  const fx=ensureOpd.fix||[];if(fx.length)info.push(`${fx.length} nama instansi diperbaiki otomatis (${fx.slice(0,2).join('; ')}${fx.length>2?'…':''})`);
+  const na=await learnAbbr();if(na)info.push(`${na} singkatan baru dipelajari`);
+  const nb=await brgLearn(add);if(nb)info.push(`${nb} nama barang masuk master`);
+  const ns=matchSekolah(nm);if(ns){await kv('opds',D.opds);info.push(`${ns} koordinat sekolah dicocokkan`)}
+  const nd=await addrSync(nm);if(nd)info.push(`alamat diseragamkan di ${nd} baris (Ctrl+Z untuk batal)`);
+  if(info.length)setTimeout(()=>toast(info.join('. '),'ok',14000),600);
+}
+
+/* ======================= V3-B: Jadwal turun lapangan + rute (tersimpan offline) ======================= */
+const HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],BLN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const fdl=d=>{const x=new Date(d+'T00:00:00');return `${HARI[x.getDay()]}, ${String(x.getDate()).padStart(2,'0')} ${BLN[x.getMonth()]} ${x.getFullYear()}`};
+const JD={cp:'',tim:'TIM 1',date:'',kibs:new Set(['A','C']),wt:'',g:'',cart:[],cur:'',edit:'',route:null,tok:0};
+const kibTxt=ks=>{const a=(ks||[]).map(k=>'KIB '+k);return a.length>1?a.slice(0,-1).join(', ')+' dan '+a[a.length-1]:a.join('')};
+const fmtMin=m=>m>=60?`${Math.floor(m/60)} jam ${Math.round(m%60)} menit`:`${Math.max(1,Math.round(m))} menit`;
+function opdCoord(n){
+  const o=D.opds.find(x=>x.name===n);
+  if(o&&o.lat!=null&&o.lat!==''&&!isNaN(+o.lat))return{c:[+o.lat,+o.lon],src:o.latSrc==='sekolah'?'koordinat sekolah':'koordinat instansi'};
+  const rs=V().filter(r=>r.kib&&r.opd===n&&r.lat!=null&&r.lat!==''&&!isNaN(+r.lat));
+  if(rs.length)return{c:[rs.reduce((s,r)=>s+ +r.lat,0)/rs.length,rs.reduce((s,r)=>s+ +r.lon,0)/rs.length],src:'GPS aset'};
+  if(WS.ready){const w=V().find(r=>r.kib&&r.opd===n&&r.wKode);if(w){const e=WS.byK.get(w.wKode),k=e&&(e.l>=3?e.kec:e.k),c=k&&wilCoord(k,[]);if(c)return{c:c.c,src:'perkiraan wilayah',approx:1}}}
+  return null;
+}
+function jdRows(){
+  const ks=[...JD.kibs];if(!ks.length)return[];
+  let a=V().filter(r=>r.kib&&r.st==='01'&&!r.mut&&ks.includes(r.kib));
+  if(JD.g)a=a.filter(r=>(r.wGid||[]).includes(JD.g));
+  if(JD.wt)a=a.filter(r=>wMatch(r,JD.wt));
+  const m=new Map();
+  a.forEach(r=>{const o=r.opd||'(Belum terkelompok)';if(!m.has(o))m.set(o,{opd:o,n:{A:0,B:0,C:0,D:0,E:0,F:0},rows:[],al:new Map()});
+    const x=m.get(o);x.n[r.kib]++;x.rows.push(r);const al=String(r.alamat||'').trim();if(al&&!adrEmpty(al))x.al.set(al,(x.al.get(al)||0)+1)});
+  return[...m.values()].sort((x,y)=>x.opd.localeCompare(y.opd));
+}
+const jdLok=x=>{const t=[...x.al].sort((a,b)=>b[1]-a[1])[0];return t?t[0]:''};
+const jdArea=()=>JD.wt||(JD.g&&(wgs().find(g=>g.id===JD.g)||{}).name)||'';
+const inCart=o=>JD.cart.some(c=>c.opd===o);
+
+function vJadwal(){
+  if(!JD.date)JD.date=addDays(1);
+  $('#v').innerHTML=`<div class="bar"><h3 style="margin:0">Jadwal Turun Lapangan</h3></div>
+    <div class="pn" id="jdform"></div>
+    <div class="pn"><div id="jmap" class="jmap"></div><p class="mu" id="jrs" style="margin:8px 0 0">Centang instansi untuk menandai di peta dan membuat rute.</p></div>
+    <div class="pn" id="jdlist"></div><div id="jdcart"></div><div id="jdsaved"></div>`;
+  jdForm();jdList();jdCart();jdSaved();jdMapInit();
+}
+function jdForm(){
+  const ks=kts(),c=ks.find(k=>k.id===JD.cp);
+  $('#jdform').innerHTML=`<h3>Pelaksanaan</h3>
+    <label>Contact person<select id="jcp"><option value="">— pilih —</option>${ks.map(k=>`<option value="${k.id}"${k.id===JD.cp?' selected':''}>${esc(k.nama)}${k.hp?' · '+esc(k.hp):''}</option>`).join('')}</select></label>
+    <div class="row"><button class="b sm" data-a="kedit" data-id="">+ Kontak</button>${c?`<button class="b sm" data-a="kedit" data-id="${c.id}">✏️ Ubah</button>`:''}${c&&c.hp?`<a class="b sm" href="tel:${esc(c.hp)}">📞 ${esc(c.hp)}</a>`:''}</div>
+    <div class="row"><label style="flex:1;min-width:140px">Tanggal<input type="date" id="jdt" value="${JD.date}"></label><label style="flex:1;min-width:140px">Tim<input id="jtim" value="${esc(JD.tim)}"></label></div>
+    <label>Area yang dikunjungi<input id="jw" list="jwl" placeholder="mis. Pulau Bacan atau Halmahera Timur" value="${esc(JD.wt)}"><datalist id="jwl">${wtl()}</datalist></label>
+    <label>Atau pilih kelompok pulau/zona<select id="jg"><option value="">Semua</option>${wgs().map(g=>`<option value="${g.id}"${JD.g===g.id?' selected':''}>${esc(g.name)}</option>`).join('')}</select></label>
+    <p style="margin:6px 0"><b>KIB yang diinventarisasi</b> (boleh lebih dari satu)</p>
+    <div class="rg">${'ABCDEF'.split('').map(k=>`<label class="rb"><input type="checkbox" data-jk="${k}"${JD.kibs.has(k)?' checked':''}><span>KIB ${k}</span></label>`).join('')}</div>`;
+}
+document.addEventListener('change',e=>{
+  const t=e.target;if(!t.closest)return;
+  if(t.closest('#jdform')){
+    if(t.id==='jcp'){JD.cp=t.value;jdForm()}else if(t.id==='jdt'){JD.date=t.value||JD.date}else if(t.id==='jtim')JD.tim=t.value;
+    else if(t.id==='jg'){JD.g=t.value;jdList();jdDraw(1)}else if(t.id==='jw'){JD.wt=t.value;jdList();jdDraw(1)}
+    else if(t.dataset.jk){t.checked?JD.kibs.add(t.dataset.jk):JD.kibs.delete(t.dataset.jk);jdList();jdCart();jdDraw(1)}
+  }else if(t.closest('#jdlist')&&t.dataset.jo!==undefined)jdToggle(t.dataset.jo,t.checked);
+  else if(t.closest('#jdcart')){
+    if(t.dataset.cd){const o=t.dataset.cd,n=t.value;if(!n)return;JD.cart.forEach(c=>{if(c.date===o)c.date=n});if(JD.cur===o)JD.cur=n;jdCart();jdDraw()}
+    else if(t.dataset.ct)JD.cart.forEach(c=>{if(c.date===t.dataset.ct)c.tim=t.value});
+  }
+});
+document.addEventListener('input',e=>{if(e.target.id==='jw'){clearTimeout(jdForm._t);jdForm._t=setTimeout(()=>{JD.wt=e.target.value;jdList();jdDraw(1)},400)}});
+function jdToggle(o,on){
+  if(on===undefined)on=!inCart(o);
+  if(on&&!inCart(o)){JD.cart.push({opd:o,date:JD.date||addDays(1),tim:JD.tim});JD.cur=JD.date||addDays(1)}
+  if(!on)JD.cart=JD.cart.filter(c=>c.opd!==o);
+  jdList();jdCart();jdDraw();
+}
+function jdList(){
+  const el=$('#jdlist');if(!el)return;const rows=jdRows(),ks=[...JD.kibs];
+  el.innerHTML=`<div class="bar"><h3 style="margin:0">Instansi (${rows.length})</h3><span class="row" style="margin:0"><button class="b sm" data-a="jdall">Centang semua</button><button class="b sm" data-a="jdnone">Kosongkan</button></span></div>`
+   +(rows.map(x=>{const co=opdCoord(x.opd),on=inCart(x.opd);
+     return `<label class="iv-r"><input type="checkbox" data-jo="${esc(x.opd)}"${on?' checked':''}><span><b>${esc(x.opd)}</b> ${ks.map(k=>`<i class="ch">${k}: ${x.n[k]}</i>`).join('')}<small>${esc(jdLok(x)||'Lokasi belum terisi')} · ${co?(co.approx?'perkiraan wilayah':co.src)+` · <a href="https://www.google.com/maps?q=${co.c[0]},${co.c[1]}" target="_blank" rel="noopener">Google Maps</a>`:'koordinat belum ada'}</small></span></label>`}).join('')||'<p class="empty">Tidak ada instansi dengan data pada KIB dan area ini.</p>');
+}
+A.jdall=()=>{jdRows().forEach(x=>{if(!inCart(x.opd))JD.cart.push({opd:x.opd,date:JD.date,tim:JD.tim})});JD.cur=JD.date;jdList();jdCart();jdDraw()};
+A.jdnone=()=>{JD.cart=[];jdList();jdCart();jdDraw()};
+A.jdrm=t=>jdToggle(t.dataset.o,false);
+A.jdclear=()=>{if(JD.cart.length&&!confirm('Kosongkan keranjang?'))return;JD.cart=[];JD.edit='';jdList();jdCart();jdDraw()};
+A.jdshow=t=>{JD.cur=t.dataset.d;jdCart();jdDraw()};
+A.jdsort=()=>{
+  const cs=JD.cart.filter(c=>c.date===JD.cur),pts=cs.map(c=>({c,co:opdCoord(c.opd)}));
+  if(pts.filter(p=>p.co).length<2)return toast('Perlu minimal 2 instansi berkoordinat','w');
+  const rest=pts.slice(),out=[rest.shift()];
+  while(rest.length){const l=out[out.length-1];let bi=0,bd=1e18;rest.forEach((p,i)=>{const d=l.co&&p.co?wDist(l.co.c[0],l.co.c[1],p.co.c[0],p.co.c[1]):1e17;if(d<bd){bd=d;bi=i}});out.push(rest.splice(bi,1)[0])}
+  JD.cart=[...JD.cart.filter(c=>c.date!==JD.cur),...out.map(p=>p.c)];jdCart();jdDraw();
+};
+function jdCart(){
+  const el=$('#jdcart');if(!el)return;
+  if(!JD.cart.length){el.innerHTML='';return}
+  const R=new Map(jdRows().map(x=>[x.opd,x])),g=new Map();JD.cart.forEach(c=>{if(!g.has(c.date))g.set(c.date,[]);g.get(c.date).push(c)});
+  el.innerHTML=`<div class="pn"><h3>Keranjang jadwal</h3>${[...g].sort((a,b)=>a[0]<b[0]?-1:1).map(([d,cs])=>`<div class="qf"><div class="row"><b style="flex:1;min-width:150px">${fdl(d)}</b><input type="date" data-cd="${d}" value="${d}" style="width:auto"></div>
+    <div class="row"><input data-ct="${d}" value="${esc(cs[0].tim)}" placeholder="Tim" style="width:110px"><button class="b sm${JD.cur===d?' p':''}" data-a="jdshow" data-d="${d}">🧭 Tampilkan rute</button></div>
+    ${cs.map((c,i)=>{const x=R.get(c.opd)||{n:{}};return `<div class="cd" style="cursor:default"><b>${i+1}. ${esc(c.opd)}</b> <i class="ch">${[...JD.kibs].map(k=>k+': '+(x.n[k]||0)).join(' · ')}</i><button class="ib" style="float:right" data-a="jdrm" data-o="${esc(c.opd)}" title="Keluarkan">✕</button></div>`}).join('')}</div>`).join('')}
+    <div class="row"><button class="b p" data-a="jdsave">${JD.edit?'💾 Perbarui jadwal':'💾 Simpan jadwal'}</button><button class="b" data-a="jdsort">↕ Urutkan terdekat</button><button class="b" data-a="jdoff">⬇ Unduh rute offline</button><button class="b d" data-a="jdclear">Kosongkan</button></div></div>`;
+}
+
+/* --- peta + rute --- */
+let JM=null,JL=null;
+async function jdMapInit(){
+  const el=$('#jmap');if(!el)return;
+  try{
+    if(!document.getElementById('lcss')){const l=document.createElement('link');l.id='lcss';l.rel='stylesheet';l.href=LCSS;document.head.append(l)}
+    await js(LJS);
+  }catch(_){el.innerHTML='<p class="empty">Peta perlu internet saat pertama dibuka.</p>';return}
+  if(JM){try{JM.remove()}catch(_){}}
+  JM=L.map(el).setView([-0.8,127.6],7);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OSM'}).addTo(JM);
+  JL=L.layerGroup().addTo(JM);setTimeout(()=>JM&&JM.invalidateSize(),250);jdDraw(1);
+}
+async function jdDraw(fit){
+  if(!JM||!JL||!$('#jmap'))return;
+  JL.clearLayers();const pts=[];
+  jdRows().forEach(x=>{const co=opdCoord(x.opd);if(!co)return;const on=inCart(x.opd);pts.push(co.c);
+    L.circleMarker(co.c,{radius:on?10:6,color:on?'#e8761f':'#3b1f14',weight:2,fillColor:on?'#fbc531':'#2fa66a',fillOpacity:.9}).addTo(JL).bindTooltip(x.opd+(co.approx?' (perkiraan)':'')).on('click',()=>jdToggle(x.opd))});
+  if(fit&&pts.length)JM.fitBounds(pts,{padding:[24,24],maxZoom:12});
+  await jdRoute();
+}
+const rkey=(a,b)=>a.map(x=>(+x).toFixed(4)).join(',')+'|'+b.map(x=>(+x).toFixed(4)).join(',');
+function decPoly(s){let i=0,la=0,lo=0,o=[];while(i<s.length){let b,sh=0,r=0;do{b=s.charCodeAt(i++)-63;r|=(b&31)<<sh;sh+=5}while(b>=32);la+=(r&1)?~(r>>1):(r>>1);sh=0;r=0;do{b=s.charCodeAt(i++)-63;r|=(b&31)<<sh;sh+=5}while(b>=32);lo+=(r&1)?~(r>>1):(r>>1);o.push([la/1e5,lo/1e5])}return o}
+let rtT;const rtSave=()=>{clearTimeout(rtT);rtT=setTimeout(()=>kv('routes',D.routes),800)};
+function rtTrim(){const rc=D.routes,ks=Object.keys(rc);if(ks.length>200){ks.sort((a,b)=>(rc[a].t||0)-(rc[b].t||0)).slice(0,ks.length-200).forEach(k=>delete rc[k])}}
+async function routeLeg(a,b,noNet){
+  const rc=D.routes||(D.routes={}),k=rkey(a,b),h=rc[k];
+  if(h){h.t=Date.now();return{line:decPoly(h.p),km:h.d/1000,min:h.s/60,steps:h.st||[],src:'cache'}}
+  if(!noNet&&navigator.onLine){
+    try{
+      const u=`${D.meta.osrm||'https://router.project-osrm.org'}/route/v1/driving/${a[1]},${a[0]};${b[1]},${b[0]}?overview=simplified&geometries=polyline&steps=true`,
+            ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),9000),r=await fetch(u,{signal:ctl.signal});clearTimeout(tm);
+      const j=await r.json();
+      if(j.code==='Ok'&&j.routes&&j.routes[0]){
+        const x=j.routes[0],st=((x.legs[0]||{}).steps||[]).map(s=>[s.name||'',s.maneuver.type,s.maneuver.modifier||'',Math.round(s.distance)]);
+        rc[k]={p:x.geometry,d:Math.round(x.distance),s:Math.round(x.duration),st,t:Date.now()};rtTrim();rtSave();
+        return{line:decPoly(x.geometry),km:x.distance/1000,min:x.duration/60,steps:st,src:'online'};
+      }
+    }catch(_){}
+  }
+  const d=wDist(a[0],a[1],b[0],b[1])/1000;return{line:[a,b],km:d,min:d/40*60,steps:[],src:'lurus'};
+}
+async function jdRoute(){
+  const tok=JD.tok=Math.random(),rs=$('#jrs'),cs=JD.cart.filter(c=>c.date===JD.cur);
+  const pts=cs.map(c=>({o:c.opd,co:opdCoord(c.opd)})).filter(p=>p.co);JD.route=null;
+  if(pts.length<2){if(rs)rs.textContent=cs.length?'Centang minimal 2 instansi yang punya koordinat untuk melihat rute.':'Centang instansi untuk menandai di peta dan membuat rute.';return}
+  let km=0,min=0,off=0,lurus=0;const steps=[];
+  for(let i=0;i<pts.length-1;i++){
+    const r=await routeLeg(pts[i].co.c,pts[i+1].co.c);if(tok!==JD.tok)return;
+    if(JL&&window.L)L.polyline(r.line,{color:r.src==='lurus'?'#8a7262':'#e8761f',weight:5,opacity:.85,dashArray:r.src==='lurus'?'6 8':null}).addTo(JL);
+    km+=r.km;min+=r.min;if(r.src==='cache')off++;if(r.src==='lurus')lurus++;steps.push({a:pts[i].o,b:pts[i+1].o,r});
+  }
+  JD.route={km,min,steps};
+  if(rs)rs.innerHTML=`Rute ${fdl(JD.cur)}: <b>${km.toFixed(1)} km</b> · ±${fmtMin(min)} · ${off} dari ${pts.length-1} ruas tersimpan offline${lurus?` · garis putus-putus = ${lurus} ruas perkiraan garis lurus (rute jalan belum tersedia)`:''} <button class="b sm" data-a="jdsteps">Petunjuk arah</button>`;
+}
+const MN={'turn':'Belok','new name':'Lanjut','depart':'Mulai','arrive':'Tiba','merge':'Bergabung','on ramp':'Masuk jalur','off ramp':'Keluar jalur','fork':'Ambil percabangan','end of road':'Belok','continue':'Lurus','roundabout':'Masuk bundaran','rotary':'Masuk bundaran','roundabout turn':'Belok di bundaran'};
+const MD={'left':'kiri','right':'kanan','slight left':'serong kiri','slight right':'serong kanan','sharp left':'tajam kiri','sharp right':'tajam kanan','straight':'lurus','uturn':'putar balik'};
+const stepTx=([n,t,m,d])=>`${MN[t]||'Lanjut'}${m&&MD[m]&&t!=='depart'&&t!=='arrive'?' '+MD[m]:''}${n?' ke '+n:''} (${d>=1000?(d/1000).toFixed(1)+' km':d+' m'})`;
+A.jdsteps=()=>{
+  if(!JD.route)return;
+  modal(`<h3>Petunjuk arah</h3><div style="max-height:62vh;overflow:auto">${JD.route.steps.map((s,i)=>`<h4>${i+1}. ${esc(s.a)} ke ${esc(s.b)}</h4><p class="mu" style="margin:0">${s.r.km.toFixed(1)} km · ±${fmtMin(s.r.min)} · ${s.r.src==='lurus'?'perkiraan garis lurus':s.r.src==='cache'?'tersimpan offline':'baru diunduh'}</p>${s.r.steps.length?`<ol style="margin:4px 0 10px 18px;padding:0">${s.r.steps.map(x=>`<li>${esc(stepTx(x))}</li>`).join('')}</ol>`:''}`).join('')}</div><div class="row"><button class="b p" data-a="close">Tutup</button></div>`);
+};
+async function prefetchPlans(show){
+  if(!navigator.onLine||prefetchPlans.run)return 0;prefetchPlans.run=1;let n=0;
+  try{
+    for(const p of planes().filter(p=>planAct(p)&&dTo(p.date)>=-1&&dTo(p.date)<=21)){
+      const pts=(p.items||[]).map(i=>i.lat!=null&&i.lon!=null?[i.lat,i.lon]:null).filter(Boolean);
+      for(let i=0;i<pts.length-1;i++){if((D.routes||{})[rkey(pts[i],pts[i+1])])continue;const r=await routeLeg(pts[i],pts[i+1]);if(r.src==='online')n++;await new Promise(x=>setTimeout(x,350))}
+    }
+  }finally{prefetchPlans.run=0}
+  if(n||show)toast(n?`${n} ruas rute diunduh untuk dipakai offline`:'Semua rute jadwal sudah tersimpan offline','ok',3500);return n;
+}
+A.jdoff=()=>{
+  if(!navigator.onLine)return toast('Perlu internet untuk mengunduh rute','w');
+  const g=new Map();JD.cart.forEach(c=>{if(!g.has(c.date))g.set(c.date,[]);g.get(c.date).push(c)});let n=0;
+  busy('Mengunduh rute…',async()=>{for(const cs of g.values()){const pts=cs.map(c=>opdCoord(c.opd)).filter(Boolean).map(x=>x.c);
+    for(let i=0;i<pts.length-1;i++){const r=await routeLeg(pts[i],pts[i+1]);if(r.src==='online')n++;await new Promise(x=>setTimeout(x,350))}}
+    toast(n?`${n} ruas rute tersimpan untuk offline`:'Rute sudah tersimpan atau belum ada koordinat','ok');jdDraw()});
+};
+window.addEventListener('online',()=>setTimeout(()=>prefetchPlans(),2500));
+
+/* --- simpan jadwal, ubah, hapus, Excel --- */
+A.jdsave=async()=>{
+  if(!JD.cart.length)return toast('Keranjang masih kosong','w');
+  if(!confirm(`Simpan jadwal untuk ${JD.cart.length} instansi?`))return;
+  const R=new Map(jdRows().map(x=>[x.opd,x])),g=new Map();JD.cart.forEach(c=>{if(!g.has(c.date))g.set(c.date,[]);g.get(c.date).push(c)});
+  const cp=kts().find(k=>k.id===JD.cp)||{},area=jdArea(),ks=[...JD.kibs].sort(),made=[],ed=JD.edit&&g.size===1?by(JD.edit):null;
+  hb();
+  for(const [d,cs] of g){
+    const items=cs.map(c=>{const x=R.get(c.opd)||{n:{A:0,B:0,C:0,D:0,E:0,F:0},rows:[],al:new Map()},co=opdCoord(c.opd);return{opd:c.opd,tim:c.tim,n:x.n,lokasi:jdLok(x),lat:co?co.c[0]:null,lon:co?co.c[1]:null}});
+    const ids=[...new Set(cs.flatMap(c=>((R.get(c.opd)||{}).rows||[]).filter(r=>!r.invAt&&(!r.ada||r.ada==='BELUM')).map(r=>r.id)))];
+    let p;if(ed){hn(ed);p=ed}else{p={id:uid(),st:'plan'};hn(p,1)}
+    Object.assign(p,{name:`Inventarisasi ${area||'lapangan'}`,date:d,tim:cs[0].tim,cp:cp.nama||'',hp:cp.hp||'',cpid:cp.id||'',wil:area,kibs:ks,items,ids,petugas:D.meta.who||'',fields:p.fields||QDEF});
+    await save(p);made.push(p);
+  }
+  hc();JD.cart=[];JD.edit='';toast(`${made.length} jadwal tersimpan`,'ok');jdCart();jdList();jdDraw();jdSaved();prefetchPlans();
+};
+function jdSaved(){
+  const el=$('#jdsaved');if(!el)return;const ps=planes();
+  el.innerHTML=`<div class="pn"><div class="bar"><h3 style="margin:0">Jadwal tersimpan (${ps.length})</h3><button class="b p sm" data-a="jdxl">📊 Excel jadwal</button></div>`
+   +(ps.map(p=>{const n=(p.ids||[]).length,dn=planDone(p),d=dTo(p.date),act=planAct(p);
+     return `<div class="cd" style="cursor:default"><div class="bar" style="margin:0"><b>${fdl(p.date)}</b><i class="ch ${!act?'ok':d<0?'er':d===0?'wa':''}">${!act?'Selesai':d<0?'Terlambat':d===0?'Hari ini':d+' hari lagi'}</i></div>
+       <small>${esc(p.name||'')} · ${esc(p.tim||'')} · ${esc(p.cp||'-')}${p.hp?' ('+esc(p.hp)+')':''}</small><small>${(p.items||[]).map(i=>esc(i.opd)).join(', ')||'(pilihan data manual)'}</small>
+       <div class="pb"><i style="width:${n?Math.round(dn/n*100):0}%"></i></div><small>${dn} dari ${n} data selesai</small>
+       <div class="row"><button class="b sm p" data-a="ivstart" data-id="${p.id}">▶ Isi lapangan</button><button class="b sm" data-a="jdedit" data-id="${p.id}">✏️ Ubah</button><button class="b sm" data-a="jdload" data-id="${p.id}">🧭 Pilih ulang</button><button class="b sm" data-a="ivics" data-id="${p.id}">📆</button><button class="b sm d" data-a="ivpdel" data-id="${p.id}">🗑</button></div></div>`}).join('')||'<p class="empty">Belum ada jadwal tersimpan.</p>')+'</div>';
+}
+A.ivpdel=async t=>{if(!confirm('Hapus jadwal ini? Data aset tidak ikut terhapus.'))return;const p=by(t.dataset.id);hb();hn(p);p.del=1;await save(p);hc();toast('Jadwal dihapus. Ctrl+Z untuk membatalkan','ok',4000);if(S.tab==='jadwal')jdSaved();else ivJadwal()};
+A.jdload=t=>{const p=by(t.dataset.id);JD.edit=p.id;JD.date=p.date;JD.tim=p.tim||'TIM 1';JD.cp=p.cpid||'';JD.kibs=new Set(p.kibs&&p.kibs.length?p.kibs:['A','C']);JD.wt=p.wil||'';JD.g='';
+  JD.cart=(p.items||[]).map(i=>({opd:i.opd,date:p.date,tim:i.tim||p.tim}));JD.cur=p.date;vJadwal();scrollTo(0,0);toast('Jadwal dimuat ke keranjang. Ubah lalu tekan Perbarui','ok',3500)};
+A.jdedit=t=>{
+  const p=by(t.dataset.id);
+  modal(`<form id="fm" onsubmit="return false"><h3>Ubah jadwal</h3>
+    <label>Nama kegiatan<input name="name" value="${esc(p.name||'')}"></label><label>Tanggal<input type="date" name="date" value="${esc(p.date||'')}"></label>
+    <label>Tim<input name="tim" value="${esc(p.tim||'')}"></label>
+    <label>Contact person<select name="cp"><option value="">— pilih —</option>${kts().map(k=>`<option value="${k.id}"${k.id===p.cpid?' selected':''}>${esc(k.nama)}${k.hp?' · '+esc(k.hp):''}</option>`).join('')}</select></label>
+    <label>Catatan<textarea name="note">${esc(p.note||'')}</textarea></label>
+    <div class="row"><button type="button" class="b p" data-a="jdesave" data-id="${p.id}">Simpan</button><button type="button" class="b" data-a="close">Batal</button></div></form>`);
+};
+A.jdesave=async t=>{
+  const F=new FormData($('#fm')),p=by(t.dataset.id),date=F.get('date');if(!date)return toast('Tanggal wajib diisi','w');
+  if(!confirm('Simpan perubahan jadwal ini?'))return;
+  const cp=kts().find(k=>k.id===F.get('cp'))||{};
+  hb();hn(p);Object.assign(p,{name:String(F.get('name')||'').trim()||p.name,date,tim:String(F.get('tim')||''),note:String(F.get('note')||''),cp:cp.nama||p.cp||'',hp:cp.hp||(cp.nama?'':p.hp)||'',cpid:cp.id||''});
+  (p.items||[]).forEach(i=>{i.tim=p.tim});await save(p);hc();A.close();if(S.tab==='jadwal')jdSaved();else ivJadwal();
+};
+A.jdxl=()=>{
+  const ps=planes().filter(p=>(p.items||[]).length);if(!ps.length)return toast('Belum ada jadwal berisi instansi','w');
+  const mg=prompt('Judul minggu (mis. MINGGU KESEMBILAN). Kosongkan bila tidak perlu','');if(mg===null)return;
+  busy('Membuat Excel…',async()=>{
+    await js(EXJS);
+    const W=new ExcelJS.Workbook(),ws=W.addWorksheet((mg||'JADWAL').slice(0,31)),yr=new Date(ps[0].date+'T00:00:00').getFullYear();
+    ws.columns=[26,43,29,20,10,13,6,19,34,12,13,13,13].map(width=>({width}));
+    [['JADWAL RENCANA INVENTARISASI BMD'],[`${D.meta.prov?'PROVINSI '+D.meta.prov.toUpperCase()+' ':''}TAHUN ${yr}`],[mg||'']].forEach((r,i)=>{ws.mergeCells(`A${i+1}:I${i+1}`);const c=ws.getCell(`A${i+1}`);c.value=r[0];c.font={bold:true,size:12};c.alignment={horizontal:'center'}});
+    const H=['HARI dan TANGGAL','UPB','KETERANGAN','LOKASI','JUMLAH \nTANAH','JUMLAH BANGUNAN','KDP','KETERANGAN','CONTACT PERSON','CATATAN','PERALATAN & MESIN (KIB B)','JALAN IRIGASI JARINGAN (KIB D)','ASET TETAP LAINNYA (KIB E)'],hr=ws.getRow(5);
+    H.forEach((h,i)=>{const c=hr.getCell(i+1);c.value=h;c.font={bold:true};c.alignment={horizontal:'center',vertical:'middle',wrapText:true};c.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FFD9D9D9'}}});hr.height=32;
+    const dates=[...new Set(ps.map(p=>p.date))].sort();let r=6;
+    dates.forEach(d=>{
+      const r0=r;
+      ps.filter(p=>p.date===d).sort((a,b)=>(a.tim||'').localeCompare(b.tim||'')).forEach(p=>{
+        (p.items||[]).forEach((it,i)=>{
+          const n=it.n||{},row=ws.getRow(r++);
+          [null,it.opd,kibTxt((()=>{const x=(p.kibs||[]).filter(k=>(n[k]||0)>0);return x.length?x:(p.kibs||[])})()),p.wil||it.lokasi||'',n.A||0,n.C||0,n.F||0,it.tim||p.tim||'',i===0&&p.cp?`${p.cp}${p.hp?' ('+p.hp+')':''}`:'',i===0?(p.note||''):'',n.B||0,n.D||0,n.E||0].forEach((v,j)=>{if(v!==null)row.getCell(j+1).value=v});
+        });
+      });
+      ws.mergeCells(`A${r0}:A${r-1}`);const c=ws.getCell(`A${r0}`);c.value=fdl(d);c.alignment={horizontal:'center',vertical:'middle',wrapText:true};
+    });
+    for(let i=5;i<r;i++)for(let j=1;j<=13;j++){const c=ws.getRow(i).getCell(j);c.border={top:{style:'thin'},left:{style:'thin'},bottom:{style:'thin'},right:{style:'thin'}};if(i>5&&j>3&&j!==9&&j!==10&&!c.alignment)c.alignment={horizontal:'center',vertical:'middle'}}
+    const buf=await W.xlsx.writeBuffer(),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));a.download=`JADWAL_INVENTARISASI_${(mg||'MINGGU').replace(/\s+/g,'_')}.xlsx`;a.click();
+  });
+};
+
+/* ======================= V3-C: wajib sambung, kelap-kelip 30 detik, sinkron simpel, GPS otomatis, kamera timestamp ======================= */
+const needSetup=()=>!D.meta.url||!D.meta.secret;
+const GATE=/^(new|nsave|esave|addrow|imp|impBeranda|gedit|gsave|ivplan|ivpsave|ivstart|ivgo|ivsave|smut|foto|lamp|gps|ivgps|rdel|del|gdelrows|wrun|wquick|wseed|impInst|jdsave|jdedit|jdesave|jdload|ivpdel|bimp|sekimp|alsync|opdMerge)$/;
+function gateMsg(first){
+  if(!needSetup())return;
+  modal(`<h3>Hubungkan dulu ke Spreadsheet</h3><p>${first?'Selamat datang. ':''}Sebelum mengisi data, isi <b>URL Web App Apps Script</b> dan <b>kunci rahasia</b> di menu Sinkron. Dengan begitu data tidak hanya tersimpan di perangkat ini dan bisa dipakai bersama petugas lain.</p>
+    <p class="mu">Anda cukup mengisi URL, kunci, dan nama petugas. Nama project, provinsi, dan ibukota terisi otomatis bila petugas lain sudah mengisinya.</p>
+    <div class="row"><button class="b p" data-a="gosync">Buka menu Sinkron</button><button class="b" data-a="close">Nanti</button></div>`);
+}
+A.gosync=()=>{A.close();S.tab='sinkron';render()};
+const setupBanner=()=>needSetup()?`<div class="pn" style="border-color:var(--ac)"><b>Belum terhubung ke Spreadsheet.</b><p class="mu" style="margin:4px 0 8px">Isi URL Web App dan kunci rahasia dulu agar data bisa diisi.</p><button class="b p" data-a="gosync">Isi sekarang</button></div>`:'';
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-a]');if(!t||!A[t.dataset.a])return;
+  if(needSetup()&&GATE.test(t.dataset.a)){gateMsg();return}
+  A[t.dataset.a](t,e);
+});
+
+/* --- kelap-kelip hanya 30 detik --- */
+const PS={};
+function pulses(){
+  document.querySelectorAll('.pulse').forEach(e=>e.classList.remove('pulse'));
+  const trig=new Set(),base=V().filter(r=>r.kib&&r.st==='01');let nx=1e9;
+  const on=sel=>{trig.add(sel);const t0=PS[sel]||(PS[sel]=Date.now()),left=30000-(Date.now()-t0);if(left<=0)return;nx=Math.min(nx,left);document.querySelectorAll(sel).forEach(e=>e.classList.add('pulse'))};
+  if(QN||needSetup())on('[data-a=tab][data-k=sinkron]');
+  if(QN)on('#qc,[data-a=kirim]');
+  if(needSetup())on('[data-a=msave],[data-a=gosync]');
+  if(S.tab==='beranda'){if(!base.length)on('[data-a=impBeranda]');else if(base.some(r=>r.kib==='C'&&!r.opd))on('[data-a=regrup]')}
+  if(G.dirty.size)on('[data-a=gsave]');
+  if(planes().some(p=>planAct(p)&&p.date<=today()))on('[data-a=tab][data-k=inv],[data-a=tab][data-k=jadwal]');
+  if(S.tab==='data'&&G.rows&&G.rows.some(r=>!r.wKode&&(r.alamat||r.ket))&&WS.ready)on('[data-a=wquick]');
+  if(S.tab==='data'&&!G.rows.length&&S.opd&&S.st==='01')on('[data-a=imp]');
+  Object.keys(PS).forEach(k=>{if(!trig.has(k))delete PS[k]});
+  clearTimeout(pulses._t);if(nx<1e9)pulses._t=setTimeout(pulses,nx+120);
+}
+
+/* --- Sinkron: URL, kunci, nama petugas; info project otomatis dari server --- */
+function vSync(){
+  const m=D.meta,I=(k,l,t='text')=>`<label>${l}<input id="m_${k}" type="${t}" value="${esc(m[k]||'')}" autocomplete="off"></label>`;
+  $('#v').innerHTML=`<div class="pn"><h3>Hubungkan ke Google Spreadsheet</h3>
+    ${needSetup()?'<p class="mu">Isi URL dan kunci rahasia dulu agar data bisa diisi.</p>':`<p class="mu">Project: <b>${esc(m.project||'-')}</b> · ${esc(m.prov||'-')} · ${esc(m.ibu||'-')}</p>`}
+    ${I('url','URL Web App Apps Script','url')}${I('secret','Kunci rahasia','password')}${I('who','Nama petugas')}
+    <div class="row"><button class="b p" data-a="msave">Simpan &amp; hubungkan</button><button class="b" data-a="ping">🔌 Tes</button><button class="b" data-a="kirim">⬆ Kirim</button><button class="b" data-a="tarik">⬇ Tarik</button></div>
+    <details class="inf"><summary>Info project (terisi otomatis dari server)</summary>${I('project','Nama Project (header)')}${I('prov','Provinsi')}${I('ibu','Ibukota')}
+      <p class="mu">Bila petugas lain sudah mengisi dengan URL yang sama, tiga isian ini terisi otomatis saat Anda menekan Simpan atau Tes. Bila Anda mengubahnya, perubahan dikirim ke server untuk petugas lain.</p></details>
+    <div class="row"><button class="b" data-a="cekSrv">🔎 Cek jumlah di server</button><button class="b" data-a="kirimSemua">♻ Kirim ulang semua data</button></div>
+    <p class="mu" id="qi"></p></div>`;
+  upQ().then(()=>{const q=$('#qi');if(q)q.textContent=$('#qc').textContent});
+}
+async function metaSync(){
+  if(!D.meta.url||!D.meta.secret)return;
+  try{
+    const j=await post({action:'meta'}),sv=j.meta;
+    if(sv&&(sv.project||sv.prov||sv.ibu)){let ch=0;['project','prov','ibu'].forEach(k=>{if(sv[k]&&D.meta[k]!==sv[k]){D.meta[k]=sv[k];ch=1}});
+      if(ch){await kv('meta',D.meta);updHeader();toast('Info project terisi otomatis dari server','ok',3500);if(S.tab==='sinkron')vSync()}}
+    else if(D.meta.project||D.meta.prov||D.meta.ibu)await post({action:'metaset',meta:{project:D.meta.project,prov:D.meta.prov,ibu:D.meta.ibu}});
+  }catch(_){}
+}
+
+/* --- Isi lapangan: GPS otomatis --- */
+function ivGps(force){
+  const e=$('#ivgps');if(!e)return;
+  const show=p=>{const x=$('#ivgps');if(x)x.innerHTML=p?`📍 Lintang <b>${p.lat.toFixed(6)}</b> · Bujur <b>${p.lon.toFixed(6)}</b> <span class="mu">(±${Math.round(p.acc)} m)</span>`:'📍 Lokasi belum tersedia. Aktifkan GPS lalu ketuk Ambil ulang'};
+  if(!force&&IV.pos&&Date.now()-IV.pos.t<60000){show(IV.pos);return}
+  if(!navigator.geolocation){show(null);return}
+  e.textContent='📍 Mengambil lokasi…';
+  navigator.geolocation.getCurrentPosition(p=>{IV.pos={lat:p.coords.latitude,lon:p.coords.longitude,acc:p.coords.accuracy,t:Date.now()};show(IV.pos)},()=>show(null),{enableHighAccuracy:true,timeout:15000,maximumAge:5000});
+}
+A.ivgps=()=>ivGps(1);
+
+/* --- Kamera foto timestamp (foto.html) --- */
+let FOTO_IV=0;
+A.foto=t=>{
+  PR=t.dataset.id;FOTO_IV=S.tab==='inv'&&IV.t==='lap'?1:0;A.close&&A.close();
+  const d=document.createElement('div');d.id='fo';
+  d.innerHTML='<iframe src="foto.html?embed=1" allow="camera;geolocation;microphone;fullscreen" title="Kamera timestamp"></iframe><button class="b p" data-a="fotoX" style="position:absolute;top:calc(8px + env(safe-area-inset-top));right:8px">✕ Tutup</button>';
+  document.body.append(d);
+};
+A.fotoX=()=>{const d=$('#fo');if(d)d.remove()};
+window.addEventListener('message',async e=>{
+  const m=e.data;if(e.origin!==location.origin||!m||m.type!=='foto-ts'||!PR)return;
+  A.fotoX();const r=by(PR);if(!r)return;
+  await busy('Menyimpan foto…',async()=>{
+    const id='p'+uid(),n=(await all('ph')).filter(q=>q.rid==r.id).length+1,mt=m.meta||{};
+    await put('ph',{id,rid:r.id,opd:r.opd,name:`${((r.nama||'')+'_'+(r.reg||'')).replace(/[^\w]+/g,'_')}_${n}_${id}.jpg`,blob:m.blob,lat:mt.lat,lon:mt.lon});
+    await put('q',{id:'q'+id,k:'p',pid:id});
+    if(mt.lat!=null&&!r.lat){r.lat=+(+mt.lat).toFixed(7);r.lon=+(+mt.lon).toFixed(7);await save(r)}
+    upQ();
+  });
+  toast(navigator.onLine?'Foto tersimpan, dikirim ke Drive…':'Foto tersimpan offline, dikirim saat online','ok');
+  if(FOTO_IV)ivPh();else edit(r.id);sync();
+});
 
 /* ======================= INIT ======================= */
 (async()=>{
@@ -2039,9 +2663,16 @@ if(A.xl){const _xl=A.xl;A.xl=(t,e)=>{if(S.opd==='*')return toast('Pilih satu ins
     else if(x.k==='last')S.opd=x.v;
     else if(x.k==='wg')D.wg=x.v;
     else if(x.k==='walias')D.walias=x.v;
+    else if(x.k==='param')D.param=x.v;
+    else if(x.k==='brg')D.brg=x.v;
+    else if(x.k==='kontak')D.kontak=x.v;
+    else if(x.k==='sekolah')D.sek=x.v;
+    else if(x.k==='oalias')D.oalias=x.v;
+    else if(x.k==='routes')D.routes=x.v;
   });
-  mkAbr();updNet();upQ();render();sync();
+  applyParam();mkAbr();updNet();upQ();render();sync();
   try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(_){}
+  if(needSetup())setTimeout(()=>gateMsg(1),700);setTimeout(()=>prefetchPlans(),6000);
   setTimeout(()=>{if(navigator.onLine&&!localStorage.getItem('wil-pre'))fetch('wilayah.json').then(r=>r.ok&&localStorage.setItem('wil-pre','1')).catch(()=>{})},8000);
   if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 })();
