@@ -1,4 +1,4 @@
-const V = 'inv-shell-v7', TILES = 'inv-tiles', MAX_TILES = 600;
+const V = 'inv-shell-v8', TILES = 'inv-tiles', MAX_TILES = 600;
 const LIBS = [
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css',
@@ -9,6 +9,7 @@ const LIBS = [
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(V).then(async c => {
     await c.addAll(['./', './index.html']);
+    await c.add('./foto.html').catch(() => {});
     await Promise.all(LIBS.map(u => c.add(u).catch(() => {})));
   }).then(() => self.skipWaiting()));
 });
