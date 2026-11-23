@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#fe4247">
+<meta name="theme-color" content="#fdf3e7">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script>(function(){var t="light";try{t=localStorage.getItem("inv-theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light")}catch(e){}document.documentElement.setAttribute("data-theme",t);var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t=="dark"?"#140d0b":"#fe4247"})()</script>
+<script>(function(){var t="light";try{t=localStorage.getItem("inv-theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light")}catch(e){}document.documentElement.setAttribute("data-theme",t);var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t=="dark"?"#1a110d":"#fdf3e7"})()</script>
 <title>Inventarisasi Aset</title>
 <style>
 :root{
-  --bg:#fe4247;--sf:#fff;--sf2:#fff8ef;--ink:#3b1f14;--mu:#8a7262;--ln:#f0e0cc;
+  --bg:#fdf3e7;--sf:#fff;--sf2:#fff8ef;--ink:#3b1f14;--mu:#8a7262;--ln:#f0e0cc;
   --pr:#fbc531;--pr2:#f6b100;--pi:#3b1f14;--ac:#e8761f;
   --ok:#1f9d5f;--er:#d93f3f;--wa:#c27800;
   --sh:0 1px 2px rgba(85,41,31,.05),0 6px 18px -8px rgba(85,41,31,.12);
@@ -19,7 +19,7 @@
   color-scheme:light;
 }
 :root[data-theme="dark"]{
-  --bg:#140d0b;--sf:#261913;--sf2:#2e1f18;--ink:#f8eadc;--mu:#b39b8a;--ln:#3d2b21;
+  --bg:#1a110d;--sf:#261913;--sf2:#2e1f18;--ink:#f8eadc;--mu:#b39b8a;--ln:#3d2b21;
   --pr:#fbc531;--pr2:#f6b100;--pi:#2a1a10;--ac:#f4883c;
   --ok:#4cd08a;--er:#ff7a7a;--wa:#f5b04a;
   --sh:0 1px 2px rgba(0,0,0,.3),0 8px 20px -10px rgba(0,0,0,.5);
@@ -219,57 +219,6 @@ nav button{flex:0 0 20%;min-width:0;scroll-snap-align:start;padding:7px 1px 6px;
 .inf summary{cursor:pointer;font-weight:600;margin:8px 0}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation-duration:.01ms!important}}
 @media print{header,nav,aside,footer,.bar,.row,#hint,#ts{display:none!important}body{padding:0;background:#fff;color:#000}#map{height:70vh}}
-/* ===== Tema v2: merah Kok Bisa + gaya tegas ala Perpustakaan Skill ===== */
-:root{--bg:#fff6ea;--sf:#fff;--sf2:#fff0de;--ink:#17120f;--mu:#6b5a4e;--ln:#ecd9c4;--pr:#fe4247;--pr2:#e5262c;--pi:#fff;--ac:#fe4247;--bd:#17120f;--hs:#17120f}
-:root[data-theme="dark"]{--bg:#140d0b;--sf:#211613;--sf2:#2b1c17;--ink:#fff1e6;--mu:#c2a999;--ln:#3d2b21;--pr:#fe4247;--pr2:#ff6a6e;--pi:#fff;--ac:#ff6a6e;--bd:rgba(255,241,230,.55);--hs:rgba(254,66,71,.75)}
-h1,h2,h3{font-weight:800;letter-spacing:-.03em}
-header{background:var(--pr);color:#fff;border:2px solid var(--bd);box-shadow:3px 3px 0 var(--hs);backdrop-filter:none}
-.brand-text small{color:rgba(255,255,255,.88)}
-header .chip{background:#fff;color:#17120f;border:2px solid #17120f}
-header .chip.off{color:#b3141a}
-header .chip.pulse{color:#b3141a}
-.pn,.cd,.stats div,.tile,.gw,aside,.ivbar{border:2px solid var(--bd);box-shadow:4px 4px 0 var(--hs)}
-nav{border:2px solid var(--bd);box-shadow:4px 4px 0 var(--hs);background:var(--sf)}
-dialog{border:2px solid var(--bd);box-shadow:8px 8px 0 var(--hs)}
-.cd:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--hs);border-color:var(--bd)}
-.tile{border-width:2px}.tile:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--hs)}
-.b{border:2px solid var(--bd);box-shadow:2px 2px 0 var(--hs);font-weight:700}
-.b:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--hs);background:var(--sf2)}
-.b:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--hs)}
-.b.p{background:var(--pr);color:#fff;border-color:var(--bd);box-shadow:3px 3px 0 var(--hs)}
-.b.p:hover{background:var(--pr2)}
-.b.d{border-color:var(--er)}
-input,select,textarea{border:2px solid var(--bd);background:var(--sf)}
-aside button.on,nav button.on,.kib-sel button.on{background:var(--pr);color:#fff;box-shadow:none}
-aside button.on{border:2px solid var(--bd)}
-.kib-sel button{border:2px solid var(--bd)}
-.tabs button{border:2px solid var(--bd);color:var(--ink);font-weight:700}
-.tabs button.on{background:var(--ink);color:var(--bg)}
-.ch{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;font-weight:700;letter-spacing:.02em;border:1.5px solid var(--bd);color:var(--ink);background:var(--sf2)}
-.ch.ok{color:var(--ok);border-color:var(--ok)}.ch.er{color:var(--er);border-color:var(--er)}.ch.wa{color:var(--wa);border-color:var(--wa)}
-@keyframes plc{0%,100%{background:var(--pr)}33%{background:#c81d23}66%{background:#ff7a59}}
-.rb span{border:2px solid var(--bd)}
-.rb input:checked+span{background:var(--pr);color:#fff;box-shadow:3px 3px 0 var(--hs)}
-.rb input[value=TIDAK]:checked+span,.rb input[value=RB]:checked+span,.rb input[value="TDK SESUAI"]:checked+span{background:#17120f;color:#fff}
-.hero{background:var(--pr);color:#fff;border:2px solid var(--bd);box-shadow:6px 6px 0 var(--hs);border-radius:28px}
-.hero h1{color:#fff;font-weight:800;font-size:clamp(28px,5vw,48px)}
-.hero h1 em,.sec em{font-style:italic;font-weight:800}
-.hero h1 em{color:#ffe27a}.sec em{color:var(--pr)}
-.hero p{color:rgba(255,255,255,.92)}
-.hero .b{background:#fff;color:#17120f;border-color:#17120f;box-shadow:3px 3px 0 #17120f}
-.hero .b.p{background:#ffe27a}
-.art .a1{background:#ffe27a;border:2px solid #17120f}.art .a2{background:#fff;border:2px solid #17120f}.art .a3{background:#17120f}
-.art .a4{border-color:#fff}.art .a5{background:#17120f}
-:root[data-theme="dark"] .art .a5{background:#17120f}
-.sec{font-size:clamp(22px,4vw,30px);font-weight:800;margin:26px 4px 12px}
-.stats b{color:var(--pr)}
-.mq{overflow:hidden;white-space:nowrap;background:#17120f;color:#fff;border:2px solid var(--bd);border-radius:999px;margin:0 0 18px;padding:9px 0;font:700 12px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.08em}
-:root[data-theme="dark"] .mq{background:var(--pr)}
-.mq div{display:inline-block;padding-left:100%;animation:mq 28s linear infinite}
-@keyframes mq{to{transform:translateX(-100%)}}
-footer{background:var(--pr);color:#fff;font-weight:700;border:2px solid var(--bd);border-radius:24px;margin:24px 10px 10px;box-shadow:4px 4px 0 var(--hs)}
-@media(prefers-reduced-motion:reduce){.mq div{animation:none;padding-left:12px}}
-@media(max-width:640px){header{box-shadow:2px 2px 0 var(--hs)}.pn,.cd,.stats div,.tile,.gw{box-shadow:3px 3px 0 var(--hs)}}
 </style>
 </head>
 <body>
@@ -485,7 +434,7 @@ const A={};
 const modal=h=>{$('#dlg').innerHTML=h;$('#dlg').showModal()};
 const fd=()=>Object.fromEntries(new FormData($('#fm')));
 A.close=()=>$('#dlg').close();
-const setTheme=t=>{document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('inv-theme',t)}catch(_){}const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t=='dark'?'#140d0b':'#fe4247';const b=$('#tg');if(b)b.textContent=t=='dark'?'☀️':'🌙'};
+const setTheme=t=>{document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('inv-theme',t)}catch(_){}const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t=='dark'?'#1a110d':'#fdf3e7';const b=$('#tg');if(b)b.textContent=t=='dark'?'☀️':'🌙'};
 A.theme=()=>setTheme(document.documentElement.dataset.theme=='dark'?'light':'dark');
 /* dispatcher klik dipasang di modul V3-C */
 const updNet=()=>{const n=$('#net');if(!n)return;n.className='chip'+(navigator.onLine?'':' off');n.innerHTML='<span class="dot"></span>'+(navigator.onLine?'Online':'Offline')};
@@ -540,7 +489,7 @@ function vHome(){
   const PAL={A:['#23885a','#fff'],B:['#f4883c','#3b1f14'],C:['#55291f','#fff'],D:['#fbc531','#3b1f14'],E:['#f47c8c','#3b1f14'],F:['#1f8f8a','#fff']};
   $('#v').innerHTML=`${setupBanner()}<section class="hero">
     <div>
-      <h1>Inventarisasi aset daerah, <em>dari lapangan sampai laporan.</em></h1>
+      <h1>Inventarisasi aset daerah, dari lapangan sampai laporan.</h1>
       <p>Import kertas kerja induk, kelompokkan per OPD, isi 01 di lapangan dengan foto dan GPS, lalu catat mutasi 02/03 dan ekspor hasilnya.</p>
       <div class="row">
         <button class="b p" data-a="impBeranda">⬆ Import Excel Induk</button>
@@ -553,9 +502,8 @@ function vHome(){
     </div>
     <div class="art" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i><i class="a5"></i></div>
   </section>
-  <div class="mq" aria-hidden="true"><div>ONLINE &amp; OFFLINE · FOTO + GPS · JADWAL INVENTARISASI · PETA WILAYAH · UNDO / REDO · AUTO SINKRON · ONLINE &amp; OFFLINE · FOTO + GPS · JADWAL INVENTARISASI · PETA WILAYAH · UNDO / REDO · AUTO SINKRON ·</div></div>
   ${jadwalHome()}
-  <h2 class="sec">Data per <em>KIB</em></h2>
+  <h2 class="sec">Data per KIB</h2>
   <div class="tiles">
     ${['A','B','C','D','E','F'].map(k=>`<button class="tile" data-a="tabKib" data-k="${k}" style="--t:${PAL[k][0]};--tc:${PAL[k][1]}"><em>KIB ${k}</em><b>${cnt[k].toLocaleString('id-ID')}</b><span>${KIB_META[k].n}</span></button>`).join('')}
   </div>
@@ -2003,7 +1951,7 @@ A.ivics=t=>{const p=by(t.dataset.id),d=p.date.replace(/-/g,''),e=d,x=s=>String(s
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));a.download=`jadwal_${d}.ics`;a.click()};
 function jadwalHome(){
   const ps=planes().filter(planAct).slice(0,3);if(!ps.length)return'';
-  return `<h2 class="sec">Jadwal <em>inventarisasi</em></h2>${ps.map(p=>{const d=dTo(p.date),n=(p.ids||[]).length;return `<div class="cd${d<=0?' pulse':''}" data-a="ivstart" data-id="${p.id}"><b>${esc(p.name)}</b><small>📅 ${fdate(p.date)} · ${d<0?`terlambat ${-d} hari`:d===0?'hari ini':d+' hari lagi'} · ${planDone(p)}/${n} data</small></div>`}).join('')}`;
+  return `<h2 class="sec">Jadwal inventarisasi</h2>${ps.map(p=>{const d=dTo(p.date),n=(p.ids||[]).length;return `<div class="cd${d<=0?' pulse':''}" data-a="ivstart" data-id="${p.id}"><b>${esc(p.name)}</b><small>📅 ${fdate(p.date)} · ${d<0?`terlambat ${-d} hari`:d===0?'hari ini':d+' hari lagi'} · ${planDone(p)}/${n} data</small></div>`}).join('')}`;
 }
 
 /* ---------- Isi lapangan (HP) ---------- */
