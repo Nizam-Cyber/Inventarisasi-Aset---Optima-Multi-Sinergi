@@ -217,6 +217,30 @@ nav button{flex:0 0 20%;min-width:0;scroll-snap-align:start;padding:7px 1px 6px;
 .jmap{height:320px;border-radius:16px;border:1px solid var(--ln);z-index:0}
 #fo{position:fixed;inset:0;z-index:500;background:#000}#fo iframe{width:100%;height:100%;border:0}
 .inf summary{cursor:pointer;font-weight:600;margin:8px 0}
+/* --- Status kirim latar belakang --- */
+#net.sy .dot{animation:pls 1s ease-in-out infinite;background:var(--wa)}
+#net[data-q]:not([data-q="0"])::after{content:attr(data-q);margin-left:6px;background:var(--wa);color:#fff;border-radius:99px;padding:0 6px;font-size:10px}
+#qc[data-a="cfopen"]{display:inline-block!important;cursor:pointer;border-color:var(--er);color:var(--er)}
+/* --- dropdown multi-pilih --- */
+.mdd{position:relative;flex:1;min-width:170px}
+.mdd-b{display:flex;flex-wrap:wrap;gap:4px;align-items:center;border:1.5px solid var(--ln);border-radius:14px;background:var(--sf2);padding:4px 8px;min-height:42px}
+.mdd-b:focus-within{border-color:var(--ac);box-shadow:0 0 0 4px color-mix(in srgb,var(--ac) 20%,transparent)}
+.mdd-b .ch{margin:0;background:var(--pr);color:var(--pi);border-color:transparent}
+.mdd-b .ch b{cursor:pointer;padding:0 3px}
+.mdd .mdd-i{flex:1;min-width:90px;border:0;background:transparent;box-shadow:none;padding:6px 4px;width:auto}
+.mdd .mdd-i:focus{box-shadow:none}
+.mdd-l{position:absolute;z-index:40;left:0;right:0;top:100%;margin-top:4px;max-height:260px;overflow:auto;background:var(--sf);border:1px solid var(--ln);border-radius:14px;box-shadow:var(--shg)}
+.mdd-o{padding:10px 14px;cursor:pointer;font-size:14px}
+.mdd-o:hover{background:var(--sf2)}.mdd-o.on{background:color-mix(in srgb,var(--pr) 30%,var(--sf));font-weight:600}
+.row>.mdd{flex:1 1 190px}
+/* --- pemisah antar instansi --- */
+.ig{border:1px solid var(--ln);border-radius:16px;box-shadow:0 1px 3px rgba(85,41,31,.12),0 4px 10px -6px rgba(85,41,31,.10);margin:12px 0;overflow:hidden;background:var(--sf)}
+.ig>.iv-g{margin:0;padding:10px 14px;background:var(--sf2);border-bottom:1px solid var(--ln)}
+.ig>.iv-r{padding:10px 14px}
+.ig>.iv-r:last-child{border-bottom:0}
+.gt tr.nw td{border-top:3px solid var(--ac)}
+footer a{color:inherit;text-decoration:underline;text-underline-offset:3px;font-weight:600}
+.stats.s4{grid-template-columns:repeat(4,1fr)}@media(max-width:700px){.stats.s4{grid-template-columns:repeat(2,1fr)}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation-duration:.01ms!important}}
 @media print{header,nav,aside,footer,.bar,.row,#hint,#ts{display:none!important}body{padding:0;background:#fff;color:#000}#map{height:70vh}}
 </style>
@@ -256,7 +280,7 @@ nav button{flex:0 0 20%;min-width:0;scroll-snap-align:start;padding:7px 1px 6px;
 </div>
 
 <nav id="nav"></nav>
-<footer>Made by Nizam Zamami © 2026</footer>
+<footer><a href="https://linktr.ee/KontakNizamZamami" target="_blank" rel="noopener">Made by Nizam Zamami</a> © 2026</footer>
 
 <div id="ld" hidden><div class="sp"></div><b id="ldt">Memproses…</b></div>
 <div id="ts"></div>
@@ -395,7 +419,7 @@ const tx=async(s,m,f)=>{const d=await DB;return new Promise((ok,no)=>{const t=d.
 const put=(s,o)=>tx(s,'readwrite',x=>x.put(o)),
       all=s=>tx(s,'readonly',x=>x.getAll()),
       putMany=(s,a)=>tx(s,'readwrite',x=>a.forEach(o=>x.put(o))),
-      kv=(k,v)=>put('kv',{k,v});
+      kv=(k,v)=>{const r=put('kv',{k,v});if(MST.includes(k))mSoon();return r};
 
 /* ==== FUNGSI save & saveMany (PERBAIKAN BUG) ==== */
 async function save(r){
@@ -403,14 +427,14 @@ async function save(r){
   if(!D.recs.includes(r))D.recs.push(r);
   await put('recs',r);
   await put('q',{id:'r'+r.id,k:'r',rid:r.id});
-  upQ();
+  upQ();bgSync();
 }
 async function saveMany(a){
   const t=Date.now();
   a.forEach(r=>{r.ts=t;if(!D.recs.includes(r))D.recs.push(r)});
   await putMany('recs',a);
   await putMany('q',a.map(r=>({id:'r'+r.id,k:'r',rid:r.id})));
-  upQ();
+  upQ();bgSync();
 }
 /* =========================================================== */
 
@@ -418,7 +442,7 @@ async function saveMany(a){
 const $=s=>document.querySelector(s),
       esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),
       uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7),
-      cur=()=>S.opd=='__'||S.opd=='*'?'':S.opd,
+      cur=()=>S.opd=='__'||S.opd=='*'||S.opd=='#'?'':S.opd,
       by=id=>D.recs.find(r=>r.id===id),
       V=()=>D.recs.filter(r=>!r.del),
       rp=n=>'Rp '+Math.round(n||0).toLocaleString('id-ID'),
@@ -431,7 +455,7 @@ const JS={};
 const js=u=>JS[u]||(JS[u]=new Promise((ok,no)=>{const s=document.createElement('script');s.src=u;s.onload=ok;s.onerror=()=>{delete JS[u];no(new Error('Pustaka gagal dimuat — sambungkan internet sekali, setelah itu tersimpan untuk offline'))};document.head.append(s)}));
 
 const A={};
-const modal=h=>{$('#dlg').innerHTML=h;$('#dlg').showModal()};
+const modal=h=>{$('#dlg').innerHTML=h+(h.includes('name="nama"')?brgDL():'');$('#dlg').showModal()};
 const fd=()=>Object.fromEntries(new FormData($('#fm')));
 A.close=()=>$('#dlg').close();
 const setTheme=t=>{document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('inv-theme',t)}catch(_){}const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t=='dark'?'#1a110d':'#fdf3e7';const b=$('#tg');if(b)b.textContent=t=='dark'?'☀️':'🌙'};
@@ -453,7 +477,12 @@ function updHeader(){
   if(m.logoOpt){lg.style.width='auto';lg.innerHTML=`<img src="${m.logoOpt}" style="max-height:40px;object-fit:contain">`}
 }
 let QN=0;
-async function upQ(){const n=(await all('q')).length;QN=n;const q=$('#qc');if(q)q.textContent=n?n+' belum terkirim':'Semua terkirim';pulses()}
+async function upQ(){
+  const n=(await all('q')).length,c=typeof CF!=='undefined'?CF.items.length:0;QN=n;
+  const q=$('#qc');if(q){q.textContent=c?`⚠ ${c} konflik`:n?n+' belum terkirim':'Semua terkirim';if(c)q.dataset.a='cfopen';else delete q.dataset.a}
+  const nt=$('#net');if(nt)nt.dataset.q=n;
+  pulses();
+}
 
 /* ======================= NAV ======================= */
 const TABS=[
@@ -471,7 +500,7 @@ A.tab=t=>{S.tab=t.dataset.k;S.p=0;S.q='';S.f='';S.edit=0;render()};
 
 function render(){
   guardSync();
-  if(S.opd==='*'&&['hasil','peta','kontrol'].includes(S.tab))S.opd='';
+  if(S.opd==='*'&&S.tab==='peta')S.opd='';
   updHeader();
   setTheme(document.documentElement.dataset.theme||'light');
   const html=TABS.map(([k,l,ic])=>`<button data-a="tab" data-k="${k}"${S.tab==k?' class="on"':''}><span class="ic">${ic}</span>${l}</button>`).join('');
@@ -483,35 +512,15 @@ function render(){
 
 /* ======================= BERANDA ======================= */
 function vHome(){
-  const all=V(),noOpd=all.filter(r=>r.kib==='C'&&r.st==='01'&&!r.opd).length;
-  const cnt={A:0,B:0,C:0,D:0,E:0,F:0};
-  all.forEach(r=>{if(r.st==='01'&&cnt[r.kib]!=null)cnt[r.kib]++});
-  const PAL={A:['#23885a','#fff'],B:['#f4883c','#3b1f14'],C:['#55291f','#fff'],D:['#fbc531','#3b1f14'],E:['#f47c8c','#3b1f14'],F:['#1f8f8a','#fff']};
-  $('#v').innerHTML=`${setupBanner()}<section class="hero">
-    <div>
-      <h1>Inventarisasi aset daerah, dari lapangan sampai laporan.</h1>
-      <p>Import kertas kerja induk, kelompokkan per OPD, isi 01 di lapangan dengan foto dan GPS, lalu catat mutasi 02/03 dan ekspor hasilnya.</p>
-      <div class="row">
-        <button class="b p" data-a="impBeranda">⬆ Import Excel Induk</button>
-        <button class="b" data-a="tplM">⬇ Template Import (A–F)</button>
-      </div>
-      <div class="row">
-        <button class="b" data-a="new" data-st="01">+ Data manual</button>
-        <button class="b" data-a="regrup">🔀 Kelompokkan ulang</button>
-      </div>
-    </div>
-    <div class="art" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i><i class="a5"></i></div>
-  </section>
-  ${jadwalHome()}
-  <h2 class="sec">Data per KIB</h2>
-  <div class="tiles">
-    ${['A','B','C','D','E','F'].map(k=>`<button class="tile" data-a="tabKib" data-k="${k}" style="--t:${PAL[k][0]};--tc:${PAL[k][1]}"><em>KIB ${k}</em><b>${cnt[k].toLocaleString('id-ID')}</b><span>${KIB_META[k].n}</span></button>`).join('')}
-  </div>
-  <div class="stats">
-    <div><b>${noOpd.toLocaleString('id-ID')}</b><span>KIB C belum terkelompok</span></div>
-    <div><b>${D.opds.length.toLocaleString('id-ID')}</b><span>Instansi / OPD</span></div>
-    <div><b>${all.length.toLocaleString('id-ID')}</b><span>Total rekaman</span></div>
-  </div>`;
+  const all=V(),base=all.filter(r=>r.kib&&r.st==='01'),n=base.length,done=base.filter(r=>r.invAt||(r.ada&&r.ada!=='BELUM')).length,noOpd=base.filter(r=>!r.opd).length,pcn=n?Math.round(done/n*100):0;
+  const cnt={A:0,B:0,C:0,D:0,E:0,F:0};base.forEach(r=>{if(cnt[r.kib]!=null)cnt[r.kib]++});
+  const PAL={A:['#23885a','#fff'],B:['#f4883c','#3b1f14'],C:['#55291f','#fff'],D:['#fbc531','#3b1f14'],E:['#f47c8c','#3b1f14'],F:['#1f8f8a','#fff']},fm=v=>v.toLocaleString('id-ID');
+  $('#v').innerHTML=`${setupBanner()}<h2 class="sec" style="margin-top:6px">Dashboard</h2>
+    <div class="stats s4"><div><b>${fm(n)}</b><span>Data induk</span></div><div><b>${fm(D.opds.length)}</b><span>Instansi</span></div><div><b>${fm(noOpd)}</b><span>Belum terkelompok</span></div><div><b>${fm(QN)}</b><span>Belum terkirim</span></div></div>
+    <div class="pn" style="margin-top:12px"><div class="bar" style="margin-bottom:0"><b>Progres inventarisasi lapangan</b><b>${pcn}%</b></div><div class="pb"><i style="width:${pcn}%"></i></div><p class="mu">${fm(done)} dari ${fm(n)} data induk sudah diisi</p></div>
+    ${jadwalHome()}
+    <h2 class="sec">Data per KIB</h2>
+    <div class="tiles">${['A','B','C','D','E','F'].map(k=>`<button class="tile" data-a="tabKib" data-k="${k}" style="--t:${PAL[k][0]};--tc:${PAL[k][1]}"><em>KIB ${k}</em><b>${fm(cnt[k])}</b><span>${KIB_META[k].n}</span></button>`).join('')}</div>`;
 }
 A.tabKib=t=>{S.kib=t.dataset.k;S.tab='data';S.st='01';S.p=0;S.edit=0;render()};
 A.regrup=()=>busy('Mengelompokkan data per instansi…',async()=>{const n=await grup(false);toast(`${n} baris dikelompokkan/diperbarui`,'ok');render()});
@@ -594,8 +603,10 @@ document.addEventListener('keydown',e=>{
   if(k==='z'&&!e.shiftKey){e.preventDefault();A.gundo()}else if(k==='y'||(k==='z'&&e.shiftKey)){e.preventDefault();A.gredo()}
 });
 
-const wfo=st=>{const rs=V().filter(r=>r.opd===cur()&&r.kib===S.kib&&r.st===st),ks=[...new Set(rs.map(r=>r.wKab).filter(Boolean))].sort(),es=[...new Set(rs.map(r=>r.wKec).filter(Boolean))].sort();
-  return `<option value="">Semua wilayah</option><option value="u">Belum terbaca</option>${wgs().map(g=>`<option value="g:${g.id}">Pulau/zona: ${esc(g.name)}</option>`).join('')}${ks.map(k=>`<option value="k:${esc(k)}">Kab/Kota: ${esc(k)}</option>`).join('')}${es.map(k=>`<option value="e:${esc(k)}">Kec: ${esc(k)}</option>`).join('')}`};
+const wfo=st=>{const rs=V().filter(r=>inOpd(r)&&r.kib===S.kib&&r.st===st),ks=[...new Set(rs.map(r=>r.wKab).filter(Boolean))].sort(),es=[...new Set(rs.map(r=>r.wKec).filter(Boolean))].sort();
+  return[['u','Belum terbaca'],...wgs().map(g=>['g:'+g.id,'Pulau/zona: '+g.name]),...ks.map(k=>['k:'+k,'Kab/Kota: '+k]),...es.map(k=>['e:'+k,'Kec: '+k])]};
+const ST_OPTS=[['belum','Belum diisi'],['ADA','Ada'],['TIDAK','Tidak ada'],['mut','Dimutasi']];
+const wtOpts=()=>WS.ready?[...WS.labs.keys()].map(l=>[l,l]):[];
 function vData(){
   endEd(true);G.a=G.b=null;
   const st=S.st,ed=S.edit&&st!=='04';
@@ -605,44 +616,43 @@ function vData(){
   if(st==='04')r2=B('xl','📊 Unduh Excel KKI','p',` data-kib="${S.kib}"`);
   else if(ed)r2=B('gsave','💾 Simpan','p')+B('gundo','↶ Urungkan')+B('gredo','↷ Ulangi')+B('gedit','👁 Selesai')+B('addrow','+ Baris','',' data-n="1"')+B('addrow','+10','',' data-n="10"')+B('fdown','⬇ Isi bawah')+B('fright','➡ Isi kanan')+B('gclear','🧹 Kosongkan')+B('gpaste','📋 Tempel')+B('gdelrows','🗑 Hapus baris')+B('gdiscard','✖ Buang perubahan')+
     `<span class="mu" id="gs">Klik sel lalu ketik. Seret kotak kecil di pojok sel untuk menyalin ke bawah atau samping.</span>`;
-  else r2=B('gedit','✏️ Edit tabel','p')+B('gundo','↶')+B('gredo','↷')+B('new','+ Tambah (form)','',` data-st="${st}"`)+B('wquick','📍 Petakan wilayah')+B('tpl','⬇ Template','',` data-kib="${S.kib}"`)+(st==='01'?B('imp','⬆ Import','',` data-kib="${S.kib}"`):'')+B('xl','📊 Unduh Excel','',` data-kib="${S.kib}"`);
+  else r2=B('gedit','✏️ Edit tabel','p')+B('gundo','↶')+B('gredo','↷')+B('new','+ Tambah (form)','',` data-st="${st}"`)+(st==='02'?B('minta','↔ Tarik aset dari OPD lain'):'')+B('wquick','📍 Petakan wilayah')+B('tpl','⬇ Template','',` data-kib="${S.kib}"`)+(st==='01'?B('imp','⬆ Import','',` data-kib="${S.kib}"`):'')+B('xl','📊 Unduh Excel','',` data-kib="${S.kib}"`);
+  const f1=st!=='04'?`<div class="row"><input id="q" placeholder="Cari nama, alamat, reg… (Enter = langsung)" value="${esc(S.q)}">${st==='01'?mdd('mf','Status…',ST_OPTS,S.fs||[],v=>{S.fs=v;S.p=0;drawGrid()}):''}${mdd('mw','Filter wilayah…',wfo(st),S.wfs||[],v=>{S.wfs=v;S.p=0;drawGrid()})}${mdd('mt','Ketik wilayah, mis. Gane…',wtOpts(),S.wts||[],v=>{S.wts=v;S.p=0;drawGrid()},{free:1,focus:c=>{if(!WS.ready)wilLoad().then(()=>{c.opts=wtOpts()}).catch(()=>{})}})}</div>`:'';
   $('#v').innerHTML=`<div class="bar" style="margin-bottom:6px"><h3 style="margin:0">${KIB_META[S.kib].n}</h3><span class="ch">${ed?'Mode edit tabel':'Preview'}</span></div>
     <div class="kib-sel">${['A','B','C','D','E','F'].map(k=>`<button data-a="selKib" data-k="${k}"${S.kib==k?' class="on"':''}>KIB ${k}</button>`).join('')}</div>
     <div class="tabs">${['01','02','03','04'].map(k=>`<button data-a="selSt" data-k="${k}"${st==k?' class="on"':''}>${lab[k]}</button>`).join('')}</div>
-    <div class="pn"><div class="row">${sel(1)}${st!=='04'?`<input id="q" placeholder="Cari nama, alamat, reg…" value="${esc(S.q)}">`:''}${st==='01'?`<select id="f"><option value="">Semua</option><option value="belum">Belum diisi</option><option value="ADA">Ada</option><option value="TIDAK">Tidak ada</option><option value="mut">Dimutasi</option></select>`:''}${st!=='04'?`<select id="wf">${wfo(st)}</select><input id="wt" list="wtl" placeholder="Filter wilayah, mis. Gane" value="${esc(S.wt||'')}"><datalist id="wtl">${wtl()}</datalist>`:''}</div>
+    <div class="pn"><div class="row">${sel(1)}${psel()}</div>${f1}
     <div class="row">${r2}</div></div>
     ${st==='04'?'<div id="hs"></div>':''}<div class="row" id="rs"></div><div id="lst"></div><div class="row" id="pg"></div>`;
-  const qi=$('#q');if(qi)qi.oninput=e=>{endEd(true);S.q=e.target.value;S.p=0;clearTimeout(vData._t);vData._t=setTimeout(drawGrid,200)};
-  const wt=$('#wt');if(wt){wt.oninput=e=>{endEd(true);S.wt=e.target.value;S.p=0;clearTimeout(vData._t2);vData._t2=setTimeout(drawGrid,300)};wt.onfocus=()=>{if(!WS.ready)wilLoad().then(()=>{const d=$('#wtl');if(d)d.innerHTML=wtl()}).catch(()=>{})}}
-  const wf=$('#wf');if(wf){wf.value=S.wf;wf.onchange=e=>{endEd(true);S.wf=e.target.value;S.p=0;drawGrid()}}
-  const fs=$('#f');if(fs){fs.value=S.f;fs.onchange=e=>{endEd(true);S.f=e.target.value;S.p=0;drawGrid()}}
+  const qi=$('#q');
+  if(qi){const go=()=>{clearTimeout(vData._t);endEd(true);S.q=qi.value;S.p=0;drawGrid()};qi.oninput=()=>{clearTimeout(vData._t);vData._t=setTimeout(go,SD)};qi.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();go()}}}
   drawGrid();if(st==='04')vHasilKib();flush();
 }
 A.selKib=t=>{S.kib=t.dataset.k;S.st='01';S.p=0;S.edit=0;render()};
 A.selSt=t=>{S.st=t.dataset.k;S.p=0;S.edit=0;render()};
-function sel(all){return `<select id="so"><option value="">— pilih instansi —</option>${all?`<option value="*"${S.opd=='*'?' selected':''}>★ Semua instansi</option>`:''}<option value="__"${S.opd=='__'?' selected':''}>(Belum terkelompok)</option>${D.opds.map(o=>`<option${o.name==S.opd?' selected':''}>${esc(o.name)}</option>`).join('')}</select>`}
-document.addEventListener('change',e=>{if(e.target.id=='so'){S.opd=e.target.value;S.p=0;kv('last',S.opd);render()}});
 
 function rowsNow(){
-  const al=S.opd==='*',rs=V().filter(r=>(al||r.opd===cur())&&r.kib===S.kib),st=S.st;
+  const rs=V().filter(r=>inOpd(r)&&r.kib===S.kib),st=S.st,mo=S.opd==='*'||S.opd==='#';
   if(st==='04'){const g=new Map();rs.forEach(r=>{const o=r.opd||'';if(!g.has(o))g.set(o,[]);g.get(o).push(r)});return[...g.values()].flatMap(x=>hasil(x.filter(r=>r.st==='01'),x.filter(r=>r.st==='02'),x.filter(r=>r.st==='03')))}
   let a=rs.filter(r=>r.st===st);
   if(S.q){const q=norm(S.q);a=a.filter(r=>norm([r.nama,r.alamat,r.reg,r.kode,r.ket].join(' ')).includes(q))}
-  if(S.wt)a=a.filter(r=>wMatch(r,S.wt));
-  if(S.wf){const w=S.wf;a=a.filter(r=>w==='u'?!r.wKode:w.startsWith('g:')?(r.wGid||[]).includes(w.slice(2)):w.startsWith('k:')?r.wKab===w.slice(2):w.startsWith('e:')?r.wKec===w.slice(2):true)}
-  if(S.f&&st==='01')a=a.filter(r=>S.f=='belum'?(!r.ada||r.ada=='BELUM')&&!r.mut:S.f=='mut'?r.mut:r.ada==S.f);
-  return a.sort((x,y)=>(x.no||1e9)-(y.no||1e9));
+  const wl=S.wts&&S.wts.length?S.wts:(S.wt?[S.wt]:[]);if(wl.length)a=a.filter(r=>wl.some(t=>wMatch(r,t)));
+  const wf=S.wfs&&S.wfs.length?S.wfs:(S.wf?[S.wf]:[]);
+  if(wf.length)a=a.filter(r=>wf.some(w=>w==='u'?!r.wKode:w.startsWith('g:')?(r.wGid||[]).includes(w.slice(2)):w.startsWith('k:')?r.wKab===w.slice(2):w.startsWith('e:')?r.wKec===w.slice(2):true));
+  const fs_=S.fs&&S.fs.length?S.fs:(S.f?[S.f]:[]);
+  if(fs_.length&&st==='01')a=a.filter(r=>fs_.some(f=>f==='belum'?(!r.ada||r.ada==='BELUM')&&!r.mut:f==='mut'?!!r.mut:r.ada===f));
+  return a.sort((x,y)=>(mo?(x.opd||'').localeCompare(y.opd||''):0)||(x.no||1e9)-(y.no||1e9));
 }
 function drawGrid(){
   const el=$('#lst');if(!el)return;
   if(!S.opd){el.innerHTML='<p class="empty">Pilih instansi dulu.</p>';$('#pg').innerHTML='';return}
-  const h4=S.st==='04',a=rowsNow(),N=50,pg=Math.ceil(a.length/N)||1,C=[...(S.opd==='*'?[['opd','Instansi','text']]:[]),...cols(S.kib,h4?'01':S.st)];
-  const rsE=$('#rs');if(rsE){if(S.opd==='*'){const m=new Map();a.forEach(r=>{const o=r.opd||'(Belum terkelompok)';m.set(o,(m.get(o)||0)+1)});
+  const h4=S.st==='04',a=rowsNow(),N=pgN(),mo=S.opd==='*'||S.opd==='#',pg=Math.ceil(a.length/N)||1,C=[...(mo?[['opd','Instansi','text']]:[]),...cols(S.kib,h4?'01':S.st)];
+  const rsE=$('#rs');if(rsE){if(mo){const m=new Map();a.forEach(r=>{const o=r.opd||'(Belum terkelompok)';m.set(o,(m.get(o)||0)+1)});
     rsE.innerHTML=`<span class="mu">${a.length} baris di ${m.size} instansi:</span>`+[...m].sort((x,y)=>y[1]-x[1]).slice(0,40).map(([o,n])=>`<button class="b sm" data-a="pickOpd" data-o="${esc(o==='(Belum terkelompok)'?'__':o)}">${esc(o)} · ${n}</button>`).join('')}else rsE.innerHTML=''}
   S.p=Math.max(0,Math.min(S.p,pg-1));
   G.rows=a.slice(S.p*N,S.p*N+N);G.cols=C;G.ro=h4||!S.edit;G.a=G.b=null;G.off=h4?1:2;
   const hd=`<th class="s0">No</th>${h4?'':'<th class="s1"></th>'}${C.map((c,j)=>`<th data-hj="${j}">${esc(c[1])}</th>`).join('')}`;
-  const bd=G.rows.map((r,i)=>`<tr data-i="${i}"><td class="s0">${h4?S.p*N+i+1:(r.no||'')}</td>${h4?'':`<td class="s1"><button class="ib" data-a="edit" data-id="${r.id}" title="Edit lengkap (form, foto, GPS)">✏️</button><button class="ib" data-a="rdel" data-id="${r.id}" title="Hapus">🗑</button></td>`}${C.map((c,j)=>`<td data-j="${j}"${NUMK.has(c[0])?' class="n"':''}>${cv(r,c)}</td>`).join('')}</tr>`).join('');
+  const bd=G.rows.map((r,i)=>`<tr data-i="${i}"${mo&&i>0&&r.opd!==G.rows[i-1].opd?' class="nw"':''}><td class="s0">${h4?S.p*N+i+1:(r.no||'')}</td>${h4?'':`<td class="s1"><button class="ib" data-a="edit" data-id="${r.id}" title="Edit lengkap (form, foto, GPS)">✏️</button><button class="ib" data-a="rdel" data-id="${r.id}" title="Hapus">🗑</button></td>`}${C.map((c,j)=>`<td data-j="${j}"${NUMK.has(c[0])?' class="n"':''}>${cv(r,c)}</td>`).join('')}</tr>`).join('');
   el.innerHTML=`<div class="gw${G.ro?'':' ed'}"><table class="gt" id="gt"><thead><tr>${hd}</tr></thead><tbody>${bd||`<tr><td colspan="${C.length+2}" class="empty">Belum ada data. Import template, tambah lewat form, atau ${S.edit?'klik “+ Baris”':'masuk Edit tabel lalu “+ Baris”'}.</td></tr>`}</tbody></table><div id="fh" hidden></div></div>`;
   $('#pg').innerHTML=`<button class="b" data-a="pp" data-d="-1">‹</button><span class="mu">${a.length} baris · total ${rp(sm(a))} · hal ${S.p+1}/${pg}</span><button class="b" data-a="pp" data-d="1">›</button>`;
   $('#pg').dataset.max=pg;pulses();
@@ -652,11 +662,11 @@ A.pp=t=>{endEd(true);S.p=Math.max(0,Math.min(+$('#pg').dataset.max-1,S.p+ +t.dat
 
 /* --- CRUD baris --- */
 async function delRec(r){const ch=V().filter(x=>x.link===r.id);await opA(async()=>{hn(r);ch.forEach(x=>hn(x));r.del=1;ch.forEach(x=>x.del=1);await saveMany([r,...ch])})}
-A.pickOpd=t=>{S.opd=t.dataset.o;S.p=0;kv('last',S.opd);render()};
+A.pickOpd=t=>{setOpds([t.dataset.o]);saveLast();S.p=0;render()};
 A.rdel=async t=>{if(!confirm('Hapus baris ini?'))return;await delRec(by(t.dataset.id));drawGrid();toast('Baris dihapus','ok',2500)};
 A.gedit=()=>{guardSync();S.edit=S.edit?0:1;vData()};
 A.addrow=async t=>{
-  if(!S.opd||S.opd==='*')return toast('Pilih satu instansi untuk menambah baris','w');
+  if(!S.opd||S.opd==='*'||S.opd==='#')return toast('Pilih satu instansi untuk menambah baris','w');
   const n=+t.dataset.n||1,o=cur(),mx=V().filter(r=>r.kib===S.kib&&r.st===S.st&&r.opd===o).reduce((m,r)=>Math.max(m,+r.no||0),0);
   const nw=Array.from({length:n},(_,i)=>({id:uid(),kib:S.kib,st:S.st,opd:o,no:mx+i+1,ada:S.st==='02'?'ADA':''}));
   await opA(async()=>{nw.forEach(r=>hn(r,1));await saveMany(nw)});
@@ -699,7 +709,7 @@ function setVal(r,c,val){
   else if(Array.isArray(t)){const o=t.map(x=>Array.isArray(x)?x:[x,x]).find(x=>String(x[0]).toLowerCase()===v.toLowerCase()||String(x[1]).toLowerCase()===v.toLowerCase());if(o)v=o[0]}
   if(String(r[k]??'')===String(v))return;
   if(!G.orig.has(r.id))G.orig.set(r.id,snapR(r));hn(r);
-  r[k]=v;if(k[0]==='w'&&k!=='wBy')r.wBy='manual';G.dirty.add(r);if(r.kib==='C'&&r.st==='01'&&(k==='ada'||k==='kd'))G.syn.add(r);
+  r[k]=v;if(k==='nama'&&!r.kode){const kk=kodeFor(v);if(kk)r.kode=kk}if(k[0]==='w'&&k!=='wBy')r.wBy='manual';G.dirty.add(r);if(r.kib==='C'&&r.st==='01'&&(k==='ada'||k==='kd'))G.syn.add(r);
 }
 function flush(){
   const g=$('#gs');if(g)g.innerHTML=G.dirty.size?`<b style="color:var(--wa)">● ${G.dirty.size} baris belum disimpan</b>. Tekan Simpan untuk mengirim.`:'Semua tersimpan. Klik sel lalu ketik. Seret kotak kecil di pojok sel untuk menyalin.';
@@ -848,7 +858,7 @@ A.edit=t=>edit(t.dataset.id);
 const fld=(f,v)=>{
   const [k,l,t]=f;
   if(Array.isArray(t))return `<label>${l}<select name="${k}">${(v!==''&&!t.some(o=>(Array.isArray(o)?o[0]:o)==v)?[...t,v]:t).map(o=>{const[a,b]=Array.isArray(o)?[o[0],o[0]+' '+o[1]]:[o,o];return `<option value="${esc(a)}"${a==v?' selected':''}>${esc(b||'—')}</option>`}).join('')}</select></label>`;
-  return `<label>${l}<input name="${k}" type="${t}" value="${esc(v)}"${t==='number'?' step="any" inputmode="decimal"':''}></label>`;
+  return `<label>${l}<input name="${k}" type="${t}" value="${esc(v)}"${t==='number'?' step="any" inputmode="decimal"':''}${k==='nama'?' list="brgl" autocomplete="off"':''}></label>`;
 };
 
 A.esave=async t=>{
@@ -970,9 +980,9 @@ function vHasil(){
 A.selKibHasil=t=>{S.kib=t.dataset.k;vHasil()};
 function vHasilKib(){
   if(!S.opd){$('#hs').innerHTML='<p class="empty">Pilih instansi dulu.</p>';return}
-  const rs=V().filter(r=>r.opd===cur()&&r.kib===S.kib);
+  const rs=V().filter(r=>inOpd(r)&&r.kib===S.kib),g=new Map();rs.forEach(r=>{const o=r.opd||'';if(!g.has(o))g.set(o,[]);g.get(o).push(r)});
   const c1=rs.filter(r=>r.st==='01'),c2=rs.filter(r=>r.st==='02'),c3=rs.filter(r=>r.st==='03');
-  const h=hasil(c1,c2,c3),sel1=c1.filter(r=>r.ada&&r.ada!=='BELUM').length;
+  const h=[...g.values()].flatMap(x=>hasil(x.filter(r=>r.st==='01'),x.filter(r=>r.st==='02'),x.filter(r=>r.st==='03'))),sel1=c1.filter(r=>r.ada&&r.ada!=='BELUM').length;
   const diff=sm(c1)-sm(c3)+sm(c2)-sm(h);
   $('#hs').innerHTML=`<div class="pn"><table>
     <tr><th>Kategori</th><th>Baris</th><th>Nilai</th></tr>
@@ -1182,11 +1192,11 @@ async function vPeta(){
     <button class="b" data-a="prn">🖨 Cetak</button></div>
     <p class="mu" id="hint">Pilih bangunan, lalu ketuk titiknya di peta.</p></div>
     <div id="mw"><div id="map"></div><div id="nA">▲<br>U</div></div><ol id="lg" style="font-size:13px"></ol>`;
-  if(!S.opd)return $('#hint').textContent='Pilih instansi dulu.';
+  if(!S.opd||S.opd==='*')return $('#hint').textContent='Pilih satu atau beberapa instansi (bukan Semua).';
   await busy('Memuat peta…',async()=>{
     if(!document.getElementById('lcss')){const l=document.createElement('link');l.id='lcss';l.rel='stylesheet';l.href=LCSS;document.head.append(l)}
     await js(LJS);
-    const bl=[...V().filter(r=>r.st==='01'&&r.opd===cur()&&!r.mut&&r.kib===S.kib),...V().filter(r=>r.st==='02'&&r.opd===cur()&&r.kib===S.kib)];
+    const bl=[...V().filter(r=>r.st==='01'&&inOpd(r)&&!r.mut&&r.kib===S.kib),...V().filter(r=>r.st==='02'&&inOpd(r)&&r.kib===S.kib)];
     $('#mb').innerHTML='<option value="">— pilih —</option>'+bl.map((r,i)=>`<option value="${r.id}">${i+1}. ${esc(r.nama)}${r.lat?' ✓':''}</option>`).join('');
     const sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Esri'}),
           osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OSM'}),
@@ -1229,22 +1239,19 @@ function vKontrol(){
     <p class="mu">${C.length} instansi · <b style="color:var(--er)">${late.length}</b> terlewat · <b>${soon.length}</b> 7 hari ke depan</p>${tot}</div>
   <div class="pn"><b>Progres per tahap</b><table><tr><th>Tahap</th><th>Belum</th><th>Proses</th><th>Sudah</th><th>Nihil</th><th>%</th></tr>${th}</table></div>
   <div class="pn"><b>Per PJ</b><table><tr><th>PJ</th><th>UPB</th><th>Register</th><th>Sudah</th><th>%</th></tr>${Object.entries(pj).sort((a,b)=>b[1].n-a[1].n).map(([p,o])=>`<tr><td>${esc(p)}</td><td>${o.n}</td><td>${o.r}</td><td>${o.s}</td><td>${pc(o.s,o.r)??'-'}${o.r?'%':''}</td></tr>`).join('')}</table></div>
-  <div class="bar"><div class="row"><select id="cp"><option value="">Semua PJ</option>${Object.keys(pj).map(p=>`<option>${esc(p)}</option>`).join('')}</select>
-    <select id="cs_"><option value="">Semua</option><option value="BELUM">Ada BELUM</option><option value="PROSES">Ada PROSES</option><option value="late">Terlewat</option><option value="soon">7 hari</option><option value="done">Selesai</option></select>
-    <input id="cq" placeholder="Cari instansi…"></div></div>
+  <div class="bar"><div class="row">${(S.cf=Object.assign({ps:[],ss:[],q:''},S.cf||{}),'')}${mdd('kp','Semua PJ (boleh pilih beberapa)…',Object.keys(pj).map(p=>[p,p]),S.cf.ps,v=>{S.cf.ps=v;clist()})}${mdd('ks','Semua status…',[['BELUM','Ada BELUM'],['PROSES','Ada PROSES'],['late','Terlewat'],['soon','7 hari'],['done','Selesai']],S.cf.ss,v=>{S.cf.ss=v;clist()})}
+    <input id="cq" placeholder="Cari instansi… (Enter = langsung)" value="${esc(S.cf.q)}">${psel()}</div></div>
   <div id="cl"></div>`;
-  const F=S.cf=S.cf||{p:'',s:'',q:''};
-  $('#cp').value=F.p;$('#cs_').value=F.s;$('#cq').value=F.q;
-  $('#cp').onchange=e=>{F.p=e.target.value;clist()};$('#cs_').onchange=e=>{F.s=e.target.value;clist()};
-  $('#cq').oninput=e=>{F.q=e.target.value;clearTimeout(clist.t);clist.t=setTimeout(clist,200)};clist();
+  const F=S.cf,cq=$('#cq'),go=()=>{clearTimeout(clist.t);F.q=cq.value;clist()};
+  cq.oninput=()=>{clearTimeout(clist.t);clist.t=setTimeout(go,SD)};cq.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();go()}};clist();
 }
 function clist(){
   const F=S.cf,C=ctlAll(),td=tdy(),wk=new Date(Date.now()+6048e5).toISOString().slice(0,10),q=norm(F.q);
   const all_=c=>TH.flatMap(([k])=>KB.map(b=>c[k+b])).filter(v=>v&&v!=='NIHIL'),has=(c,s)=>TH.some(([k])=>KB.some(b=>c[k+b]===s));
-  let a=C.filter(c=>(!F.p||(tx_(c.pj)||'(belum ada PJ)')==F.p)&&(!q||norm(c.opd+' '+(c.tim||'')).includes(q))&&
-    (!F.s||(F.s==='late'?c.tgl&&c.tgl<td&&openT(c):F.s==='soon'?c.tgl&&c.tgl>=td&&c.tgl<=wk:F.s==='done'?all_(c).length&&all_(c).every(v=>v==='SUDAH'):has(c,F.s))));
+  let a=C.filter(c=>(!F.ps||!F.ps.length||F.ps.includes(tx_(c.pj)||'(belum ada PJ)'))&&(!q||norm(c.opd+' '+(c.tim||'')).includes(q))&&
+    (!F.ss||!F.ss.length||F.ss.some(s_=>s_==='late'?c.tgl&&c.tgl<td&&openT(c):s_==='soon'?c.tgl&&c.tgl>=td&&c.tgl<=wk:s_==='done'?all_(c).length&&all_(c).every(v=>v==='SUDAH'):has(c,s_))));
   a.sort((x,y)=>(x.tgl||'9').localeCompare(y.tgl||'9'));
-  $('#cl').innerHTML=a.slice(0,60).map(c=>{
+  $('#cl').innerHTML=a.slice(0,pgN()).map(c=>{
     const pb=pc(N(c.sB),N(c.rB)),late=c.tgl&&c.tgl<td&&openT(c);
     return `<div class="cd" data-a="ce" data-n="${esc(c.opd)}">
       <b>${esc(c.opd)}</b>
@@ -1311,37 +1318,186 @@ A.cekSrv=()=>busy('Memeriksa spreadsheet…',async()=>{
 A.kirimSemua=async()=>{if(!confirm(`Kirim ulang ${D.recs.length} baris data ke spreadsheet? Data yang sudah ada hanya diperbarui, tidak digandakan.`))return;
   await putMany('q',D.recs.filter(r=>r.kib||r.st==='ctl'||r.st==='plan').map(r=>({id:'r'+r.id,k:'r',rid:r.id})));upQ();sync(true)};
 const b64=b=>new Promise(ok=>{const f=new FileReader();f.onload=()=>ok(f.result.split(',')[1]);f.readAsDataURL(b)});
-let syncInfo={};
-async function sync(manual){
-  if(syncing)return;if(!navigator.onLine)return manual&&toast('Offline','w');
-  if(!D.meta.url)return manual&&toast('Isi URL Apps Script','w');syncing=1;
-  try{
-    const q=await all('q');if(!q.length){manual&&toast('Semua terkirim','ok');return}
-    await busy(`Mengirim ${q.length} data…`,async()=>{
-      const rq=q.filter(x=>x.k==='r'),M=new Map(D.recs.map(r=>[r.id,r]));
-      for(let i=0;i<rq.length;i+=100){
-        const ch=rq.slice(i,i+100);
-        const its=ch.map(x=>M.get(x.rid)).filter(Boolean).map(r=>({id:r.id,ts:r.ts,j:JSON.stringify(r)})),
-              rs=await post({action:'put',items:its});
-        if(rs.n!==undefined&&rs.n!==its.length)throw new Error(`Server hanya menerima ${rs.n} dari ${its.length} baris`);
-        syncInfo.total=rs.total;
-        await tx('q','readwrite',s=>ch.forEach(x=>s.delete(x.id)));
-      }
-      for(const x of q.filter(x=>x.k==='p')){
-        const p=await tx('ph','readonly',s=>s.get(x.pid));
-        if(p)await post({action:'photo',opd:p.opd,name:p.name,data:await b64(p.blob)});
-        await tx('q','readwrite',s=>s.delete(x.id));
-      }
-    });
-    toast(`Berhasil: ${q.filter(x=>x.k==='r').length} baris data dan ${q.filter(x=>x.k==='p').length} foto terkirim`+(syncInfo.total!=null?`. Baris di spreadsheet sekarang: ${syncInfo.total}`:''),'ok',9000);
-  }catch(e){toast('Gagal: '+e.message,'e',8000)}
-  finally{syncing=0;upQ()}
+/* ======================= SINKRON: latar belakang, antar pengguna, bentrok edit ======================= */
+const DAY=864e5,MST=['opds','brg','kontak','wg','oalias','abbr','walias','param'];
+D.bts={};D.msnap={};D.pullTs={r:0,m:0};
+const hsh=s=>{let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return h};
+const njs=v=>JSON.stringify(v,(k,x)=>x&&typeof x==='object'&&!Array.isArray(x)?Object.keys(x).sort().reduce((a,c)=>(a[c]=x[c],a),{}):x);
+const same=(a,b)=>{const s=o=>{const c={...o};delete c.ts;return njs(c)};return s(a)===s(b)};
+const kvQ=(k,v)=>put('kv',{k,v});
+const lineMap=t=>new Map(String(t||'').split('\n').map(l=>l.trim()).filter(Boolean).map(l=>[l.split('=')[0].trim().toLowerCase(),l]));
+const ADP={
+  opds:{rows:()=>new Map(D.opds.map(o=>[o.name,o])),apply:m=>{D.opds=[...m.values()]},val:()=>D.opds},
+  brg:{rows:()=>new Map(brg().map(x=>[x.k,x])),apply:m=>{D.brg=[...m.values()]},val:()=>D.brg},
+  kontak:{rows:()=>new Map(kts().map(x=>[x.id,x])),apply:m=>{D.kontak=[...m.values()]},val:()=>D.kontak},
+  wg:{rows:()=>new Map(wgs().map(x=>[x.id,x])),apply:m=>{D.wg=[...m.values()]},val:()=>D.wg},
+  oalias:{rows:()=>new Map(Object.entries(D.oalias||{})),apply:m=>{D.oalias=Object.fromEntries(m)},val:()=>D.oalias},
+  abbr:{rows:()=>lineMap(D.abbr),apply:m=>{D.abbr=[...m.values()].join('\n');mkAbr()},val:()=>D.abbr},
+  walias:{rows:()=>lineMap(D.walias??WALIAS0),apply:m=>{D.walias=[...m.values()].join('\n')},val:()=>D.walias},
+  param:{rows:()=>{const p=D.param||PD_DEF,m=new Map();p.kd.forEach(r=>m.set('kd|'+r[0],r));p.kond.forEach(r=>m.set('kond|'+r[0],r));['asal','sbt','sbk'].forEach(g=>p[g].forEach(x=>m.set(g+'|'+x,x)));return m},
+    apply:m=>{const p={kd:[],kond:[],asal:[],sbt:[],sbk:[]};m.forEach((v,k)=>{p[k.split('|')[0]].push(v)});D.param=p;applyParam()},val:()=>D.param}
+};
+let pT;const persist=()=>{clearTimeout(pT);pT=setTimeout(()=>{kvQ('bts',D.bts);kvQ('msnap',D.msnap);kvQ('pullts',D.pullTs)},500)};
+const setSt=on=>{const n=$('#net');if(n)n.classList.toggle('sy',!!on)};
+let mT;const mSoon=()=>{clearTimeout(mT);mT=setTimeout(async()=>{await mDiff();bgSync(300)},400)};
+let bgT;const bgSync=(d=1200)=>{clearTimeout(bgT);bgT=setTimeout(()=>sync(false),d)};
+
+/* --- bentrok --- */
+const CF={items:[],shown:new Set()};
+const addCf=c=>{c.key=c.kind+':'+(c.id||c.name+'|'+c.rk);const i=CF.items.findIndex(x=>x.key===c.key);if(i>=0)CF.items[i]=c;else CF.items.push(c)};
+const FLB=()=>{if(FLB.m)return FLB.m;const m={};Object.values(FIELDS).forEach(a=>a.forEach(f=>{if(!m[f[0]])m[f[0]]=f[1]}));WCOLS.forEach(f=>m[f[0]]=f[1]);m.opd='Instansi';m.no='No';return FLB.m=m};
+const ago=ts=>{const m=Math.max(1,Math.round((Date.now()-ts)/6e4));return m<60?m+' menit lalu':Math.round(m/60)+' jam lalu'};
+const cfLabel=c=>c.kind==='r'?`${esc((c.loc&&c.loc.nama)||(c.rem&&c.rem.nama)||'(tanpa nama)')} · ${esc((c.loc&&c.loc.opd)||(c.rem&&c.rem.opd)||'')} · ${(c.loc||c.rem||{}).kib||''}-${(c.loc||c.rem||{}).st||''}`:`Master ${esc(c.name)}: ${esc(c.rk)}`;
+function cfDiff(c){
+  const sh=v=>esc(v==null?'(dihapus)':typeof v==='object'?JSON.stringify(v).slice(0,70):String(v));
+  if(c.kind==='r'){
+    const ks=[...new Set([...Object.keys(c.rem||{}),...Object.keys(c.loc||{})])].filter(k=>!['ts','id','wGid','lock','invAt','invBy','invPlan'].includes(k));
+    const d=ks.filter(k=>njs((c.rem||{})[k]??'')!==njs((c.loc||{})[k]??'')).slice(0,6);
+    return d.map(k=>`${esc(FLB()[k]||k)}: pengguna lain <s>${sh((c.rem||{})[k]??'')}</s> · Anda <b>${sh((c.loc||{})[k]??'')}</b>`);
+  }
+  return [`pengguna lain <s>${sh(c.rem)}</s> · Anda <b>${sh(c.loc)}</b>`];
 }
-A.tarik=()=>busy('Menarik…',async()=>{
-  const j=await post({action:'get'}),M=new Map(D.recs.map(r=>[r.id,r])),up=[];
-  j.items.forEach(it=>{const l=M.get(it.id);if(!l||+it.ts>l.ts){const r=JSON.parse(it.j);if(l)Object.assign(l,r);else D.recs.push(r);up.push(l||r)}});
-  await putMany('recs',up);toast(`${up.length} rekaman`,'ok');render();
-});
+function openCf(force){
+  if(!CF.items.length)return;
+  const fresh=CF.items.some(c=>!CF.shown.has(c.key));
+  if(!force&&!fresh)return;
+  if($('#dlg').open&&!force){toast(`Ada ${CF.items.length} data yang juga diubah pengguna lain. Ketuk tanda ⚠ di atas atau menu Sinkron untuk menyelesaikan`,'w',7000);return}
+  CF.items.forEach(c=>CF.shown.add(c.key));
+  modal(`<h3>Data diubah pengguna lain</h3><p class="mu">Baris berikut juga diubah pengguna lain dalam 1 hari terakhir. Centang baris yang ingin Anda <b>timpa dengan data Anda</b>. Yang tidak dicentang memakai data dari pengguna lain.</p>
+    <div style="max-height:52vh;overflow:auto">${CF.items.map((c,i)=>`<label class="iv-r"><input type="checkbox" data-cf="${i}"><span><b>${cfLabel(c)}</b><small>diubah ${ago(c.ts)}</small><small>${cfDiff(c).join('<br>')||'isi berbeda'}</small></span></label>`).join('')}</div>
+    <div class="row"><button class="b sm" data-a="cfall">Centang semua</button><button class="b sm" data-a="cfnone">Kosongkan</button></div>
+    <div class="row"><button class="b p" data-a="cfapply">Terapkan pilihan</button><button class="b" data-a="close">Nanti</button></div>`);
+}
+A.cfopen=()=>openCf(1);
+A.cfall=()=>document.querySelectorAll('[data-cf]').forEach(x=>x.checked=true);
+A.cfnone=()=>document.querySelectorAll('[data-cf]').forEach(x=>x.checked=false);
+A.cfapply=async()=>{
+  const its=[...CF.items],dq=[],ap=[];let ow=0,tk=0;
+  its.forEach((c,i)=>{
+    const ck=document.querySelector(`[data-cf="${i}"]`);if(!ck)return;const on=ck.checked;
+    if(c.kind==='r'){
+      if(on){D.bts[c.id]=c.ts;ow++}
+      else{const l=by(c.id);if(l){Object.keys(l).forEach(k=>delete l[k]);Object.assign(l,c.rem);ap.push(l)}D.bts[c.id]=c.ts;dq.push('r'+c.id);tk++}
+    }else{
+      const sn=D.msnap[c.name]||(D.msnap[c.name]={});
+      if(on){sn[c.rk]={h:0,ts:c.ts};dq.push('m:'+c.name+'|'+c.rk);ow++}
+      else{const cur=ADP[c.name].rows();if(c.rem==null)cur.delete(c.rk);else cur.set(c.rk,c.rem);ADP[c.name].apply(cur);kvQ(c.name,ADP[c.name].val());
+        sn[c.rk]=c.rem==null?{del:1,ts:c.ts}:{h:hsh(njs(c.rem)),ts:c.ts};dq.push('m:'+c.name+'|'+c.rk);tk++}
+    }
+  });
+  CF.items=[];if(ap.length)await putMany('recs',ap);if(dq.length)await tx('q','readwrite',s=>dq.forEach(i=>s.delete(i)));
+  persist();A.close();await mDiff();upQ();bgSync(300);refreshView();
+  toast(`${ow} data ditimpa dengan data Anda, ${tk} memakai data pengguna lain`,'ok',5000);
+};
+function refreshView(){
+  if($('#dlg').open||G.ed||G.dirty.size)return;
+  if(S.tab==='data')drawGrid();else if(S.tab==='beranda')vHome();else if(S.tab==='jadwal'){jdSaved();jdList()}
+}
+
+/* --- master: selisih lokal, tarik, kirim --- */
+async function mDiff(){
+  const q=[];
+  for(const name of MST){
+    const cur=ADP[name].rows(),sn=D.msnap[name]||(D.msnap[name]={});
+    cur.forEach((v,rk)=>{const h=hsh(njs(v)),s=sn[rk];if(!s||s.h!==h)q.push({id:'m:'+name+'|'+rk,k:'m',name,rk,j:JSON.stringify({v}),bts:s?s.ts:0})});
+    Object.keys(sn).forEach(rk=>{if(!cur.has(rk)&&!sn[rk].del)q.push({id:'m:'+name+'|'+rk,k:'m',name,rk,j:JSON.stringify({del:1}),bts:sn[rk].ts})});
+  }
+  if(q.length){await putMany('q',q);upQ()}
+}
+async function pullMasters(full){
+  const j=await post({action:'mget',since:full?0:D.pullTs.m||0});let mx=full?0:(D.pullTs.m||0);const grp={};
+  j.items.forEach(it=>{mx=Math.max(mx,+it.ts);const i=it.id.indexOf('|'),name=it.id.slice(0,i);if(!ADP[name])return;let o;try{o=JSON.parse(it.j)}catch(_){return}(grp[name]=grp[name]||[]).push({rk:it.id.slice(i+1),ts:+it.ts,o})});
+  let ch=0;
+  for(const name of Object.keys(grp)){
+    const cur=ADP[name].rows(),sn=D.msnap[name]||(D.msnap[name]={});let mod=0;
+    for(const{rk,ts,o}of grp[name]){
+      const s=sn[rk],has=cur.has(rk),lv=has?cur.get(rk):undefined;
+      if(s&&ts<=s.ts)continue;
+      const dirty=s?(has?(!!s.del||hsh(njs(lv))!==s.h):!s.del):false;
+      if(o.del){
+        if(!has){sn[rk]={del:1,ts};continue}
+        if(dirty){if(Date.now()-ts<DAY)addCf({kind:'m',name,rk,ts,rem:null,loc:lv});else sn[rk]={...s,ts};continue}
+        cur.delete(rk);sn[rk]={del:1,ts};mod=1;continue;
+      }
+      if(!s){if(has&&njs(lv)===njs(o.v)){sn[rk]={h:hsh(njs(lv)),ts};continue}cur.set(rk,o.v);sn[rk]={h:hsh(njs(o.v)),ts};mod=1;continue}
+      if(dirty){if(Date.now()-ts<DAY)addCf({kind:'m',name,rk,ts,rem:o.v,loc:lv});else sn[rk]={...s,ts};continue}
+      cur.set(rk,o.v);sn[rk]={h:hsh(njs(o.v)),ts};mod=1;
+    }
+    if(mod){ADP[name].apply(cur);await kvQ(name,ADP[name].val());ch++}
+  }
+  D.pullTs.m=mx;persist();return ch;
+}
+async function pushMasters(){
+  const q=(await all('q')).filter(x=>x.k==='m');if(!q.length)return 0;let n=0;
+  for(let i=0;i<q.length;i+=100){
+    const ch=q.slice(i,i+100),rs=await post({action:'mput',items:ch.map(x=>({id:x.name+'|'+x.rk,ts:Date.now(),j:x.j,bts:x.bts}))}),
+          cs=new Map((rs.conflicts||[]).map(c=>[c.id,c])),del=[];
+    ch.forEach(x=>{
+      const id=x.name+'|'+x.rk,c=cs.get(id);
+      if(c){let o={};try{o=JSON.parse(c.j)}catch(_){}addCf({kind:'m',name:x.name,rk:x.rk,ts:c.ts,rem:o.del?null:o.v,loc:ADP[x.name].rows().get(x.rk)});return}
+      const st=(rs.stamps||{})[id],o=JSON.parse(x.j),sn=D.msnap[x.name]||(D.msnap[x.name]={});
+      if(st)sn[x.rk]=o.del?{del:1,ts:st}:{h:hsh(njs(o.v)),ts:st};
+      del.push(x.id);n++;
+    });
+    if(del.length)await tx('q','readwrite',s=>del.forEach(i=>s.delete(i)));
+  }
+  persist();return n;
+}
+
+/* --- data aset --- */
+async function pullRecs(full){
+  const j=await post({action:'get',since:full?0:D.pullTs.r||0}),qs=new Map((await all('q')).filter(x=>x.k==='r').map(x=>[x.rid,x]));
+  let mx=full?0:(D.pullTs.r||0);const ap=[],dq=[];
+  for(const it of j.items){
+    const ts=+it.ts;mx=Math.max(mx,ts);let rem;try{rem=JSON.parse(it.j)}catch(_){continue}
+    const l=by(it.id),known=D.bts[it.id]||0;
+    if(!l){D.recs.push(rem);ap.push(rem);D.bts[it.id]=ts;continue}
+    if(ts<=known)continue;
+    const mine=qs.has(it.id)||G.dirty.has(l);
+    if(mine&&!same(l,rem)){if(Date.now()-ts<DAY)addCf({kind:'r',id:it.id,ts,rem,loc:l});else D.bts[it.id]=ts;continue}
+    if(qs.has(it.id))dq.push('r'+it.id);
+    Object.keys(l).forEach(k=>delete l[k]);Object.assign(l,rem);ap.push(l);D.bts[it.id]=ts;
+  }
+  D.pullTs.r=mx;if(ap.length)await putMany('recs',ap);if(dq.length)await tx('q','readwrite',s=>dq.forEach(i=>s.delete(i)));persist();return ap.length;
+}
+async function pushRecs(){
+  const q=(await all('q')).filter(x=>x.k==='r'),pend=new Set(CF.items.filter(c=>c.kind==='r').map(c=>c.id)),M=new Map(D.recs.map(r=>[r.id,r])),todo=q.filter(x=>!pend.has(x.rid));let n=0;
+  for(let i=0;i<todo.length;i+=100){
+    const ch=todo.slice(i,i+100),its=ch.map(x=>M.get(x.rid)).filter(Boolean).map(r=>({id:r.id,ts:r.ts,j:JSON.stringify(r),bts:D.bts[r.id]||0})),
+          rs=await post({action:'put',items:its}),cs=new Set((rs.conflicts||[]).map(c=>c.id)),del=[];
+    (rs.conflicts||[]).forEach(c=>{let rem;try{rem=JSON.parse(c.j)}catch(_){return}const l=by(c.id);if(l)addCf({kind:'r',id:c.id,ts:c.ts,rem,loc:l})});
+    ch.forEach(x=>{if(cs.has(x.rid))return;const st=(rs.stamps||{})[x.rid];if(st)D.bts[x.rid]=st;del.push(x.id);n++});
+    if(del.length)await tx('q','readwrite',s=>del.forEach(i=>s.delete(i)));
+  }
+  persist();return n;
+}
+async function pushPhotos(){
+  const q=(await all('q')).filter(x=>x.k==='p');let n=0;
+  for(const x of q){const p=await tx('ph','readonly',s=>s.get(x.pid));if(p)await post({action:'photo',opd:p.opd,name:p.name,data:await b64(p.blob)});await tx('q','readwrite',s=>s.delete(x.id));n++}
+  return n;
+}
+let failT=0;
+async function sync(manual){
+  if(syncing)return;
+  if(!D.meta.url||!D.meta.secret)return manual&&toast('Isi URL dan kunci di menu Sinkron','w');
+  if(!navigator.onLine)return manual&&toast('Offline. Data aman di perangkat dan dikirim saat online','w');
+  syncing=1;setSt(1);const R={};
+  const run=async()=>{
+    try{R.pr=await pullRecs()}catch(e){if(manual)throw e;throw e}
+    try{R.pm=await pullMasters();await mDiff()}catch(e){R.mErr=String(e.message||e)}
+    R.r=await pushRecs();
+    if(!R.mErr){try{R.m=await pushMasters()}catch(e){R.mErr=String(e.message||e)}}
+    R.p=await pushPhotos();
+  };
+  try{
+    if(manual)await busy('Menyinkronkan…',run);else await run();
+    if(manual)toast(`Selesai: ${R.r||0} baris dan ${R.m||0} master terkirim, ${R.pr||0} baris baru dari pengguna lain, ${R.p||0} foto${R.mErr?'. Master belum tersinkron: server masih versi lama, deploy ulang kode.gs':''}`,R.mErr?'w':'ok',9000);
+    else if(R.pr||R.pm)refreshView();
+  }catch(e){
+    if(!manual&&Date.now()-failT>3e5){failT=Date.now();toast('Pengiriman latar belakang tertunda: '+(e.message||e),'w',5000)}
+  }finally{syncing=0;setSt(0);await upQ();openCf()}
+}
+A.tarik=()=>busy('Menarik dari server…',async()=>{const a=await pullRecs(true),b=await pullMasters(true);toast(`${a} baris dan ${b} master diperbarui dari server`,'ok',6000);render()});
 
 /* ======================= IMPORT KIB ======================= */
 A.tpl=t=>{const kib=t.dataset.kib||S.kib;dlTemplate(kib)};
@@ -1647,7 +1803,7 @@ function wilFill(r,code,by,fix,amb){
 }
 async function wilRun(rows,opt){
   await wilLoad();
-  const gl=wgs(),sc=opt.scope&&gl.find(g=>g.id===opt.scope),scK=sc&&sc.kodes.length?sc.kodes:null,GM=new Map();
+  const gl=wgs(),sc=[].concat(opt.scope||[]).map(id=>gl.find(g=>g.id===id)).filter(Boolean),scK=sc.some(g=>g.kodes.length)?sc.flatMap(g=>g.kodes):null,GM=new Map();
   gl.forEach(g=>[wn(g.name).replace(/ /g,''),wn(g.name).replace(/^pulau /,'').replace(/ /g,'')].forEach(k=>{if(k){if(!GM.has(k))GM.set(k,[]);GM.get(k).push(g)}}));
   if(rows.some(r=>r.lat!=null&&r.lat!==''))try{await wilBat()}catch(_){}
   const ch=[],res={n:rows.length,ok:0,gps:0,none:0,amb:0,fix:new Map()};
@@ -1684,7 +1840,7 @@ function mWilayah(){
   <div class="pn"><h3>Petakan data ke wilayah</h3>
     <p class="mu">Dibaca dari kolom Lokasi/Alamat dan Keterangan. Salah ketik dikoreksi lewat cakupan wilayah. Terbaca ${mp} dari ${base.length} data induk.</p>
     <label>Data yang diproses<select id="wr"><option value="opd">KIB ${S.kib} · instansi terpilih</option><option value="kib">KIB ${S.kib} · semua instansi</option><option value="all">Semua KIB dan instansi</option></select></label>
-    <label>Batasi ke kelompok (opsional, memperkuat koreksi salah ketik)<select id="ws"><option value="">Tanpa batas (seluruh provinsi)</option>${gs.map(g=>`<option value="${g.id}">${esc(g.name)}</option>`).join('')}</select></label>
+    <div class="qf"><b>Batasi ke kelompok (opsional, memperkuat koreksi salah ketik)</b>${mdd('mws','Seluruh provinsi (pilih kelompok bila perlu)…',gs.map(g=>[g.id,g.name]),[],()=>{})}</div>
     <label style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="wo" style="width:auto"> Timpa data yang sudah terbaca</label>
     <div class="row"><button class="b p" data-a="wrun">▶ Jalankan pemetaan</button></div></div>`;
 }
@@ -1694,8 +1850,8 @@ A.wload=()=>busy('Memuat data wilayah…',async()=>{
   await wilLoad();toast('Data wilayah siap dipakai','ok');mWilayah();
 });
 A.wrun=()=>{
-  const sc=$('#ws').value,over=$('#wo').checked,rg=$('#wr').value;
-  let rows=V().filter(r=>r.kib&&r.st!=='ctl'&&(rg==='all'||(r.kib===S.kib&&(rg==='kib'||r.opd===cur()))));
+  const sc=(MDC.mws?MDC.mws.sel:[]),over=$('#wo').checked,rg=$('#wr').value;
+  let rows=V().filter(r=>r.kib&&r.st!=='ctl'&&(rg==='all'||(r.kib===S.kib&&(rg==='kib'||inOpd(r)))));
   if(!rows.length)return toast('Tidak ada data pada cakupan ini','w');
   if(!confirm(`Petakan wilayah untuk ${rows.length} baris?\nHasil bisa diurungkan dengan Ctrl+Z.`))return;
   wilReport(rows,{scope:sc,over});
@@ -1711,7 +1867,7 @@ function wilReport(rows,opt){
   });
 }
 A.wquick=()=>{
-  const rows=V().filter(r=>r.kib===S.kib&&(S.opd==='*'||r.opd===cur())&&r.st===(S.st==='04'?'01':S.st));
+  const rows=V().filter(r=>r.kib===S.kib&&inOpd(r)&&r.st===(S.st==='04'?'01':S.st));
   if(!rows.length)return toast('Belum ada data','w');
   if(!confirm(`Petakan wilayah untuk ${rows.length} baris di tabel ini?`))return;
   wilReport(rows,{scope:S.wscope||'',over:false});
@@ -1809,7 +1965,7 @@ const QF={
   rehab:['Pernah direhab',[['YA','Ya'],['TIDAK','Tidak']]]};
 const QK={A:['ada','pakai','kuasa','sesuai','patok','pagar','papan'],C:['ada','kond','guna','kuasa','rehab'],B:['ada','kond'],D:['ada','kond'],E:['ada','kond'],F:['ada','kond']};
 const QDEF=['ada','kond','guna','pakai','kuasa'],KDT=KD.filter(k=>/^[23]/.test(k[0]));
-const IV={t:'pilih',sel:new Set(),pg:1,pid:'',ids:[],i:0,fields:QDEF,edit:'',rad:50,f:{opd:'*',kib:'',wt:'',g:'',st:'belum',q:''}};
+const IV={t:'pilih',sel:new Set(),pg:1,pid:'',ids:[],i:0,fields:QDEF,edit:'',rad:50,f:{opds:[],kibs:[],wts:[],gs:[],sts:['belum'],q:''}};
 const today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
 const addDays=(n)=>{const d=new Date(Date.now()+n*864e5-new Date().getTimezoneOffset()*6e4);return d.toISOString().slice(0,10)};
 const dTo=d=>Math.round((Date.parse(d+'T00:00:00Z')-Date.parse(today()+'T00:00:00Z'))/864e5);
@@ -1822,11 +1978,14 @@ function wMatch(r,t){
   if(code){if(r.wKode)return r.wKode.startsWith(code);const e=WS.byK.get(code);return wn([r.alamat,r.ket].join(' ')).includes(wn(e.n))}
   return wn([r.wDesa,r.wKec,r.wKab,r.wGrup,r.alamat,r.ket].join(' ')).includes(wn(t));
 }
+const ivF=()=>{const f=IV.f,L=(a,s)=>a&&a.length?a:(s&&s!=='*'?[s]:[]);return{opds:L(f.opds,f.opd),kibs:L(f.kibs,f.kib),wts:L(f.wts,f.wt),gs:L(f.gs,f.g),sts:f.sts?f.sts:(f.st&&f.st!=='all'?[f.st]:[]),q:f.q||''}};
+const ivArea=()=>{const f=ivF();return f.wts.join(', ')||f.gs.map(id=>(wgs().find(g=>g.id===id)||{}).name).filter(Boolean).join(', ')};
 function ivRows(){
-  const f=IV.f;let a=V().filter(r=>r.kib&&r.st==='01'&&!r.mut&&(f.opd==='*'||r.opd===f.opd)&&(!f.kib||r.kib===f.kib));
-  if(f.g)a=a.filter(r=>(r.wGid||[]).includes(f.g));
-  if(f.wt)a=a.filter(r=>wMatch(r,f.wt));
-  if(f.st==='belum')a=a.filter(r=>!r.invAt&&(!r.ada||r.ada==='BELUM'));
+  const f=ivF();
+  let a=V().filter(r=>r.kib&&r.st==='01'&&!r.mut&&(!f.opds.length||f.opds.some(o=>o==='__'?!r.opd:r.opd===o))&&(!f.kibs.length||f.kibs.includes(r.kib)));
+  if(f.gs.length)a=a.filter(r=>f.gs.some(g=>(r.wGid||[]).includes(g)));
+  if(f.wts.length)a=a.filter(r=>f.wts.some(t=>wMatch(r,t)));
+  if(f.sts.length)a=a.filter(r=>f.sts.some(s=>s==='belum'?!r.invAt&&(!r.ada||r.ada==='BELUM'):r.ada===s));
   if(f.q){const q=norm(f.q);a=a.filter(r=>norm([r.nama,r.alamat,r.reg,r.kode].join(' ')).includes(q))}
   return a;
 }
@@ -1838,39 +1997,42 @@ function vInv(){
 A.ivtab=t=>{IV.t=t.dataset.k;vInv()};
 const wtl=()=>WS.ready?[...WS.labs.keys()].map(l=>`<option value="${esc(l)}">`).join(''):'';
 function ivPilih(){
-  const f=IV.f,rows=ivRows(),by_=new Map(),N=IV.pg*60;let shown=0;
-  rows.forEach(r=>{const o=r.opd||'(Belum terkelompok)';if(!by_.has(o))by_.set(o,[]);by_.get(o).push(r)});
-  IV.grp=by_;const unm=V().filter(r=>r.kib&&r.st==='01'&&!r.wKode).length,O=(v,l,s)=>`<option value="${esc(v)}"${s?' selected':''}>${esc(l)}</option>`;
+  const f=ivF(),upd=(k,v)=>{IV.f[k]=v;IV.pg=1;ivList()};
+  const unm=V().filter(r=>r.kib&&r.st==='01'&&!r.wKode).length;
+  IV.f={opds:f.opds,kibs:f.kibs,wts:f.wts,gs:f.gs,sts:f.sts,q:f.q};
   $('#iv').innerHTML=`<div class="pn"><h3>Pilih daerah dan data</h3>
-    <div class="row"><select id="ivo">${O('*','Semua instansi',f.opd==='*')}${D.opds.map(o=>O(o.name,o.name,f.opd===o.name)).join('')}</select>
-    <select id="ivk">${O('','Semua KIB',!f.kib)}${'ABCDEF'.split('').map(k=>O(k,'KIB '+k,f.kib===k)).join('')}</select></div>
-    <div class="row"><input id="ivw" list="ivwl" placeholder="Wilayah, mis. Gane atau Bacan Selatan" value="${esc(f.wt)}"><datalist id="ivwl">${wtl()}</datalist>
-    <select id="ivg">${O('','Semua pulau/zona',!f.g)}${wgs().map(g=>O(g.id,g.name,f.g===g.id)).join('')}</select></div>
-    <div class="row"><select id="ivs">${O('belum','Belum diinventarisasi',f.st==='belum')}${O('all','Semua data',f.st==='all')}</select><input id="ivq" placeholder="Cari nama, alamat, reg" value="${esc(f.q)}"></div>
+    <div class="row">${mdd('ivo','Semua instansi (pilih untuk menyaring)…',[['__','(Belum terkelompok)'],...opdNames().map(n=>[n,n])],f.opds,v=>upd('opds',v))}${mdd('ivk','Semua KIB…',['A','B','C','D','E','F'].map(k=>[k,'KIB '+k]),f.kibs,v=>upd('kibs',v))}</div>
+    <div class="row">${mdd('ivw','Wilayah, mis. Gane atau Bacan Selatan…',wtOpts(),f.wts,v=>upd('wts',v),{free:1,focus:c=>{if(!WS.ready)wilLoad().then(()=>{c.opts=wtOpts()}).catch(()=>{})}})}${mdd('ivg','Semua pulau/zona…',wgs().map(g=>[g.id,g.name]),f.gs,v=>upd('gs',v))}</div>
+    <div class="row">${mdd('ivs','Semua status…',[['belum','Belum diinventarisasi'],['ADA','Sudah: Ada'],['TIDAK','Sudah: Tidak ada']],f.sts,v=>upd('sts',v))}<input id="ivq" placeholder="Cari nama, alamat, reg (Enter = langsung)" value="${esc(f.q)}">${psel()}</div>
     ${unm?`<p class="mu">${unm} data belum dipetakan wilayahnya, jadi filter wilayah hanya membaca teks alamat. <button class="b sm" data-a="ivmap">📍 Petakan dulu</button></p>`:''}</div>
-  <div class="pn"><div class="bar"><b>${rows.length} data dari ${by_.size} instansi</b><span class="row" style="margin:0"><button class="b sm" data-a="ivall">Pilih semua</button><button class="b sm" data-a="ivnone">Kosongkan</button></span></div>
-    ${[...by_].map(([o,rs])=>{const head=`<label class="iv-g"><input type="checkbox" data-g="${esc(o)}"${rs.every(r=>IV.sel.has(r.id))?' checked':''}><b>${esc(o)}</b><i class="ch">${rs.length}</i></label>`;
-      const items=rs.filter(()=>shown++<N).map(r=>`<label class="iv-r"><input type="checkbox" data-id="${r.id}"${IV.sel.has(r.id)?' checked':''}><span><b>${esc(r.nama||'(tanpa nama)')}</b> <i class="ch">KIB ${r.kib}</i>${r.ada?`<i class="ch ${r.ada==='ADA'?'ok':'er'}">${r.ada}</i>`:''}<small>${esc(r.kode||'')} · Reg ${esc(r.reg||'-')} · ${esc(r.alamat||'-')}${r.wKec?' · '+esc(r.wKec):''}</small></span></label>`).join('');
-      return head+items}).join('')||'<p class="empty">Tidak ada data yang cocok dengan filter.</p>'}
-    ${rows.length>N?`<div class="row"><button class="b" data-a="ivmore">Tampilkan lebih banyak</button></div>`:''}</div>
-  <div id="ivnear"></div>
+  <div class="pn" id="ivl"></div><div id="ivnear"></div>
   <div class="ivbar"><span id="ivc"><b>${IV.sel.size}</b> dipilih</span><button class="b" data-a="ivgo">▶ Isi sekarang</button><button class="b p" data-a="ivplan">📅 ${IV.edit?'Perbarui':'Jadwalkan'}</button></div>`;
-  const bind=(id,k,ev='onchange')=>{const e=$('#'+id);if(e)e[ev]=x=>{f[k]=x.target.value;IV.pg=1;clearTimeout(bind._t);bind._t=setTimeout(ivPilih,ev==='oninput'?350:0)}};
-  bind('ivo','opd');bind('ivk','kib');bind('ivg','g');bind('ivs','st');bind('ivw','wt','oninput');bind('ivq','q','oninput');
-  const w=$('#ivw');if(w)w.onfocus=()=>{if(!WS.ready)wilLoad().then(()=>{const d=$('#ivwl');if(d)d.innerHTML=wtl()}).catch(()=>{})};
+  const qi=$('#ivq'),go=()=>{clearTimeout(ivPilih._t);IV.f.q=qi.value;IV.pg=1;ivList()};
+  qi.oninput=()=>{clearTimeout(ivPilih._t);ivPilih._t=setTimeout(go,SD)};qi.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();go()}};
+  ivList();
+}
+function ivList(){
+  const el=$('#ivl');if(!el)return;
+  const rows=ivRows(),by_=new Map(),N=pgN()*IV.pg;let shown=0;
+  rows.forEach(r=>{const o=r.opd||'(Belum terkelompok)';if(!by_.has(o))by_.set(o,[]);by_.get(o).push(r)});IV.grp=by_;
+  el.innerHTML=`<div class="bar"><b>${rows.length} data dari ${by_.size} instansi</b><span class="row" style="margin:0"><button class="b sm" data-a="ivall">Pilih semua</button><button class="b sm" data-a="ivnone">Kosongkan</button></span></div>
+    ${[...by_].map(([o,rs])=>{if(shown>=N)return'';const head=`<label class="iv-g"><input type="checkbox" data-g="${esc(o)}"${rs.every(r=>IV.sel.has(r.id))?' checked':''}><b>${esc(o)}</b><i class="ch">${rs.length}</i></label>`;
+      const items=rs.filter(()=>shown++<N).map(r=>`<label class="iv-r"><input type="checkbox" data-id="${r.id}"${IV.sel.has(r.id)?' checked':''}><span><b>${esc(r.nama||'(tanpa nama)')}</b> <i class="ch">KIB ${r.kib}</i>${r.ada?`<i class="ch ${r.ada==='ADA'?'ok':'er'}">${r.ada}</i>`:''}<small>${esc(r.kode||'')} · Reg ${esc(r.reg||'-')} · ${esc(r.alamat||'-')}${r.wKec?' · '+esc(r.wKec):''}</small></span></label>`).join('');
+      return `<div class="ig">${head}${items}</div>`}).join('')||'<p class="empty">Tidak ada data yang cocok dengan filter.</p>'}
+    ${rows.length>N?`<div class="row"><button class="b" data-a="ivmore">Tampilkan lebih banyak</button></div>`:''}`;
   ivNear();
 }
 document.addEventListener('change',e=>{
   const t=e.target;if(!t.closest||!t.closest('#iv'))return;
   if(t.matches('input[type=checkbox][data-id]')){t.checked?IV.sel.add(t.dataset.id):IV.sel.delete(t.dataset.id);const c=$('#ivc');if(c)c.innerHTML=`<b>${IV.sel.size}</b> dipilih`}
-  else if(t.matches('input[type=checkbox][data-g]')){(IV.grp.get(t.dataset.g)||[]).forEach(r=>t.checked?IV.sel.add(r.id):IV.sel.delete(r.id));ivPilih()}
+  else if(t.matches('input[type=checkbox][data-g]')){(IV.grp.get(t.dataset.g)||[]).forEach(r=>t.checked?IV.sel.add(r.id):IV.sel.delete(r.id));ivList()}
   else if(t.name==='q_ada'){const z=$('#ivrz');if(z)z.hidden=t.value!=='TIDAK'}
 });
-A.ivall=()=>{ivRows().forEach(r=>IV.sel.add(r.id));ivPilih()};
-A.ivnone=()=>{IV.sel.clear();ivPilih()};
-A.ivmore=()=>{IV.pg++;ivPilih()};
-A.ivmap=()=>{const f=IV.f,rows=V().filter(r=>r.kib&&r.st==='01'&&(f.opd==='*'||r.opd===f.opd)&&(!f.kib||r.kib===f.kib));
-  if(!confirm(`Petakan wilayah untuk ${rows.length} baris?`))return;wilReport(rows,{scope:f.g||'',over:false})};
+A.ivall=()=>{ivRows().forEach(r=>IV.sel.add(r.id));ivList()};
+A.ivnone=()=>{IV.sel.clear();ivList()};
+A.ivmore=()=>{IV.pg++;ivList()};
+A.ivmap=()=>{const f=ivF(),rows=V().filter(r=>r.kib&&r.st==='01'&&(!f.opds.length||f.opds.some(o=>o==='__'?!r.opd:r.opd===o))&&(!f.kibs.length||f.kibs.includes(r.kib)));
+  if(!confirm(`Petakan wilayah untuk ${rows.length} baris?`))return;wilReport(rows,{scope:f.gs,over:false})};
 
 /* ---------- Rekomendasi wilayah terjangkau ---------- */
 function wilCoord(k,rows){
@@ -1892,7 +2054,7 @@ async function ivNear(){
   const grp=(arr)=>{const m=new Map();arr.forEach(r=>{const k=key(r);if(!k)return;if(!m.has(k))m.set(k,[]);m.get(k).push(r)});return m};
   const gc=[...grp(cur)].map(([k,rs])=>({...mk(rs,k),co:wilCoord(k,rs)})).filter(a=>a.co);
   let o=null;
-  if(IV.f.g){const g=wgs().find(x=>x.id===IV.f.g);const pt=g&&wilGroupPt(g);if(pt)o={c:pt.c,src:pt.src}}
+  {const gs_=ivF().gs;if(gs_.length===1){const g=wgs().find(x=>x.id===gs_[0]);const pt=g&&wilGroupPt(g);if(pt)o={c:pt.c,src:pt.src}}}
   if(!o&&gc.length)o={c:[gc.reduce((s,a)=>s+a.co.c[0],0)/gc.length,gc.reduce((s,a)=>s+a.co.c[1],0)/gc.length],src:'rata-rata '+gc.length+' wilayah terpilih'};
   if(!o)return;
   const oG=new Set(cur.flatMap(r=>r.wGid||[])),res=[];
@@ -1912,7 +2074,7 @@ A.ivnadd=t=>{const x=IV.near[+t.dataset.i];x.rs.forEach(r=>IV.sel.add(r.id));toa
 /* ---------- Jadwal ---------- */
 A.ivplan=()=>{
   if(!IV.sel.size)return toast('Pilih data dulu','w');
-  const ep=IV.edit&&by(IV.edit),wl=IV.f.wt||(IV.f.g&&(wgs().find(g=>g.id===IV.f.g)||{}).name)||'',fs=ep?ep.fields:QDEF;
+  const ep=IV.edit&&by(IV.edit),wl=ivArea(),fs=ep?ep.fields:QDEF;
   modal(`<form id="fm" onsubmit="return false"><h3>${ep?'Perbarui jadwal':'Jadwalkan inventarisasi'}</h3>
     <p class="mu">${IV.sel.size} data dari ${new Set([...IV.sel].map(id=>(by(id)||{}).opd)).size} instansi</p>
     <label>Nama kegiatan<input name="name" value="${esc(ep?ep.name:'Inventarisasi '+(wl||'lapangan'))}"></label>
@@ -1927,7 +2089,7 @@ A.ivpsave=async()=>{
   const F=new FormData($('#fm')),name=String(F.get('name')||'').trim(),date=F.get('date');
   if(!name||!date)return toast('Nama dan tanggal wajib diisi','w');
   if(!confirm('Simpan jadwal inventarisasi ini?'))return;
-  const ep=IV.edit&&by(IV.edit),wl=IV.f.wt||(IV.f.g&&(wgs().find(g=>g.id===IV.f.g)||{}).name)||'',
+  const ep=IV.edit&&by(IV.edit),wl=ivArea(),
         p=Object.assign(ep||{id:uid(),st:'plan',status:''},{name,date,petugas:String(F.get('petugas')||''),note:String(F.get('note')||''),ids:[...IV.sel],wil:wl,
           fields:['ada',...Object.keys(QF).filter(k=>k!=='ada'&&F.get('f_'+k))]});
   await save(p);A.close();IV.edit='';IV.t='jadwal';toast('Jadwal tersimpan','ok');vInv();
@@ -1944,7 +2106,7 @@ function ivJadwal(){
     ||'<div class="pn"><p class="empty">Belum ada jadwal. Pilih data di langkah 1 lalu tekan Jadwalkan.</p></div>';
   pulses();
 }
-A.ivpedit=t=>{const p=by(t.dataset.id);IV.edit=p.id;IV.sel=new Set(p.ids||[]);IV.t='pilih';IV.f.st='all';IV.f.opd='*';IV.f.wt='';IV.f.g='';vInv();A.ivplan()};
+A.ivpedit=t=>{const p=by(t.dataset.id);IV.edit=p.id;IV.sel=new Set(p.ids||[]);IV.t='pilih';IV.f={opds:[],kibs:[],wts:[],gs:[],sts:[],q:''};vInv();A.ivplan()};
 A.ivpdel=async t=>{if(!confirm('Hapus jadwal ini? Data aset tidak ikut terhapus.'))return;const p=by(t.dataset.id);hb();hn(p);p.del=1;await save(p);hc();ivJadwal()};
 A.ivics=t=>{const p=by(t.dataset.id),d=p.date.replace(/-/g,''),e=d,x=s=>String(s||'').replace(/[,;\\]/g,m=>'\\'+m).replace(/\n/g,'\\n');
   const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Inventarisasi Aset//ID','BEGIN:VEVENT',`UID:${p.id}@inventarisasi`,`DTSTAMP:${new Date().toISOString().replace(/[-:]/g,'').slice(0,15)}Z`,`DTSTART;VALUE=DATE:${d}`,`SUMMARY:${x(p.name)}`,`DESCRIPTION:${x((p.wil||'')+' · '+(p.ids||[]).length+' data. '+(p.note||''))}`,'BEGIN:VALARM','TRIGGER:-P1D','ACTION:DISPLAY','DESCRIPTION:Besok inventarisasi','END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n');
@@ -2006,7 +2168,7 @@ A.ivsave=async()=>{
   ivLap();scrollTo(0,0);
 };
 
-if(A.xl){const _xl=A.xl;A.xl=(t,e)=>{if(S.opd==='*')return toast('Pilih satu instansi untuk unduh Excel','w');return _xl(t,e)}}
+if(A.xl){const _xl=A.xl;A.xl=(t,e)=>{if(S.opd==='*'||S.opd==='#')return toast('Pilih satu instansi untuk unduh Excel','w');return _xl(t,e)}}
 
 /* ======================= V3-A: parameter, master nama barang, kontak, sekolah, instansi otomatis ======================= */
 const ASAL=['','Pembelian (APBD)','Hibah dari Provinsi','Hibah dari Pusat','Hibah dari Lainnya','CSR','Lain-Lain'];
@@ -2128,10 +2290,10 @@ A.ksave=async t=>{
   const F=new FormData($('#fm')),nama=String(F.get('nama')||'').trim();if(!nama)return toast('Nama wajib diisi','w');
   if(!confirm('Simpan kontak ini?'))return;
   const o={id:t.dataset.id||uid(),nama,hp:String(F.get('hp')||'').trim(),ket:String(F.get('ket')||'').trim()},a=kts(),i=a.findIndex(x=>x.id===o.id);
-  if(i>=0)a[i]=o;else{a.push(o);if(S.tab==='jadwal')JD.cp=o.id}
+  if(i>=0)a[i]=o;else{a.push(o);if(S.tab==='jadwal')JD.cps.push(o.id)}
   await kv('kontak',a);A.close();kRefresh();
 };
-A.kdel=async t=>{if(!confirm('Hapus kontak ini?'))return;D.kontak=kts().filter(x=>x.id!==t.dataset.id);if(JD.cp===t.dataset.id)JD.cp='';await kv('kontak',D.kontak);A.close();kRefresh()};
+A.kdel=async t=>{if(!confirm('Hapus kontak ini?'))return;D.kontak=kts().filter(x=>x.id!==t.dataset.id);JD.cps=JD.cps.filter(x=>x!==t.dataset.id);await kv('kontak',D.kontak);A.close();kRefresh()};
 
 /* --- Master sekolah (koordinat dari file unduhan sekolah.data.kemendikdasmen.go.id) --- */
 const sk=()=>D.sek||(D.sek=[]);
@@ -2244,13 +2406,14 @@ async function addrSync(opds,o={}){
   const ch=addrChanges(opds);if(!ch.length)return 0;
   hb();ch.forEach(({r,to})=>{hn(r);r.alamat=to});hc();await saveMany(ch.map(c=>c.r));return ch.length;
 }
+const alOpds=()=>S.opd==='#'?(S.opds||[]).filter(x=>x!=='__'):(S.opd&&S.opd!=='*'&&S.opd!=='__'?[S.opd]:null);
 A.alsync=()=>{
-  const ch=addrChanges(S.opd&&S.opd!=='*'&&S.opd!=='__'?[S.opd]:null);
+  const ch=addrChanges(alOpds());
   if(!ch.length)return toast('Alamat sudah seragam di setiap instansi','ok');
   modal(`<h3>Samakan alamat per instansi</h3><p class="mu">${ch.length} baris akan diisi dengan alamat paling lengkap dari instansi yang sama. Alamat yang memang berbeda lokasi tidak diubah.</p>
     <table><tr><th>Instansi</th><th>Lama</th><th>Baru</th></tr>${ch.slice(0,12).map(({r,to})=>`<tr><td>${esc(r.opd)}</td><td>${esc(r.alamat||'(kosong)')}</td><td>${esc(to)}</td></tr>`).join('')}</table>
     <div class="row"><button class="b p" data-a="alsyncGo">Terapkan</button><button class="b" data-a="close">Batal</button></div>`);
-  A.alsyncGo=async()=>{if(!confirm(`Ubah alamat ${ch.length} baris?`))return;await addrSync(S.opd&&S.opd!=='*'&&S.opd!=='__'?[S.opd]:null);A.close();toast(ch.length+' alamat diseragamkan. Ctrl+Z untuk membatalkan','ok',6000);if(S.tab==='data')drawGrid()};
+  A.alsyncGo=async()=>{if(!confirm(`Ubah alamat ${ch.length} baris?`))return;await addrSync(alOpds());A.close();toast(ch.length+' alamat diseragamkan. Ctrl+Z untuk membatalkan','ok',6000);if(S.tab==='data')drawGrid()};
 };
 async function postImport(add){
   const nm=[...new Set(add.map(o=>o.opd).filter(Boolean))],info=[];
@@ -2266,7 +2429,7 @@ async function postImport(add){
 /* ======================= V3-B: Jadwal turun lapangan + rute (tersimpan offline) ======================= */
 const HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],BLN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 const fdl=d=>{const x=new Date(d+'T00:00:00');return `${HARI[x.getDay()]}, ${String(x.getDate()).padStart(2,'0')} ${BLN[x.getMonth()]} ${x.getFullYear()}`};
-const JD={cp:'',tim:'TIM 1',date:'',kibs:new Set(['A','C']),wt:'',g:'',cart:[],cur:'',edit:'',route:null,tok:0};
+const JD={cps:[],tim:'TIM 1',date:'',kibs:new Set(['A','C']),wts:[],gs:[],pg:1,cart:[],cur:'',edit:'',route:null,tok:0};
 const kibTxt=ks=>{const a=(ks||[]).map(k=>'KIB '+k);return a.length>1?a.slice(0,-1).join(', ')+' dan '+a[a.length-1]:a.join('')};
 const fmtMin=m=>m>=60?`${Math.floor(m/60)} jam ${Math.round(m%60)} menit`:`${Math.max(1,Math.round(m))} menit`;
 function opdCoord(n){
@@ -2277,18 +2440,31 @@ function opdCoord(n){
   if(WS.ready){const w=V().find(r=>r.kib&&r.opd===n&&r.wKode);if(w){const e=WS.byK.get(w.wKode),k=e&&(e.l>=3?e.kec:e.k),c=k&&wilCoord(k,[]);if(c)return{c:c.c,src:'perkiraan wilayah',approx:1}}}
   return null;
 }
-function jdRows(){
-  const ks=[...JD.kibs];if(!ks.length)return[];
-  let a=V().filter(r=>r.kib&&r.st==='01'&&!r.mut&&ks.includes(r.kib));
-  if(JD.g)a=a.filter(r=>(r.wGid||[]).includes(JD.g));
-  if(JD.wt)a=a.filter(r=>wMatch(r,JD.wt));
+function jdBuild(a){
   const m=new Map();
   a.forEach(r=>{const o=r.opd||'(Belum terkelompok)';if(!m.has(o))m.set(o,{opd:o,n:{A:0,B:0,C:0,D:0,E:0,F:0},rows:[],al:new Map()});
     const x=m.get(o);x.n[r.kib]++;x.rows.push(r);const al=String(r.alamat||'').trim();if(al&&!adrEmpty(al))x.al.set(al,(x.al.get(al)||0)+1)});
   return[...m.values()].sort((x,y)=>x.opd.localeCompare(y.opd));
 }
+function jdRows(){
+  const ks=[...JD.kibs];if(!ks.length)return[];
+  let a=V().filter(r=>r.kib&&r.st==='01'&&!r.mut&&ks.includes(r.kib));
+  if(JD.gs.length)a=a.filter(r=>JD.gs.some(g=>(r.wGid||[]).includes(g)));
+  if(JD.wts.length)a=a.filter(r=>JD.wts.some(t=>wMatch(r,t)));
+  return jdBuild(a);
+}
+const jdX=o=>jdBuild(V().filter(r=>r.kib&&r.st==='01'&&!r.mut&&JD.kibs.has(r.kib)&&(r.opd||'(Belum terkelompok)')===o))[0]||{opd:o,n:{A:0,B:0,C:0,D:0,E:0,F:0},rows:[],al:new Map()};
+function jdCo(x){
+  if(JD.wts.length||JD.gs.length){
+    const g=x.rows.filter(r=>r.lat!=null&&r.lat!==''&&!isNaN(+r.lat));
+    if(g.length)return{c:[g.reduce((s,r)=>s+ +r.lat,0)/g.length,g.reduce((s,r)=>s+ +r.lon,0)/g.length],src:'GPS aset di daerah ini'};
+    if(WS.ready){const kc=new Map();x.rows.forEach(r=>{const e=WS.byK.get(r.wKode);if(e){const k=e.l>=3?e.kec:e.k;kc.set(k,(kc.get(k)||0)+1)}});
+      const top=[...kc].sort((a,b)=>b[1]-a[1])[0];if(top){const c=wilCoord(top[0],x.rows);if(c)return{c:c.c,src:'perkiraan daerah ('+c.src+')',approx:1}}}
+  }
+  return opdCoord(x.opd);
+}
 const jdLok=x=>{const t=[...x.al].sort((a,b)=>b[1]-a[1])[0];return t?t[0]:''};
-const jdArea=()=>JD.wt||(JD.g&&(wgs().find(g=>g.id===JD.g)||{}).name)||'';
+const jdArea=()=>JD.wts.join(', ')||JD.gs.map(id=>(wgs().find(g=>g.id===id)||{}).name).filter(Boolean).join(', ');
 const inCart=o=>JD.cart.some(c=>c.opd===o);
 
 function vJadwal(){
@@ -2296,52 +2472,57 @@ function vJadwal(){
   $('#v').innerHTML=`<div class="bar"><h3 style="margin:0">Jadwal Turun Lapangan</h3></div>
     <div class="pn" id="jdform"></div>
     <div class="pn"><div id="jmap" class="jmap"></div><p class="mu" id="jrs" style="margin:8px 0 0">Centang instansi untuk menandai di peta dan membuat rute.</p></div>
-    <div class="pn" id="jdlist"></div><div id="jdcart"></div><div id="jdsaved"></div>`;
+    <div class="pn" id="jdlist"></div><div id="jdcart"></div><div id="jdsug"></div><div id="jdsaved"></div>`;
   jdForm();jdList();jdCart();jdSaved();jdMapInit();
 }
 function jdForm(){
-  const ks=kts(),c=ks.find(k=>k.id===JD.cp);
+  const ks=kts();
   $('#jdform').innerHTML=`<h3>Pelaksanaan</h3>
-    <label>Contact person<select id="jcp"><option value="">— pilih —</option>${ks.map(k=>`<option value="${k.id}"${k.id===JD.cp?' selected':''}>${esc(k.nama)}${k.hp?' · '+esc(k.hp):''}</option>`).join('')}</select></label>
-    <div class="row"><button class="b sm" data-a="kedit" data-id="">+ Kontak</button>${c?`<button class="b sm" data-a="kedit" data-id="${c.id}">✏️ Ubah</button>`:''}${c&&c.hp?`<a class="b sm" href="tel:${esc(c.hp)}">📞 ${esc(c.hp)}</a>`:''}</div>
+    <div class="qf"><b>Contact person (boleh lebih dari satu)</b>${mdd('jc','Pilih contact person…',ks.map(k=>[k.id,k.nama+(k.hp?' · '+k.hp:'')]),JD.cps,v=>{JD.cps=v;jdPhone()})}</div>
+    <div class="row" id="jphone"></div>
     <div class="row"><label style="flex:1;min-width:140px">Tanggal<input type="date" id="jdt" value="${JD.date}"></label><label style="flex:1;min-width:140px">Tim<input id="jtim" value="${esc(JD.tim)}"></label></div>
-    <label>Area yang dikunjungi<input id="jw" list="jwl" placeholder="mis. Pulau Bacan atau Halmahera Timur" value="${esc(JD.wt)}"><datalist id="jwl">${wtl()}</datalist></label>
-    <label>Atau pilih kelompok pulau/zona<select id="jg"><option value="">Semua</option>${wgs().map(g=>`<option value="${g.id}"${JD.g===g.id?' selected':''}>${esc(g.name)}</option>`).join('')}</select></label>
+    <div class="qf"><b>Area yang dikunjungi (ketik lalu Enter, boleh banyak)</b>${mdd('jw','mis. Pulau Bacan, Halmahera Timur…',wtOpts(),JD.wts,v=>{JD.wts=v;JD.pg=1;jdList();jdDraw(1)},{free:1,focus:c=>{if(!WS.ready)wilLoad().then(()=>{c.opts=wtOpts()}).catch(()=>{})}})}</div>
+    <div class="qf"><b>Atau kelompok pulau/zona</b>${mdd('jg','Pilih kelompok…',wgs().map(g=>[g.id,g.name]),JD.gs,v=>{JD.gs=v;JD.pg=1;jdList();jdDraw(1)})}</div>
     <p style="margin:6px 0"><b>KIB yang diinventarisasi</b> (boleh lebih dari satu)</p>
     <div class="rg">${'ABCDEF'.split('').map(k=>`<label class="rb"><input type="checkbox" data-jk="${k}"${JD.kibs.has(k)?' checked':''}><span>KIB ${k}</span></label>`).join('')}</div>`;
+  jdPhone();
+}
+function jdPhone(){
+  const el=$('#jphone');if(!el)return;const ks=kts();
+  el.innerHTML=`<button class="b sm" data-a="kedit" data-id="">+ Kontak baru</button>`+JD.cps.map(id=>ks.find(k=>k.id===id)).filter(Boolean).map(c=>`<button class="b sm" data-a="kedit" data-id="${c.id}">✏️ ${esc(c.nama)}</button>${c.hp?`<a class="b sm" href="tel:${esc(c.hp)}">📞 ${esc(c.hp)}</a>`:''}`).join('');
 }
 document.addEventListener('change',e=>{
   const t=e.target;if(!t.closest)return;
   if(t.closest('#jdform')){
-    if(t.id==='jcp'){JD.cp=t.value;jdForm()}else if(t.id==='jdt'){JD.date=t.value||JD.date}else if(t.id==='jtim')JD.tim=t.value;
-    else if(t.id==='jg'){JD.g=t.value;jdList();jdDraw(1)}else if(t.id==='jw'){JD.wt=t.value;jdList();jdDraw(1)}
-    else if(t.dataset.jk){t.checked?JD.kibs.add(t.dataset.jk):JD.kibs.delete(t.dataset.jk);jdList();jdCart();jdDraw(1)}
+    if(t.id==='jdt')JD.date=t.value||JD.date;else if(t.id==='jtim')JD.tim=t.value;
+    else if(t.dataset.jk){t.checked?JD.kibs.add(t.dataset.jk):JD.kibs.delete(t.dataset.jk);JD.pg=1;jdList();jdCart();jdDraw(1)}
   }else if(t.closest('#jdlist')&&t.dataset.jo!==undefined)jdToggle(t.dataset.jo,t.checked);
   else if(t.closest('#jdcart')){
     if(t.dataset.cd){const o=t.dataset.cd,n=t.value;if(!n)return;JD.cart.forEach(c=>{if(c.date===o)c.date=n});if(JD.cur===o)JD.cur=n;jdCart();jdDraw()}
     else if(t.dataset.ct)JD.cart.forEach(c=>{if(c.date===t.dataset.ct)c.tim=t.value});
   }
 });
-document.addEventListener('input',e=>{if(e.target.id==='jw'){clearTimeout(jdForm._t);jdForm._t=setTimeout(()=>{JD.wt=e.target.value;jdList();jdDraw(1)},400)}});
 function jdToggle(o,on){
   if(on===undefined)on=!inCart(o);
-  if(on&&!inCart(o)){JD.cart.push({opd:o,date:JD.date||addDays(1),tim:JD.tim});JD.cur=JD.date||addDays(1)}
+  if(on&&!inCart(o)){JD.cart.push({opd:o,date:JD.date||addDays(1),tim:JD.tim,co:jdCo(jdRows().find(x=>x.opd===o)||jdX(o))});JD.cur=JD.date||addDays(1)}
   if(!on)JD.cart=JD.cart.filter(c=>c.opd!==o);
   jdList();jdCart();jdDraw();
 }
 function jdList(){
-  const el=$('#jdlist');if(!el)return;const rows=jdRows(),ks=[...JD.kibs];
-  el.innerHTML=`<div class="bar"><h3 style="margin:0">Instansi (${rows.length})</h3><span class="row" style="margin:0"><button class="b sm" data-a="jdall">Centang semua</button><button class="b sm" data-a="jdnone">Kosongkan</button></span></div>`
-   +(rows.map(x=>{const co=opdCoord(x.opd),on=inCart(x.opd);
-     return `<label class="iv-r"><input type="checkbox" data-jo="${esc(x.opd)}"${on?' checked':''}><span><b>${esc(x.opd)}</b> ${ks.map(k=>`<i class="ch">${k}: ${x.n[k]}</i>`).join('')}<small>${esc(jdLok(x)||'Lokasi belum terisi')} · ${co?(co.approx?'perkiraan wilayah':co.src)+` · <a href="https://www.google.com/maps?q=${co.c[0]},${co.c[1]}" target="_blank" rel="noopener">Google Maps</a>`:'koordinat belum ada'}</small></span></label>`}).join('')||'<p class="empty">Tidak ada instansi dengan data pada KIB dan area ini.</p>');
+  const el=$('#jdlist');if(!el)return;const rows=jdRows(),ks=[...JD.kibs],N=pgN()*JD.pg;
+  el.innerHTML=`<div class="bar"><h3 style="margin:0">Instansi (${rows.length})</h3><span class="row" style="margin:0">${psel()}<button class="b sm" data-a="jdall">Centang semua</button><button class="b sm" data-a="jdnone">Kosongkan</button></span></div>`
+   +(rows.slice(0,N).map(x=>{const co=jdCo(x),on=inCart(x.opd);
+     return `<div class="ig"><label class="iv-r"><input type="checkbox" data-jo="${esc(x.opd)}"${on?' checked':''}><span><b>${esc(x.opd)}</b> ${ks.map(k=>`<i class="ch">${k}: ${x.n[k]}</i>`).join('')}<small>${esc(jdLok(x)||'Lokasi belum terisi')} · ${co?(co.approx?co.src:co.src)+` · <a href="https://www.google.com/maps?q=${co.c[0]},${co.c[1]}" target="_blank" rel="noopener">Google Maps</a>`:'koordinat belum ada'}</small></span></label></div>`}).join('')||'<p class="empty">Tidak ada instansi dengan data pada KIB dan area ini.</p>')
+   +(rows.length>N?`<div class="row"><button class="b" data-a="jdmore">Tampilkan lebih banyak</button></div>`:'');
 }
-A.jdall=()=>{jdRows().forEach(x=>{if(!inCart(x.opd))JD.cart.push({opd:x.opd,date:JD.date,tim:JD.tim})});JD.cur=JD.date;jdList();jdCart();jdDraw()};
+A.jdmore=()=>{JD.pg++;jdList()};
+A.jdall=()=>{jdRows().forEach(x=>{if(!inCart(x.opd))JD.cart.push({opd:x.opd,date:JD.date,tim:JD.tim,co:jdCo(x)})});JD.cur=JD.date;jdList();jdCart();jdDraw()};
 A.jdnone=()=>{JD.cart=[];jdList();jdCart();jdDraw()};
 A.jdrm=t=>jdToggle(t.dataset.o,false);
 A.jdclear=()=>{if(JD.cart.length&&!confirm('Kosongkan keranjang?'))return;JD.cart=[];JD.edit='';jdList();jdCart();jdDraw()};
 A.jdshow=t=>{JD.cur=t.dataset.d;jdCart();jdDraw()};
 A.jdsort=()=>{
-  const cs=JD.cart.filter(c=>c.date===JD.cur),pts=cs.map(c=>({c,co:opdCoord(c.opd)}));
+  const cs=JD.cart.filter(c=>c.date===JD.cur),pts=cs.map(c=>({c,co:(c.co||opdCoord(c.opd))}));
   if(pts.filter(p=>p.co).length<2)return toast('Perlu minimal 2 instansi berkoordinat','w');
   const rest=pts.slice(),out=[rest.shift()];
   while(rest.length){const l=out[out.length-1];let bi=0,bd=1e18;rest.forEach((p,i)=>{const d=l.co&&p.co?wDist(l.co.c[0],l.co.c[1],p.co.c[0],p.co.c[1]):1e17;if(d<bd){bd=d;bi=i}});out.push(rest.splice(bi,1)[0])}
@@ -2349,13 +2530,28 @@ A.jdsort=()=>{
 };
 function jdCart(){
   const el=$('#jdcart');if(!el)return;
-  if(!JD.cart.length){el.innerHTML='';return}
+  if(!JD.cart.length){el.innerHTML='';jdSuggest();return}
   const R=new Map(jdRows().map(x=>[x.opd,x])),g=new Map();JD.cart.forEach(c=>{if(!g.has(c.date))g.set(c.date,[]);g.get(c.date).push(c)});
   el.innerHTML=`<div class="pn"><h3>Keranjang jadwal</h3>${[...g].sort((a,b)=>a[0]<b[0]?-1:1).map(([d,cs])=>`<div class="qf"><div class="row"><b style="flex:1;min-width:150px">${fdl(d)}</b><input type="date" data-cd="${d}" value="${d}" style="width:auto"></div>
     <div class="row"><input data-ct="${d}" value="${esc(cs[0].tim)}" placeholder="Tim" style="width:110px"><button class="b sm${JD.cur===d?' p':''}" data-a="jdshow" data-d="${d}">🧭 Tampilkan rute</button></div>
-    ${cs.map((c,i)=>{const x=R.get(c.opd)||{n:{}};return `<div class="cd" style="cursor:default"><b>${i+1}. ${esc(c.opd)}</b> <i class="ch">${[...JD.kibs].map(k=>k+': '+(x.n[k]||0)).join(' · ')}</i><button class="ib" style="float:right" data-a="jdrm" data-o="${esc(c.opd)}" title="Keluarkan">✕</button></div>`}).join('')}</div>`).join('')}
+    ${cs.map((c,i)=>{const x=R.get(c.opd)||jdX(c.opd);return `<div class="cd" style="cursor:default"><b>${i+1}. ${esc(c.opd)}</b> <i class="ch">${[...JD.kibs].map(k=>k+': '+(x.n[k]||0)).join(' · ')}</i><button class="ib" style="float:right" data-a="jdrm" data-o="${esc(c.opd)}" title="Keluarkan">✕</button></div>`}).join('')}</div>`).join('')}
     <div class="row"><button class="b p" data-a="jdsave">${JD.edit?'💾 Perbarui jadwal':'💾 Simpan jadwal'}</button><button class="b" data-a="jdsort">↕ Urutkan terdekat</button><button class="b" data-a="jdoff">⬇ Unduh rute offline</button><button class="b d" data-a="jdclear">Kosongkan</button></div></div>`;
+  jdSuggest();
 }
+function jdSuggest(){
+  const el=$('#jdsug');if(!el)return;
+  if(!JD.cart.length){el.innerHTML='';return}
+  const regs=new Set();
+  JD.cart.forEach(c=>{const x=jdRows().find(r=>r.opd===c.opd)||jdX(c.opd);x.rows.forEach(r=>{if(r.wKec)regs.add(r.wKec)})});
+  if(!regs.size){el.innerHTML='';return}
+  const ks=[...JD.kibs],m=new Map();
+  V().filter(r=>r.kib&&r.st==='01'&&!r.mut&&ks.includes(r.kib)&&regs.has(r.wKec)&&!inCart(r.opd||'(Belum terkelompok)')).forEach(r=>{const o=r.opd||'(Belum terkelompok)';if(!m.has(o))m.set(o,[]);m.get(o).push(r)});
+  const L=[...m].sort((a,b)=>b[1].length-a[1].length).slice(0,15);
+  el.innerHTML=L.length?`<div class="pn"><h3>Instansi lain di daerah yang sama</h3><p class="mu">Daerah: ${[...regs].slice(0,6).map(esc).join(', ')}. Instansi berikut juga punya aset di sana, jadi bisa sekalian dikunjungi.</p>${L.map(([o,rs])=>`<div class="ig"><div class="iv-g" style="cursor:default"><b>${esc(o)}</b><i class="ch">${rs.length} data</i><button class="b sm" data-a="jdsug" data-o="${esc(o)}">+ Tambah</button></div></div>`).join('')}</div>`:'';
+}
+A.jdsug=t=>{const o=t.dataset.o,regs=new Set();JD.cart.forEach(c=>{const x=jdRows().find(r=>r.opd===c.opd)||jdX(c.opd);x.rows.forEach(r=>{if(r.wKec)regs.add(r.wKec)})});
+  const rows=V().filter(r=>r.kib&&r.st==='01'&&!r.mut&&JD.kibs.has(r.kib)&&regs.has(r.wKec)&&(r.opd||'(Belum terkelompok)')===o),x=jdBuild(rows)[0];
+  if(!x)return;JD.cart.push({opd:o,date:JD.cur||JD.date,tim:JD.tim,co:jdCo({...x,rows:x.rows})||opdCoord(o)});jdList();jdCart();jdDraw()};
 
 /* --- peta + rute --- */
 let JM=null,JL=null;
@@ -2373,7 +2569,7 @@ async function jdMapInit(){
 async function jdDraw(fit){
   if(!JM||!JL||!$('#jmap'))return;
   JL.clearLayers();const pts=[];
-  jdRows().forEach(x=>{const co=opdCoord(x.opd);if(!co)return;const on=inCart(x.opd);pts.push(co.c);
+  jdRows().forEach(x=>{const co=jdCo(x);if(!co)return;const on=inCart(x.opd);pts.push(co.c);
     L.circleMarker(co.c,{radius:on?10:6,color:on?'#e8761f':'#3b1f14',weight:2,fillColor:on?'#fbc531':'#2fa66a',fillOpacity:.9}).addTo(JL).bindTooltip(x.opd+(co.approx?' (perkiraan)':'')).on('click',()=>jdToggle(x.opd))});
   if(fit&&pts.length)JM.fitBounds(pts,{padding:[24,24],maxZoom:12});
   await jdRoute();
@@ -2401,7 +2597,7 @@ async function routeLeg(a,b,noNet){
 }
 async function jdRoute(){
   const tok=JD.tok=Math.random(),rs=$('#jrs'),cs=JD.cart.filter(c=>c.date===JD.cur);
-  const pts=cs.map(c=>({o:c.opd,co:opdCoord(c.opd)})).filter(p=>p.co);JD.route=null;
+  const pts=cs.map(c=>({o:c.opd,co:(c.co||opdCoord(c.opd))})).filter(p=>p.co);JD.route=null;
   if(pts.length<2){if(rs)rs.textContent=cs.length?'Centang minimal 2 instansi yang punya koordinat untuk melihat rute.':'Centang instansi untuk menandai di peta dan membuat rute.';return}
   let km=0,min=0,off=0,lurus=0;const steps=[];
   for(let i=0;i<pts.length-1;i++){
@@ -2432,7 +2628,7 @@ async function prefetchPlans(show){
 A.jdoff=()=>{
   if(!navigator.onLine)return toast('Perlu internet untuk mengunduh rute','w');
   const g=new Map();JD.cart.forEach(c=>{if(!g.has(c.date))g.set(c.date,[]);g.get(c.date).push(c)});let n=0;
-  busy('Mengunduh rute…',async()=>{for(const cs of g.values()){const pts=cs.map(c=>opdCoord(c.opd)).filter(Boolean).map(x=>x.c);
+  busy('Mengunduh rute…',async()=>{for(const cs of g.values()){const pts=cs.map(c=>(c.co||opdCoord(c.opd))).filter(Boolean).map(x=>x.c);
     for(let i=0;i<pts.length-1;i++){const r=await routeLeg(pts[i],pts[i+1]);if(r.src==='online')n++;await new Promise(x=>setTimeout(x,350))}}
     toast(n?`${n} ruas rute tersimpan untuk offline`:'Rute sudah tersimpan atau belum ada koordinat','ok');jdDraw()});
 };
@@ -2443,43 +2639,44 @@ A.jdsave=async()=>{
   if(!JD.cart.length)return toast('Keranjang masih kosong','w');
   if(!confirm(`Simpan jadwal untuk ${JD.cart.length} instansi?`))return;
   const R=new Map(jdRows().map(x=>[x.opd,x])),g=new Map();JD.cart.forEach(c=>{if(!g.has(c.date))g.set(c.date,[]);g.get(c.date).push(c)});
-  const cp=kts().find(k=>k.id===JD.cp)||{},area=jdArea(),ks=[...JD.kibs].sort(),made=[],ed=JD.edit&&g.size===1?by(JD.edit):null;
+  const cps=JD.cps.map(id=>kts().find(k=>k.id===id)).filter(Boolean),cpx=cps.map(c=>c.nama+(c.hp?` (${c.hp})`:'')).join(' / '),area=jdArea(),ks=[...JD.kibs].sort(),made=[],ed=JD.edit&&g.size===1?by(JD.edit):null;
   hb();
   for(const [d,cs] of g){
-    const items=cs.map(c=>{const x=R.get(c.opd)||{n:{A:0,B:0,C:0,D:0,E:0,F:0},rows:[],al:new Map()},co=opdCoord(c.opd);return{opd:c.opd,tim:c.tim,n:x.n,lokasi:jdLok(x),lat:co?co.c[0]:null,lon:co?co.c[1]:null}});
-    const ids=[...new Set(cs.flatMap(c=>((R.get(c.opd)||{}).rows||[]).filter(r=>!r.invAt&&(!r.ada||r.ada==='BELUM')).map(r=>r.id)))];
+    const xs=cs.map(c=>R.get(c.opd)||jdX(c.opd));
+    const items=cs.map((c,i)=>{const x=xs[i],co=c.co||opdCoord(c.opd);return{opd:c.opd,tim:c.tim,n:x.n,lokasi:jdLok(x),lat:co?co.c[0]:null,lon:co?co.c[1]:null}});
+    const ids=[...new Set(xs.flatMap(x=>x.rows.filter(r=>!r.invAt&&(!r.ada||r.ada==='BELUM')).map(r=>r.id)))];
     let p;if(ed){hn(ed);p=ed}else{p={id:uid(),st:'plan'};hn(p,1)}
-    Object.assign(p,{name:`Inventarisasi ${area||'lapangan'}`,date:d,tim:cs[0].tim,cp:cp.nama||'',hp:cp.hp||'',cpid:cp.id||'',wil:area,kibs:ks,items,ids,petugas:D.meta.who||'',fields:p.fields||QDEF});
+    Object.assign(p,{name:`Inventarisasi ${area||'lapangan'}`,date:d,tim:cs[0].tim,cp:cps.map(c=>c.nama).join(', '),hp:cps.map(c=>c.hp).filter(Boolean).join(', '),cpx,cpids:cps.map(c=>c.id),wil:area,kibs:ks,items,ids,petugas:D.meta.who||'',fields:p.fields||QDEF});
     await save(p);made.push(p);
   }
   hc();JD.cart=[];JD.edit='';toast(`${made.length} jadwal tersimpan`,'ok');jdCart();jdList();jdDraw();jdSaved();prefetchPlans();
 };
 function jdSaved(){
   const el=$('#jdsaved');if(!el)return;const ps=planes();
-  el.innerHTML=`<div class="pn"><div class="bar"><h3 style="margin:0">Jadwal tersimpan (${ps.length})</h3><button class="b p sm" data-a="jdxl">📊 Excel jadwal</button></div>`
+  el.innerHTML=`<div class="pn"><div class="bar"><h3 style="margin:0">Jadwal tersimpan (${ps.length})</h3><span class="row" style="margin:0"><button class="b sm" data-a="jdimp">⬆ Import Excel jadwal</button><button class="b p sm" data-a="jdxl">📊 Excel jadwal</button></span></div>`
    +(ps.map(p=>{const n=(p.ids||[]).length,dn=planDone(p),d=dTo(p.date),act=planAct(p);
      return `<div class="cd" style="cursor:default"><div class="bar" style="margin:0"><b>${fdl(p.date)}</b><i class="ch ${!act?'ok':d<0?'er':d===0?'wa':''}">${!act?'Selesai':d<0?'Terlambat':d===0?'Hari ini':d+' hari lagi'}</i></div>
-       <small>${esc(p.name||'')} · ${esc(p.tim||'')} · ${esc(p.cp||'-')}${p.hp?' ('+esc(p.hp)+')':''}</small><small>${(p.items||[]).map(i=>esc(i.opd)).join(', ')||'(pilihan data manual)'}</small>
+       <small>${esc(p.name||'')} · ${esc(p.tim||'')} · ${esc(p.cpx||p.cp||'-')}</small><small>${(p.items||[]).map(i=>esc(i.opd)).join(', ')||'(pilihan data manual)'}</small>
        <div class="pb"><i style="width:${n?Math.round(dn/n*100):0}%"></i></div><small>${dn} dari ${n} data selesai</small>
        <div class="row"><button class="b sm p" data-a="ivstart" data-id="${p.id}">▶ Isi lapangan</button><button class="b sm" data-a="jdedit" data-id="${p.id}">✏️ Ubah</button><button class="b sm" data-a="jdload" data-id="${p.id}">🧭 Pilih ulang</button><button class="b sm" data-a="ivics" data-id="${p.id}">📆</button><button class="b sm d" data-a="ivpdel" data-id="${p.id}">🗑</button></div></div>`}).join('')||'<p class="empty">Belum ada jadwal tersimpan.</p>')+'</div>';
 }
 A.ivpdel=async t=>{if(!confirm('Hapus jadwal ini? Data aset tidak ikut terhapus.'))return;const p=by(t.dataset.id);hb();hn(p);p.del=1;await save(p);hc();toast('Jadwal dihapus. Ctrl+Z untuk membatalkan','ok',4000);if(S.tab==='jadwal')jdSaved();else ivJadwal()};
-A.jdload=t=>{const p=by(t.dataset.id);JD.edit=p.id;JD.date=p.date;JD.tim=p.tim||'TIM 1';JD.cp=p.cpid||'';JD.kibs=new Set(p.kibs&&p.kibs.length?p.kibs:['A','C']);JD.wt=p.wil||'';JD.g='';
-  JD.cart=(p.items||[]).map(i=>({opd:i.opd,date:p.date,tim:i.tim||p.tim}));JD.cur=p.date;vJadwal();scrollTo(0,0);toast('Jadwal dimuat ke keranjang. Ubah lalu tekan Perbarui','ok',3500)};
+A.jdload=t=>{const p=by(t.dataset.id);JD.edit=p.id;JD.date=p.date;JD.tim=p.tim||'TIM 1';JD.cps=[...(p.cpids||[])];JD.kibs=new Set(p.kibs&&p.kibs.length?p.kibs:['A','C']);JD.wts=p.wil?String(p.wil).split(/\s*,\s*/).filter(Boolean):[];JD.gs=[];JD.pg=1;
+  JD.cart=(p.items||[]).map(i=>({opd:i.opd,date:p.date,tim:i.tim||p.tim,co:i.lat!=null&&i.lon!=null?{c:[i.lat,i.lon],src:'jadwal tersimpan'}:null}));JD.cur=p.date;vJadwal();scrollTo(0,0);toast('Jadwal dimuat ke keranjang. Ubah lalu tekan Perbarui','ok',3500)};
 A.jdedit=t=>{
   const p=by(t.dataset.id);
   modal(`<form id="fm" onsubmit="return false"><h3>Ubah jadwal</h3>
     <label>Nama kegiatan<input name="name" value="${esc(p.name||'')}"></label><label>Tanggal<input type="date" name="date" value="${esc(p.date||'')}"></label>
     <label>Tim<input name="tim" value="${esc(p.tim||'')}"></label>
-    <label>Contact person<select name="cp"><option value="">— pilih —</option>${kts().map(k=>`<option value="${k.id}"${k.id===p.cpid?' selected':''}>${esc(k.nama)}${k.hp?' · '+esc(k.hp):''}</option>`).join('')}</select></label>
+    <div class="qf"><b>Contact person</b>${mdd('mjc','Pilih contact person…',kts().map(k=>[k.id,k.nama+(k.hp?' · '+k.hp:'')]),p.cpids||[],()=>{})}</div>
     <label>Catatan<textarea name="note">${esc(p.note||'')}</textarea></label>
     <div class="row"><button type="button" class="b p" data-a="jdesave" data-id="${p.id}">Simpan</button><button type="button" class="b" data-a="close">Batal</button></div></form>`);
 };
 A.jdesave=async t=>{
   const F=new FormData($('#fm')),p=by(t.dataset.id),date=F.get('date');if(!date)return toast('Tanggal wajib diisi','w');
   if(!confirm('Simpan perubahan jadwal ini?'))return;
-  const cp=kts().find(k=>k.id===F.get('cp'))||{};
-  hb();hn(p);Object.assign(p,{name:String(F.get('name')||'').trim()||p.name,date,tim:String(F.get('tim')||''),note:String(F.get('note')||''),cp:cp.nama||p.cp||'',hp:cp.hp||(cp.nama?'':p.hp)||'',cpid:cp.id||''});
+  const cps=(MDC.mjc?MDC.mjc.sel:[]).map(id=>kts().find(k=>k.id===id)).filter(Boolean);
+  hb();hn(p);Object.assign(p,{name:String(F.get('name')||'').trim()||p.name,date,tim:String(F.get('tim')||''),note:String(F.get('note')||''),cp:cps.map(c=>c.nama).join(', '),hp:cps.map(c=>c.hp).filter(Boolean).join(', '),cpx:cps.map(c=>c.nama+(c.hp?` (${c.hp})`:'')).join(' / '),cpids:cps.map(c=>c.id)});
   (p.items||[]).forEach(i=>{i.tim=p.tim});await save(p);hc();A.close();if(S.tab==='jadwal')jdSaved();else ivJadwal();
 };
 A.jdxl=()=>{
@@ -2498,7 +2695,7 @@ A.jdxl=()=>{
       ps.filter(p=>p.date===d).sort((a,b)=>(a.tim||'').localeCompare(b.tim||'')).forEach(p=>{
         (p.items||[]).forEach((it,i)=>{
           const n=it.n||{},row=ws.getRow(r++);
-          [null,it.opd,kibTxt((()=>{const x=(p.kibs||[]).filter(k=>(n[k]||0)>0);return x.length?x:(p.kibs||[])})()),p.wil||it.lokasi||'',n.A||0,n.C||0,n.F||0,it.tim||p.tim||'',i===0&&p.cp?`${p.cp}${p.hp?' ('+p.hp+')':''}`:'',i===0?(p.note||''):'',n.B||0,n.D||0,n.E||0].forEach((v,j)=>{if(v!==null)row.getCell(j+1).value=v});
+          [null,it.opd,kibTxt((()=>{const x=(p.kibs||[]).filter(k=>(n[k]||0)>0);return x.length?x:(p.kibs||[])})()),p.wil||it.lokasi||'',n.A||0,n.C||0,n.F||0,it.tim||p.tim||'',i===0&&(p.cpx||p.cp)?(p.cpx||`${p.cp}${p.hp?' ('+p.hp+')':''}`):'',i===0?(p.note||''):'',n.B||0,n.D||0,n.E||0].forEach((v,j)=>{if(v!==null)row.getCell(j+1).value=v});
         });
       });
       ws.mergeCells(`A${r0}:A${r-1}`);const c=ws.getCell(`A${r0}`);c.value=fdl(d);c.alignment={horizontal:'center',vertical:'middle',wrapText:true};
@@ -2510,7 +2707,7 @@ A.jdxl=()=>{
 
 /* ======================= V3-C: wajib sambung, kelap-kelip 30 detik, sinkron simpel, GPS otomatis, kamera timestamp ======================= */
 const needSetup=()=>!D.meta.url||!D.meta.secret;
-const GATE=/^(new|nsave|esave|addrow|imp|impBeranda|gedit|gsave|ivplan|ivpsave|ivstart|ivgo|ivsave|smut|foto|lamp|gps|ivgps|rdel|del|gdelrows|wrun|wquick|wseed|impInst|jdsave|jdedit|jdesave|jdload|ivpdel|bimp|sekimp|alsync|opdMerge)$/;
+const GATE=/^(new|nsave|esave|addrow|imp|impBeranda|gedit|gsave|ivplan|ivpsave|ivstart|ivgo|ivsave|smut|foto|lamp|gps|ivgps|rdel|del|gdelrows|wrun|wquick|wseed|impInst|jdsave|jdedit|jdesave|jdload|ivpdel|bimp|sekimp|alsync|opdMerge|minta|mintaGo|jdimp|jdimpGo)$/;
 function gateMsg(first){
   if(!needSetup())return;
   modal(`<h3>Hubungkan dulu ke Spreadsheet</h3><p>${first?'Selamat datang. ':''}Sebelum mengisi data, isi <b>URL Web App Apps Script</b> dan <b>kunci rahasia</b> di menu Sinkron. Dengan begitu data tidak hanya tersimpan di perangkat ini dan bisa dipakai bersama petugas lain.</p>
@@ -2534,11 +2731,11 @@ function pulses(){
   if(QN||needSetup())on('[data-a=tab][data-k=sinkron]');
   if(QN)on('#qc,[data-a=kirim]');
   if(needSetup())on('[data-a=msave],[data-a=gosync]');
-  if(S.tab==='beranda'){if(!base.length)on('[data-a=impBeranda]');else if(base.some(r=>r.kib==='C'&&!r.opd))on('[data-a=regrup]')}
+  if(!base.length)on('[data-a=tab][data-k=data]');
   if(G.dirty.size)on('[data-a=gsave]');
   if(planes().some(p=>planAct(p)&&p.date<=today()))on('[data-a=tab][data-k=inv],[data-a=tab][data-k=jadwal]');
   if(S.tab==='data'&&G.rows&&G.rows.some(r=>!r.wKode&&(r.alamat||r.ket))&&WS.ready)on('[data-a=wquick]');
-  if(S.tab==='data'&&!G.rows.length&&S.opd&&S.st==='01')on('[data-a=imp]');
+  if(S.tab==='data'&&!base.length)on('[data-a=imp]');
   Object.keys(PS).forEach(k=>{if(!trig.has(k))delete PS[k]});
   clearTimeout(pulses._t);if(nx<1e9)pulses._t=setTimeout(pulses,nx+120);
 }
@@ -2553,6 +2750,7 @@ function vSync(){
     <details class="inf"><summary>Info project (terisi otomatis dari server)</summary>${I('project','Nama Project (header)')}${I('prov','Provinsi')}${I('ibu','Ibukota')}
       <p class="mu">Bila petugas lain sudah mengisi dengan URL yang sama, tiga isian ini terisi otomatis saat Anda menekan Simpan atau Tes. Bila Anda mengubahnya, perubahan dikirim ke server untuk petugas lain.</p></details>
     <div class="row"><button class="b" data-a="cekSrv">🔎 Cek jumlah di server</button><button class="b" data-a="kirimSemua">♻ Kirim ulang semua data</button></div>
+    ${CF.items.length?`<div class="row"><button class="b p" data-a="cfopen">⚠ Selesaikan ${CF.items.length} konflik data</button></div>`:''}
     <p class="mu" id="qi"></p></div>`;
   upQ().then(()=>{const q=$('#qi');if(q)q.textContent=$('#qc').textContent});
 }
@@ -2600,6 +2798,189 @@ window.addEventListener('message',async e=>{
   if(FOTO_IV)ivPh();else edit(r.id);sync();
 });
 
+/* ======================= DROPDOWN MULTI-PILIH (chip) + jeda ketik 5 detik ======================= */
+const SD=5000,MDC={};
+try{S.ps=+(localStorage.getItem('inv-ps')??50)}catch(_){S.ps=50}
+const mlab=(c,v)=>{const o=c.opts.find(x=>x[0]===v);return o?o[1]:v};
+const mddB=id=>{const c=MDC[id];return `<div class="mdd-b">${c.sel.map(v=>`<i class="ch">${esc(mlab(c,v))} <b data-mx="${esc(v)}">×</b></i>`).join('')}<input class="mdd-i" placeholder="${c.sel.length?'tambah…':esc(c.ph)}" autocomplete="off" enterkeyhint="done"></div>`};
+function mdd(id,ph,opts,sel,on,o={}){MDC[id]={ph,opts,sel:[...sel],on,free:!!o.free,single:!!o.single,focus:o.focus,t:0};return `<div class="mdd" data-md="${id}">${mddB(id)}<div class="mdd-l" hidden></div></div>`}
+function mddList(el,txt){
+  const c=MDC[el.dataset.md];if(!c)return;const l=el.querySelector('.mdd-l'),q=wn(txt||''),os=c.opts.filter(o=>!q||wn(o[1]).includes(q)).slice(0,80);
+  l.innerHTML=os.map(o=>`<div class="mdd-o${c.sel.includes(o[0])?' on':''}" data-mv="${esc(o[0])}">${c.sel.includes(o[0])?'✓ ':''}${esc(o[1])}</div>`).join('')||`<div class="mdd-o mu">${c.free&&txt?'Enter untuk menambah “'+esc(txt)+'”':'Tidak ada pilihan'}</div>`;
+  l.hidden=false;mddPos(el);
+}
+function mddPos(el){const l=el.querySelector('.mdd-l'),b=el.querySelector('.mdd-b');if(!l||l.hidden||!b)return;const r=b.getBoundingClientRect(),h=Math.max(120,Math.min(260,innerHeight-r.bottom-14));l.style.cssText=`position:fixed;left:${r.left}px;top:${r.bottom+4}px;width:${r.width}px;max-height:${h}px;right:auto;margin:0`}
+const mddRe=()=>document.querySelectorAll('.mdd').forEach(mddPos);
+addEventListener('resize',mddRe);document.addEventListener('scroll',e=>{if(!(e.target.closest&&e.target.closest('.mdd-l')))mddRe()},true);
+function mddSet(el,sel,keep){
+  const id=el.dataset.md,c=MDC[id];c.sel=c.single?sel.slice(-1):sel;
+  el.querySelector('.mdd-b').outerHTML=mddB(id);
+  const i=el.querySelector('.mdd-i');if(keep){i.focus()}
+  if(c.single)el.querySelector('.mdd-l').hidden=true;
+  c.on&&c.on([...c.sel]);
+}
+function mddArm(el){
+  const c=MDC[el.dataset.md];clearTimeout(c.t);
+  c.t=setTimeout(()=>{
+    const i=el.querySelector('.mdd-i'),v=i&&i.value.trim();
+    if(v&&c.free&&!c.sel.includes(v)){i.value='';mddSet(el,[...c.sel,v],0)}
+    const l=el.querySelector('.mdd-l');if(l)l.hidden=true;if(i&&document.activeElement===i)i.blur();
+  },SD);
+}
+const mddEl=t=>t.closest&&t.closest('.mdd');
+document.addEventListener('focusin',e=>{const el=mddEl(e.target);if(!el||!e.target.classList.contains('mdd-i'))return;const c=MDC[el.dataset.md];c&&c.focus&&c.focus(c);mddList(el,e.target.value);mddArm(el)});
+document.addEventListener('input',e=>{const el=mddEl(e.target);if(!el||!e.target.classList.contains('mdd-i'))return;mddList(el,e.target.value);mddArm(el)});
+document.addEventListener('keydown',e=>{
+  const el=mddEl(e.target);if(!el||!e.target.classList.contains('mdd-i'))return;const c=MDC[el.dataset.md];
+  if(e.key==='Enter'){e.preventDefault();const v=e.target.value.trim(),q=wn(v),o=c.opts.find(x=>!q||wn(x[1]).includes(q));
+    if(v&&o&&!c.sel.includes(o[0])){e.target.value='';mddSet(el,[...c.sel,o[0]],1)}
+    else if(v&&c.free&&!c.sel.includes(v)){e.target.value='';mddSet(el,[...c.sel,v],1)}
+    mddArm(el)}
+  else if(e.key==='Backspace'&&!e.target.value&&c.sel.length){mddSet(el,c.sel.slice(0,-1),1)}
+  else if(e.key==='Escape'){el.querySelector('.mdd-l').hidden=true;e.target.blur()}
+});
+document.addEventListener('click',e=>{
+  const el=mddEl(e.target);
+  if(!el){document.querySelectorAll('.mdd-l').forEach(l=>l.hidden=true);return}
+  const c=MDC[el.dataset.md],x=e.target.closest('[data-mx]'),o=e.target.closest('.mdd-o[data-mv]');
+  if(x){mddSet(el,c.sel.filter(v=>v!==x.dataset.mx),1);return}
+  if(o){const v=o.dataset.mv,on=c.sel.includes(v);const i=el.querySelector('.mdd-i');if(i)i.value='';mddSet(el,on?c.sel.filter(s=>s!==v):[...c.sel,v],1);mddList(el,'');mddArm(el);return}
+  const i=el.querySelector('.mdd-i');if(i&&e.target!==i)i.focus();
+});
+function psel(){const p=S.ps??50;return `<select id="ps" title="Jumlah data ditampilkan" style="width:auto;flex:0 0 auto;min-width:110px">${[[50,'50 data'],[100,'100 data'],[250,'250 data'],[0,'Semua data']].map(([v,l])=>`<option value="${v}"${p===v?' selected':''}>${l}</option>`).join('')}</select>`}
+document.addEventListener('change',e=>{if(e.target.id==='ps'){S.ps=+e.target.value;try{localStorage.setItem('inv-ps',S.ps)}catch(_){}S.p=0;IV.pg=1;JD.pg=1;const f={data:()=>drawGrid(),inv:()=>IV.t==='pilih'&&ivPilih(),master:()=>S.mtab==='barang'&&mBarang(),jadwal:()=>jdList()}[S.tab];f&&f()}});
+const pgN=()=>S.ps?S.ps:1e9;
+
+/* --- pilihan instansi (multi) --- */
+const opdNames=()=>{const s=new Set(D.opds.map(o=>o.name));V().forEach(r=>{if(r.kib&&r.opd)s.add(r.opd)});return[...s].sort((a,b)=>a.localeCompare(b))};
+const soList=()=>S.opd==='#'?(S.opds||[]):(S.opd?[S.opd]:[]);
+function setOpds(a){a=a.filter(Boolean);if(a.includes('*'))a=['*'];S.opds=a;S.opd=a.length===0?'':a[0]==='*'?'*':a.length===1?a[0]:'#'}
+const inOpd=r=>S.opd==='*'||(S.opd==='#'?(S.opds||[]).some(x=>x==='__'?!r.opd:x===r.opd):S.opd==='__'?!r.opd:r.opd===S.opd);
+const saveLast=()=>kv('last',S.opd==='#'?JSON.stringify(S.opds):S.opd);
+function sel(all,on){
+  const opts=[...(all?[['*','★ Semua instansi']]:[]),['__','(Belum terkelompok)'],...opdNames().map(n=>[n,n])];
+  return mdd('mo','Pilih instansi (boleh lebih dari satu)…',opts,soList(),on||(v=>{setOpds(v);saveLast();S.p=0;onOpdChange()}));
+}
+function onOpdChange(){
+  if(S.tab==='data'){if(MDC.mw){const o=wfo(S.st);MDC.mw.opts=o;MDC.mw.sel=MDC.mw.sel.filter(v=>o.some(x=>x[0]===v));S.wfs=MDC.mw.sel}drawGrid()}
+  else if(S.tab==='hasil')vHasilKib();else if(S.tab==='peta')vPeta();else render();
+}
+
+/* ======================= KODE BARANG OTOMATIS ======================= */
+let BRI=null;
+function briBuild(){BRI=new Map();BRI.n=brg().length;brg().forEach(b=>{if(String(b.k).split('.').length<4)return;const k=wn(b.u);if(!BRI.has(k))BRI.set(k,[]);BRI.get(k).push(b.k)})}
+function kodeFor(n){if(!BRI||BRI.n!==brg().length)briBuild();const l=BRI.get(wn(n));return l&&l.length?[...l].sort((a,b)=>a.length-b.length)[0]:''}
+function brgDL(){const seen=new Set(),o=[];for(const b of brg()){if(String(b.k).split('.').length<4||seen.has(b.u))continue;seen.add(b.u);o.push(`<option value="${esc(b.u)}">`);if(o.length>=3000)break}return `<datalist id="brgl">${o.join('')}</datalist>`}
+document.addEventListener('input',e=>{
+  const t=e.target;if(!t.matches)return;
+  if(t.matches('#fm input[name=nama]')){const kd=$('#fm [name=kode]');if(!kd)return;const k=kodeFor(t.value);if(k&&(!kd.value||kd.dataset.auto)){kd.value=k;kd.dataset.auto=1}}
+  else if(t.matches('#fm input[name=kode]'))delete t.dataset.auto;
+});
+
+/* ======================= MUTASI MASUK: tarik aset dari OPD lain ======================= */
+const MI={sel:new Set(),opds:[],q:''};
+A.minta=()=>{
+  if(!S.opd||S.opd==='*'||S.opd==='#'||S.opd==='__')return toast('Pilih satu instansi tujuan dulu','w');
+  MI.sel=new Set();MI.opds=[];MI.q='';
+  modal(`<form id="fm" onsubmit="return false"><h3>Tarik aset dari OPD lain</h3>
+    <p class="mu">Aset akan tercatat di ${S.kib}-02 milik <b>${esc(S.opd)}</b> dan otomatis tercatat keluar di ${S.kib}-03 instansi asal.</p>
+    <div class="qf"><b>Instansi asal (boleh lebih dari satu)</b>${mdd('mia','Pilih instansi asal…',opdNames().filter(n=>n!==S.opd).map(n=>[n,n]),[],v=>{MI.opds=v;miList()})}</div>
+    <input id="miq" placeholder="Cari nama atau reg aset…">
+    <div id="mil" style="max-height:36vh;overflow:auto;margin-top:8px"></div>
+    <label>Sebab bertambah<select name="sbt">${SBT.map(x=>`<option${x==='Mutasi dari OPD lain'?' selected':''}>${esc(x)}</option>`).join('')}</select></label>
+    <div class="row"><button type="button" class="b p" data-a="mintaGo">Tarik aset terpilih</button><button type="button" class="b" data-a="close">Batal</button></div></form>`);
+  const qi=$('#miq');qi.oninput=()=>{MI.q=qi.value;miList()};miList();
+};
+function miList(){
+  const el=$('#mil');if(!el)return;
+  if(!MI.opds.length){el.innerHTML='<p class="mu">Pilih instansi asal dulu.</p>';return}
+  const q=norm(MI.q),rows=V().filter(r=>r.kib===S.kib&&r.st==='01'&&!r.mut&&MI.opds.includes(r.opd)&&(!q||norm([r.nama,r.reg,r.alamat].join(' ')).includes(q))).slice(0,200);
+  el.innerHTML=rows.map(r=>`<div class="ig"><label class="iv-r"><input type="checkbox" data-mi="${r.id}"${MI.sel.has(r.id)?' checked':''}><span><b>${esc(r.nama)}</b><small>${esc(r.opd)} · Reg ${esc(r.reg||'-')} · ${esc(r.alamat||'-')} · ${rp(r.harga)}</small></span></label></div>`).join('')||'<p class="empty">Tidak ada aset yang cocok.</p>';
+}
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset&&t.dataset.mi!==undefined){t.checked?MI.sel.add(t.dataset.mi):MI.sel.delete(t.dataset.mi)}});
+A.mintaGo=async()=>{
+  if(!MI.sel.size)return toast('Centang aset yang dipindah','w');
+  if(!confirm(`Tarik ${MI.sel.size} aset ke ${S.opd}?`))return;
+  const to=S.opd,sbt=new FormData($('#fm')).get('sbt'),out=[],n0=V().filter(x=>x.st==='02'&&x.opd===to&&x.kib===S.kib).reduce((m,x)=>Math.max(m,+x.no||0),0);let k=0;
+  hb();
+  for(const id of MI.sel){
+    const r=by(id);if(!r||r.mut)continue;hn(r);const mid=uid();r.mut=mid;out.push(r);k++;
+    const o3={id:uid(),st:'03',kib:r.kib,opd:r.opd,...CP(r),sebab:'Mutasi ke OPD Lain',tujuan:to,reff:r.no,reffId:r.id,mid,km:'Mutasi Kurang ke '+to},
+          o2={id:uid(),st:'02',kib:r.kib,opd:to,no:n0+k,...CP(r),ada:'ADA',sebab:sbt,asal:r.opd,reff:r.no,reffId:r.id,mid,km:'Mutasi Tambah dari '+r.opd,y:`${r.opd} — ${r.nama}${r.reg?' (Reg '+r.reg+')':''}`};
+    hn(o3,1);hn(o2,1);out.push(o3,o2);
+  }
+  await saveMany(out);hc();A.close();toast(`${k} aset ditarik dari OPD lain`,'ok',5000);S.st='02';render();
+};
+
+/* ======================= IMPORT EXCEL JADWAL (format lampiran) ======================= */
+const BLNI={januari:0,jan:0,februari:1,feb:1,maret:2,mar:2,april:3,apr:3,mei:4,juni:5,jun:5,juli:6,jul:6,agustus:7,agt:7,agu:7,september:8,sep:8,oktober:9,okt:9,november:10,nov:10,desember:11,des:11};
+function idDate(v){
+  if(isD(v))return iso(v);
+  if(typeof v==='number'&&v>20000&&v<80000)return dt(v);
+  const m=String(v||'').toLowerCase().match(/(\d{1,2})\s+([a-z]+)\s+(\d{4})/);
+  if(m&&BLNI[m[2]]!=null)return `${m[3]}-${String(BLNI[m[2]]+1).padStart(2,'0')}-${m[1].padStart(2,'0')}`;
+  const d=dt(v);return /^\d{4}-\d\d-\d\d$/.test(d)?d:'';
+}
+async function readAllSheets(f){await js(XJS);const wb=XLSX.read(await f.arrayBuffer(),{type:'array'});return wb.SheetNames.map(n=>({n,rows:XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:true,defval:''})}))}
+function matchOpd(n){
+  const c=canonOpd(n);if(c)return c;
+  const k=opdKey(n).replace(/ /g,'');let best=null;
+  for(const nm of opdNames()){const b=opdKey(nm).replace(/ /g,''),L=Math.max(k.length,b.length),mx=L<12?1:L<25?2:3;
+    if(k===b)return nm;if(k.length>5&&digs(k)===digs(b)){const d=dl(k,b,mx);if(d<=mx&&(!best||d<best.d))best={n:nm,d}}}
+  return best?best.n:null;
+}
+function parseJadwal(sheets){
+  const plans=new Map(),unm=new Set();
+  for(const sh of sheets){
+    const hi=sh.rows.findIndex(r=>r.some(c=>nh(c)==='upb'));if(hi<0)continue;
+    const H=sh.rows[hi].map(nh),ix=re=>H.findIndex(h=>re.test(h)),kets=H.map((h,i)=>/^keterangan/.test(h)?i:-1).filter(i=>i>=0);
+    const cd=ix(/hari|tanggal/),cu=ix(/^upb$/),ck=kets[0],ct=kets[1],cl=ix(/lokasi/),cA=ix(/tanah/),cC=ix(/bangunan/),cF=ix(/^kdp$/),cp=ix(/contact|kontak/),cB=ix(/peralatan/),cD=ix(/jalan/),cE=ix(/lainnya/);
+    let date='',cpTxt='',last='';
+    for(let i=hi+1;i<sh.rows.length;i++){
+      const r=sh.rows[i],d=cd>=0?idDate(r[cd]):'';if(d)date=d;
+      const upb=tx_(r[cu]);if(!upb||!date)continue;
+      const tim=(ct>=0&&tx_(r[ct]))||'TIM 1',key=date+'|'+tim;
+      if(key!==last){cpTxt='';last=key}
+      const cpv=cp>=0?tx_(r[cp]):'';let note='';
+      if(cpv){if(/\d[\d\s().-]{7,}/.test(cpv))cpTxt=cpv;else note=cpv}
+      const kt=ck>=0?tx_(r[ck]):'',nn=c=>c>=0?(numv(r[c])||0):0,n={A:nn(cA),B:nn(cB),C:nn(cC),D:nn(cD),E:nn(cE),F:nn(cF)};
+      let kl=[...new Set((kt.match(/KIB\s*([A-F])/gi)||[]).map(x=>x.slice(-1).toUpperCase()))];if(!kl.length)kl=Object.keys(n).filter(k=>n[k]>0);
+      const o=matchOpd(upb);if(!o)unm.add(upb);
+      if(!plans.has(key))plans.set(key,{date,tim,cp:'',items:[],kibs:new Set(),wil:'',notes:[]});
+      const P=plans.get(key);if(cpTxt)P.cp=cpTxt;if(!P.wil&&cl>=0)P.wil=tx_(r[cl]);if(note)P.notes.push(note);
+      kl.forEach(k=>P.kibs.add(k));P.items.push({opd:o||upb,raw:upb,ok:!!o,tim,n,kibs:kl,lokasi:cl>=0?tx_(r[cl]):''});
+    }
+  }
+  return{plans:[...plans.values()].sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:a.tim<b.tim?-1:1),unm:[...unm]};
+}
+A.jdimp=()=>pickFile('.xlsx,.xls',f=>busy('Membaca jadwal…',async()=>{
+  const P=parseJadwal(await readAllSheets(f));
+  if(!P.plans.length)return toast('Tidak ada baris jadwal. Pastikan baris judul memuat kolom UPB dan HARI dan TANGGAL','w',9000);
+  JD.imp=P;
+  modal(`<h3>Pratinjau import jadwal</h3><p class="mu">${P.plans.length} jadwal, ${P.plans.reduce((s,p)=>s+p.items.length,0)} baris instansi.${P.unm.length?` <b style="color:var(--er)">${P.unm.length} nama instansi tidak ditemukan di data</b> (tetap diimpor, tapi tanpa daftar aset): ${P.unm.slice(0,6).map(esc).join('; ')}${P.unm.length>6?'…':''}`:' Semua instansi cocok dengan data.'}</p>
+    <div style="max-height:46vh;overflow:auto"><table><tr><th>Tanggal</th><th>Tim</th><th>Instansi</th><th>Contact</th></tr>${P.plans.map(p=>`<tr><td>${fdl(p.date)}</td><td>${esc(p.tim)}</td><td>${p.items.length}: ${p.items.slice(0,3).map(i=>esc(i.opd)).join(', ')}${p.items.length>3?'…':''}</td><td>${esc(p.cp||'-')}</td></tr>`).join('')}</table></div>
+    <div class="row"><button class="b p" data-a="jdimpGo">Simpan jadwal</button><button class="b" data-a="close">Batal</button></div>`);
+}));
+A.jdimpGo=async()=>{
+  const P=JD.imp;if(!P)return;if(!confirm(`Simpan ${P.plans.length} jadwal hasil import?`))return;
+  let made=0,skip=0;hb();
+  for(const g of P.plans){
+    const names=g.items.map(i=>i.opd).sort().join('|');
+    if(planes().some(p=>p.date===g.date&&(p.tim||'')===g.tim&&(p.items||[]).map(i=>i.opd).sort().join('|')===names)){skip++;continue}
+    let cpids=[],cpx=g.cp,cn='',hp='';
+    if(g.cp){const m=g.cp.match(/^(.*?)\s*\(([^)]*)\)\s*$/);cn=(m?m[1]:g.cp).trim();hp=(m?m[2]:(g.cp.match(/\+?\d[\d\s().-]{7,}/)||[''])[0]).trim();
+      const dg=hp.replace(/\D/g,''),ex=kts().find(k=>(dg&&String(k.hp).replace(/\D/g,'')===dg)||wn(k.nama)===wn(cn));
+      if(ex)cpids=[ex.id];else if(cn){const k={id:uid(),nama:cn,hp,ket:'dari import jadwal'};kts().push(k);cpids=[k.id];await kv('kontak',kts())}}
+    const items=g.items.map(i=>{const co=i.ok?opdCoord(i.opd):null;return{opd:i.opd,tim:i.tim,n:i.n,lokasi:i.lokasi,lat:co?co.c[0]:null,lon:co?co.c[1]:null}});
+    const ks=[...g.kibs].sort();
+    const ids=[...new Set(g.items.filter(i=>i.ok).flatMap(i=>V().filter(r=>r.kib&&r.st==='01'&&!r.mut&&r.opd===i.opd&&(i.kibs.length?i.kibs:ks).includes(r.kib)&&!r.invAt&&(!r.ada||r.ada==='BELUM')).map(r=>r.id)))];
+    const p={id:uid(),st:'plan'};hn(p,1);
+    Object.assign(p,{name:`Inventarisasi ${g.wil||'lapangan'}`,date:g.date,tim:g.tim,cp:cn,hp,cpx,cpids,wil:g.wil,kibs:ks,items,ids,note:g.notes.join('; '),petugas:D.meta.who||'',fields:QDEF});
+    await save(p);made++;
+  }
+  hc();JD.imp=null;A.close();toast(`${made} jadwal diimpor${skip?`, ${skip} dilewati karena sudah ada`:''}`,'ok',6000);if(S.tab==='jadwal')jdSaved();prefetchPlans();
+};
+
 /* ======================= INIT ======================= */
 (async()=>{
   const [recs,k]=await Promise.all([all('recs'),all('kv')]);
@@ -2608,7 +2989,7 @@ window.addEventListener('message',async e=>{
     if(x.k==='opds')D.opds=x.v;
     else if(x.k==='abbr')D.abbr=x.v;
     else if(x.k==='meta')Object.assign(D.meta,x.v);
-    else if(x.k==='last')S.opd=x.v;
+    else if(x.k==='last'){if(String(x.v).startsWith('[')){try{setOpds(JSON.parse(x.v))}catch(_){}}else S.opd=x.v}
     else if(x.k==='wg')D.wg=x.v;
     else if(x.k==='walias')D.walias=x.v;
     else if(x.k==='param')D.param=x.v;
@@ -2617,8 +2998,12 @@ window.addEventListener('message',async e=>{
     else if(x.k==='sekolah')D.sek=x.v;
     else if(x.k==='oalias')D.oalias=x.v;
     else if(x.k==='routes')D.routes=x.v;
+    else if(x.k==='bts')D.bts=x.v||{};
+    else if(x.k==='msnap')D.msnap=x.v||{};
+    else if(x.k==='pullts')D.pullTs=x.v||{r:0,m:0};
   });
   applyParam();mkAbr();updNet();upQ();render();sync();
+  setInterval(()=>{if(!document.hidden)sync(false)},6e4);document.addEventListener('visibilitychange',()=>{if(!document.hidden)bgSync(500)});
   try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(_){}
   if(needSetup())setTimeout(()=>gateMsg(1),700);setTimeout(()=>prefetchPlans(),6000);
   setTimeout(()=>{if(navigator.onLine&&!localStorage.getItem('wil-pre'))fetch('wilayah.json').then(r=>r.ok&&localStorage.setItem('wil-pre','1')).catch(()=>{})},8000);
