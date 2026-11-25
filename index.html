@@ -2232,9 +2232,9 @@ async function brgLearn(rs){let n=0;rs.forEach(r=>{if(r.kode&&r.nama)n+=brgAdd(r
 function mBarang(){
   if(!$('#mv'))return;
   if(!brg().length){BSEED.forEach(([k,u])=>brgAdd(k,u));kv('brg',brg())}
-  const q=wn(S.bq||''),a=brg().filter(x=>!q||wn(x.k+' '+x.u).includes(q)).sort((x,y)=>bkey(x.k)<bkey(y.k)?-1:1),N=40,pg=Math.max(1,Math.ceil(a.length/N));
+  const q=wn(S.bq||''),a=brg().filter(x=>!q||wn(x.k+' '+x.u).includes(q)).sort((x,y)=>bkey(x.k)<bkey(y.k)?-1:1),N=pgN(),pg=Math.max(1,Math.ceil(a.length/N));
   S.bp=Math.max(0,Math.min(S.bp||0,pg-1));
-  $('#mv').innerHTML=`<div class="pn"><div class="row"><button class="b p" data-a="bedit" data-k="">+ Tambah</button><button class="b" data-a="bimp">⬆ Import Excel/CSV</button><button class="b" data-a="bxl">⬇ Unduh</button></div>
+  $('#mv').innerHTML=`<div class="pn"><div class="row"><button class="b p" data-a="bedit" data-k="">+ Tambah</button><button class="b" data-a="bimp">⬆ Import Excel/CSV</button><button class="b" data-a="bxl">⬇ Unduh</button>${psel()}</div>
     <input id="bq" placeholder="Cari kode atau uraian" value="${esc(S.bq||'')}">
     <p class="mu">${a.length} baris. Kode dipecah otomatis (1 = Akun, 1.3 = Kelompok, 1.3.2 = Jenis, dan seterusnya). Nama barang dari import KIB masuk otomatis.</p></div>
     <div class="gw" style="max-height:58vh"><table class="gt"><thead><tr><th>Kode</th>${BLV.map(l=>`<th>${l}</th>`).join('')}<th>Uraian</th><th></th></tr></thead><tbody>${a.slice(S.bp*N,S.bp*N+N).map(x=>{const p=x.k.split('.');
